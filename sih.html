@@ -33,6 +33,7 @@
             border-radius: 8px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             animation: fadeIn 1s ease-out;
+            overflow: hidden; /* Prevents overflow */
         }
 
         /* Section heading */
@@ -105,15 +106,15 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-
- .table-container {
-            max-width: 600px;
+        /* Table Container */
+        .table-container {
+            max-width: 100%; /* Ensures table fits within the container */
+            overflow-x: auto; /* Horizontal scroll for overflow */
             margin: 20px auto;
             padding: 20px;
             background: #f9f9f9;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
         }
 
         h2 {
@@ -122,7 +123,8 @@
         }
 
         table {
-            width: 800px;
+            width: 100%;
+            min-width: 600px; /* Ensures table has enough width */
             border-collapse: collapse;
             margin: 10px 0;
         }
@@ -164,7 +166,7 @@
             <h2>Our Problem Details</h2>
             <div class="details">
                 <strong>Our Problem Statement ID:</strong> SIH1649<br>
-                <strong>Our Title:</strong>Blockchain - Based DDoS Mitigation Using AI<br>
+                <strong>Our Title:</strong> Blockchain - Based DDoS Mitigation Using AI<br>
                 <strong>Description:</strong> Out of 500 ideas submitted from institutes across India, 5 teams have been selected at the national level to tackle this challenge.
             </div>
             <p>Across Anna University’s two campuses, two teams from the Madras Institute of Technology, Chromepet, Chennai, have been selected for SIH '24. One of these teams (6 members) is ours.</p>
