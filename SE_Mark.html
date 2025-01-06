@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mark Calculation</title>
+</head>
+<body>
+    <h2>Mark Calculation</h2>
+    <form id="markForm">
+        <h3>Enter marks out of 90:</h3>
+        <label for="ca1">CA 1 (out of 20):</label>
+        <input type="number" id="ca1" required><br><br>
+
+        <label for="ca2">CA 2 (out of 25):</label>
+        <input type="number" id="ca2" required><br><br>
+
+        <label for="project">Project (out of 20):</label>
+        <input type="number" id="project" required><br><br>
+
+        <label for="externalLearning">External Learning (out of 5):</label>
+        <input type="number" id="externalLearning" required><br><br>
+
+        <label for="fp">FP (Final Presentation, out of 7):</label>
+        <input type="number" id="fp" required><br><br>
+
+        <label for="classDiagram">Class Diagram (out of 5):</label>
+        <input type="number" id="classDiagram" required><br><br>
+
+        <label for="dfd">DFD from OOAD (out of 8):</label>
+        <input type="number" id="dfd" required><br><br>
+
+        <h3>Other Marks:</h3>
+        <label for="midSem">Mid Sem (out of 50):</label>
+        <input type="number" id="midSem" required><br><br>
+
+        <label for="endSem">End Sem (out of 100):</label>
+        <input type="number" id="endSem" required><br><br>
+
+        <button type="button" onclick="calculateFinalMark()">Calculate</button>
+    </form>
+
+    <h3>Final Mark: <span id="finalMark">-</span>/100</h3>
+
+    <script>
+        function calculateFinalMark() {
+            // Input marks
+            const ca1 = parseFloat(document.getElementById("ca1").value) || 0;
+            const ca2 = parseFloat(document.getElementById("ca2").value) || 0;
+            const project = parseFloat(document.getElementById("project").value) || 0;
+            const externalLearning = parseFloat(document.getElementById("externalLearning").value) || 0;
+            const fp = parseFloat(document.getElementById("fp").value) || 0;
+            const classDiagram = parseFloat(document.getElementById("classDiagram").value) || 0;
+            const dfd = parseFloat(document.getElementById("dfd").value) || 0;
+            const midSem = parseFloat(document.getElementById("midSem").value) || 0;
+            const endSem = parseFloat(document.getElementById("endSem").value) || 0;
+
+            // Validate the individual marks
+            if (
+                ca1 > 20 || ca2 > 25 || project > 20 || externalLearning > 5 ||
+                fp > 7 || classDiagram > 5 || dfd > 8 ||
+                midSem > 50 || endSem > 100
+            ) {
+                alert("Please enter valid marks!");
+                return;
+            }
+
+            // Convert CA total to 40
+            const caTotal = ca1 + ca2 + project + externalLearning + fp + classDiagram + dfd;
+            const caConverted = (caTotal / 90) * 40;
+
+            // Convert Mid Sem to 20
+            const midSemConverted = (midSem / 50) * 20;
+
+            // Convert End Sem to 40
+            const endSemConverted = (endSem / 100) * 40;
+
+            // Final total out of 100
+            const finalMark = caConverted + midSemConverted + endSemConverted;
+
+            document.getElementById("finalMark").innerText = finalMark.toFixed(2);
+        }
+    </script>
+</body>
+</html>
