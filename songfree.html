@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="https://github.com/VINOTH1916/offi/blob/main/logo.png" type="image/x-icon">
+  <link rel="icon" href=" <link rel="icon" href="https://github.com/VINOTH1916/offi/blob/main/logo.png" type="image/x-icon">" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SongFree - Free Movie Songs</title>
@@ -40,7 +40,7 @@
     }
 
     #searchBar:focus {
-     
+      transform: scale(1.01);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     }
 
@@ -127,6 +127,76 @@
       transform: scale(1.1);
     }
 
+    /* Controls */
+    #controls {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #controls button {
+      background: #ff4757;
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s ease, transform 0.3s ease;
+      margin: 0 5px;
+    }
+
+    #controls button.active {
+      background: #ff6b81;
+    }
+
+    #controls button:hover {
+      transform: scale(1.1);
+    }
+
+    /* Banner */
+    #banner {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 500px;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      display: none;
+      z-index: 1000;
+    }
+
+    #banner h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    #banner p {
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+
+    #banner button {
+      background: #ff4757;
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s ease, transform 0.3s ease;
+      margin: 0 5px;
+    }
+
+    #banner button:hover {
+      background: #ff6b81;
+      transform: scale(1.1);
+    }
+
     /* Animations */
     @keyframes fadeIn {
       from {
@@ -196,9 +266,23 @@
   <!-- Load More Button -->
   <button id="loadMore">Load More</button>
 
+  <!-- Controls -->
+  <div id="controls">
+    <button id="repeatButton">Repeat: Off</button>
+    <button id="shuffleButton">Shuffle: Off</button>
+  </div>
+
+  <!-- Banner -->
+  <div id="banner">
+    <h2 id="bannerTitle"></h2>
+    <p id="bannerSong"></p>
+    <button id="prevButton">Previous</button>
+    <button id="pauseButton">Pause</button>
+    <button id="nextButton">Next</button>
+  </div>
+
   <script>
-    // Sample Data (Replace with your actual data)
-    const allSongs = [
+   const allSongs = [
   { title: 'Baahubali-2', name: 'Oru-Yaagam', previewUrl: 'https://drive.google.com/file/d/18gdK3I8L98yd9L7uPRXp9bHCMbZjDRGm/preview' },
   { title: 'Baahubali-2', name: 'Bale-Bale-Bale', previewUrl: 'https://drive.google.com/file/d/1wZADWfk3SU1wwxYWH2_LUMeIU-RDny9q/preview' },
   { title: 'Baahubali-2', name: 'Kanna-Nee-Thoongadaa', previewUrl: 'https://drive.google.com/file/d/1fg2yeQTgiAMkaJk7nk8Esh2KycmJT8Z5/preview' },
@@ -813,71 +897,178 @@
 
     let currentPage = 1;
     const songsPerPage = 10000; // Number of songs to load per page
+    let currentSongIndex = 0;
+    let isRepeatMode = false;
+    let isShuffleMode = false;
+    let isPlaying = false;
+    let currentIframe = null;
+    let shuffledSongs = [...allSongs]; // Copy of allSongs for shuffling
 
     // Function to generate a random color in rgba format
     function getRandomColor() {
       const r = Math.floor(Math.random() * 256); // Random red value (0-255)
       const g = Math.floor(Math.random() * 256); // Random green value (0-255)
       const b = Math.floor(Math.random() * 256); // Random blue value (0-255)
-      const a = 0.3; // Fixed alpha value for transparency
+      const a = 0.5; // Fixed alpha value for transparency
       return `rgba(${r}, ${g}, ${b}, ${a})`;
     }
 
-    // Load Songs Function
+    // Function to shuffle an array
     function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-  }
-}
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+      }
+    }
 
-function loadSongs(page) {
-  // Shuffle the allSongs array
-  shuffleArray(allSongs);
+    // Load Songs Function
+    function loadSongs(page) {
+      shuffleArray(allSongs);
+      const start = (page - 1) * songsPerPage;
+      const end = start + songsPerPage;
+      const songsToLoad = isShuffleMode ? shuffledSongs.slice(start, end) : allSongs.slice(start, end);
 
-  const start = (page - 1) * songsPerPage;
-  const end = start + songsPerPage;
-  const songsToLoad = allSongs.slice(start, end);
+      const container = document.getElementById('songContainer');
+      container.innerHTML = ''; // Clear previous songs
 
-  const container = document.getElementById('songContainer');
-  container.innerHTML = ''; // Clear the previous songs
+      songsToLoad.forEach((song, index) => {
+        const card = document.createElement('div');
+        card.className = 'song-card';
+        card.setAttribute('data-name', `${song.title} ${song.name}`);
+        card.setAttribute('data-index', index); // Add index for tracking
 
-  songsToLoad.forEach(song => {
-    const card = document.createElement('div');
-    card.className = 'song-card';
-    card.setAttribute('data-name', `${song.title} ${song.name}`);
+        // Assign a random background color to the card
+        card.style.backgroundColor = getRandomColor();
 
-    // Assign a random background color to the card
-    card.style.backgroundColor = getRandomColor();
+        card.innerHTML = `
+          <h2>${song.title}</h2>
+          <p>Song: ${song.name}</p>
+          <div class="iframe-placeholder" data-src="${song.previewUrl}">
+            <button class="play-button">Play</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
 
-    card.innerHTML = `
-      <h2>${song.title}</h2>
-      <p>Song: ${song.name}</p>
-      <div class="iframe-placeholder" data-src="${song.previewUrl}">
-        <button class="play-button">Play</button>
-      </div>
-    `;
-    container.appendChild(card);
-  });
+      // Add event listeners for play buttons
+      document.querySelectorAll('.iframe-placeholder').forEach(placeholder => {
+        placeholder.addEventListener('click', (e) => {
+          const card = e.target.closest('.song-card');
+          const index = parseInt(card.getAttribute('data-index'));
+          playSong(index);
+        });
+      });
+    }
 
-  // Add event listeners for play buttons
-  document.querySelectorAll('.iframe-placeholder').forEach(placeholder => {
-    placeholder.addEventListener('click', () => {
+    // Play Song Function
+    function playSong(index) {
+      const songs = isShuffleMode ? shuffledSongs : allSongs;
+      const container = document.getElementById('songContainer');
+      const cards = container.querySelectorAll('.song-card');
+
+      // Remove all existing iframes
+      cards.forEach(card => {
+        const placeholder = card.querySelector('.iframe-placeholder');
+        placeholder.innerHTML = '<button class="play-button">Play</button>';
+      });
+
+      // Add iframe to the selected song
+      const selectedCard = cards[index];
+      const placeholder = selectedCard.querySelector('.iframe-placeholder');
       const iframe = document.createElement('iframe');
       iframe.src = placeholder.getAttribute('data-src');
       iframe.allow = 'autoplay';
       placeholder.innerHTML = '';
       placeholder.appendChild(iframe);
-    });
-  });
-}
 
+      // Update current song index
+      currentSongIndex = index;
+
+      // Show banner
+      const banner = document.getElementById('banner');
+      banner.style.display = 'block';
+      banner.style.backgroundColor = getRandomColor();
+      document.getElementById('bannerTitle').textContent = songs[index].title;
+      document.getElementById('bannerSong').textContent = songs[index].name;
+
+      // Add event listener for when the song ends
+      iframe.onended = () => {
+        if (isRepeatMode) {
+          playSong(currentSongIndex); // Repeat the same song
+        } else {
+          playNextSong(); // Play the next song
+        }
+      };
+
+      // Update current iframe
+      currentIframe = iframe;
+      isPlaying = true;
+    }
+
+    // Play Next Song Function
+    function playNextSong() {
+      const songs = isShuffleMode ? shuffledSongs : allSongs;
+      currentSongIndex = (currentSongIndex + 1) % songs.length;
+      playSong(currentSongIndex);
+    }
+
+    // Play Previous Song Function
+    function playPreviousSong() {
+      const songs = isShuffleMode ? shuffledSongs : allSongs;
+      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+      playSong(currentSongIndex);
+    }
+
+    // Pause/Play Function
+    function togglePause() {
+      if (currentIframe) {
+        if (isPlaying) {
+          currentIframe.src = ''; // Pause by removing the src
+          isPlaying = false;
+          document.getElementById('pauseButton').textContent = 'Play';
+        } else {
+          const songs = isShuffleMode ? shuffledSongs : allSongs;
+          currentIframe.src = songs[currentSongIndex].previewUrl; // Resume by setting the src
+          isPlaying = true;
+          document.getElementById('pauseButton').textContent = 'Pause';
+        }
+      }
+    }
+
+    // Repeat Mode Toggle
+    document.getElementById('repeatButton').addEventListener('click', () => {
+      isRepeatMode = !isRepeatMode;
+      const repeatButton = document.getElementById('repeatButton');
+      repeatButton.textContent = `Repeat: ${isRepeatMode ? 'On' : 'Off'}`;
+      repeatButton.classList.toggle('active', isRepeatMode);
+    });
+
+    // Shuffle Mode Toggle
+    document.getElementById('shuffleButton').addEventListener('click', () => {
+      isShuffleMode = !isShuffleMode;
+      const shuffleButton = document.getElementById('shuffleButton');
+      shuffleButton.textContent = `Shuffle: ${isShuffleMode ? 'On' : 'Off'}`;
+      shuffleButton.classList.toggle('active', isShuffleMode);
+
+      if (isShuffleMode) {
+        shuffledSongs = [...allSongs]; // Create a copy of allSongs
+        shuffleArray(shuffledSongs); // Shuffle the copied array
+      }
+
+      // Reload songs to reflect the shuffled order
+      loadSongs(currentPage);
+    });
 
     // Load More Button
     document.getElementById('loadMore').addEventListener('click', () => {
       currentPage++;
       loadSongs(currentPage);
     });
+
+    // Banner Controls
+    document.getElementById('prevButton').addEventListener('click', playPreviousSong);
+    document.getElementById('pauseButton').addEventListener('click', togglePause);
+    document.getElementById('nextButton').addEventListener('click', playNextSong);
 
     // Search Functionality
     function filterSongs() {
