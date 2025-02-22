@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=" <link rel="icon" href="https://github.com/VINOTH1916/offi/blob/main/logo.png" type="image/x-icon">" type="image/x-icon">
+ <link rel="icon" href="https://github.com/VINOTH1916/offi/blob/main/logo.png" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SongFree - Free Movie Songs</title>
@@ -276,6 +277,7 @@
   <div id="banner">
     <h2 id="bannerTitle"></h2>
     <p id="bannerSong"></p>
+    <div id="bannerPreview"></div>
     <button id="prevButton">Previous</button>
     <button id="pauseButton">Pause</button>
     <button id="nextButton">Next</button>
@@ -979,7 +981,7 @@
       iframe.src = placeholder.getAttribute('data-src');
       iframe.allow = 'autoplay';
       placeholder.innerHTML = '';
-      placeholder.appendChild(iframe);
+      //placeholder.appendChild(iframe);
 
       // Update current song index
       currentSongIndex = index;
@@ -990,6 +992,18 @@
       banner.style.backgroundColor = getRandomColor();
       document.getElementById('bannerTitle').textContent = songs[index].title;
       document.getElementById('bannerSong').textContent = songs[index].name;
+
+       // Add preview to the banner
+       const bannerPreview = document.getElementById('bannerPreview');
+      bannerPreview.innerHTML = ''; // Clear previous preview
+      const bannerIframe = document.createElement('iframe');
+      bannerIframe.src = songs[index].previewUrl;
+      bannerIframe.allow = 'autoplay';
+      bannerIframe.style.width = '100%';
+      bannerIframe.style.height = '80px';
+      bannerIframe.style.border = 'none';
+      bannerIframe.style.borderRadius = '10px';
+      bannerPreview.appendChild(bannerIframe);
 
       // Add event listener for when the song ends
       iframe.onended = () => {
