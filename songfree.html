@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <link rel="icon" href="https://github.com/VINOTH1916/offi/blob/main/logo.png" type="image/x-icon">
+  <link rel="icon" href="https://github.com/VINOTH1916/offi/blob/main/logo.png" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SongFree - Free Movie Songs</title>
@@ -18,13 +17,7 @@
       overflow-x: hidden;
     }
 
-    h1 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 15px;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      animation: fadeIn 1s ease-in-out;
-    }
+    
 
     /* Search Bar */
     #searchBar {
@@ -257,7 +250,41 @@
   </style>
 </head>
 <body>
-  <h1>SongFree</h1>
+  <h1 id="songsFreeHeader" style="
+    font-family: 'Inter', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 2s ease-in-out;
+  ">
+    SongsFree
+  </h1>
+
+  <a href="https://drive.google.com/drive/folders/15ItJg7H7p0mxn7tQqrSrhWzbUSY_XTie" target="_blank">
+    <button style="color: rgb(241, 245, 241);background-color: darkgreen;border-radius: 5px;height: auto;width: 100px;">Download All</button>
+</a>
+
+
+  <script>
+    // Function to generate a random color in hex format
+    function getRandomColor1() {
+      const letters = '0177456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+    
+
+    // Apply random color to the header
+    const header = document.getElementById('songsFreeHeader');
+    header.style.color = getRandomColor1();
+   
+  </script>
+   
   <!-- Search Bar -->
   <input type="text" id="searchBar" placeholder="Search for movies or songs..." oninput="filterSongs()">
 
