@@ -53,6 +53,9 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
       animation: slideUp 0.5s ease-in-out;
+       height: auto;
+      width: 150px;
+      font-size: 20%;
     }
 
     .song-card:hover {
@@ -3500,7 +3503,7 @@
       const r = Math.floor(Math.random() * 256); // Random red value (0-255)
       const g = Math.floor(Math.random() * 256); // Random green value (0-255)
       const b = Math.floor(Math.random() * 256); // Random blue value (0-255)
-      const a = 0.3; // Fixed alpha value for transparency
+      const a = 0.5; // Fixed alpha value for transparency
       return `rgba(${r}, ${g}, ${b}, ${a})`;
     }
 
