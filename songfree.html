@@ -39,11 +39,15 @@
     }
 
     /* Song Container */
-    .song-container {
-      display:grid;
-      grid-template-columns: 1fr;
+     .song-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* 2 columns on mobile */
       gap: 15px;
       padding: 10px;
+      overflow-x: auto; /* Enable horizontal scrolling */
+      overflow-y: auto; /* Enable vertical scrolling */
+      max-height: 80vh; /* Limit height for vertical scrolling */
+      width: 100%;
     }
 
     .song-card {
@@ -53,10 +57,25 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
       animation: slideUp 0.5s ease-in-out;
-       height: auto;
-      width: 150px;
-      font-size: 20%;
+      min-width: 150px; /* Ensure cards don't shrink too much */
     }
+
+    /* Song Container */
+
+
+/* Horizontal Scroll Control (Optional) */
+.song-container::-webkit-scrollbar {
+  height: 8px; /* Set the height of the horizontal scrollbar */
+}
+
+.song-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5); /* Style for the thumb */
+  border-radius: 4px;
+}
+
+.song-container::-webkit-scrollbar-track {
+  background: transparent; /* Hide the track */
+}
 
     .song-card:hover {
       transform: translateY(-5px);
