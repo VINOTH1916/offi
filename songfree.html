@@ -286,7 +286,7 @@
   </script>
    
   <!-- Search Bar -->
-  <input type="text" id="searchBar" placeholder="Search for movies or songs..." oninput="filterSongs()">
+  <input type="text" id="searchBar" placeholder="Search for movies or songs...(3172 songs)" oninput="filterSongs()">
 
   <!-- Song Container -->
   <div class="song-container" id="songContainer"></div>
@@ -3500,7 +3500,7 @@
       const r = Math.floor(Math.random() * 256); // Random red value (0-255)
       const g = Math.floor(Math.random() * 256); // Random green value (0-255)
       const b = Math.floor(Math.random() * 256); // Random blue value (0-255)
-      const a = 0.5; // Fixed alpha value for transparency
+      const a = 0.3; // Fixed alpha value for transparency
       return `rgba(${r}, ${g}, ${b}, ${a})`;
     }
 
