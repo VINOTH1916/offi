@@ -3,187 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rich Music Player</title>
+    <title>Simple Music Player</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background: #1e1e1e;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .music-player {
-            background: #333;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            width: 300px;
+            font-family: Arial, sans-serif;
             text-align: center;
+            padding: 50px;
         }
-
-        .cover img {
-            width: 100%;
+        .player {
+            background: #f4f4f4;
+            padding: 20px;
             border-radius: 10px;
-        }
-
-        .info {
-            margin: 15px 0;
-        }
-
-        .info h2, .info h3 {
-            margin: 5px 0;
-        }
-
-        .progress-container {
-            background: #444;
-            border-radius: 5px;
-            cursor: pointer;
-            height: 5px;
-            width: 100%;
-            position: relative;
-            margin: 20px 0;
-        }
-
-        .progress {
-            background: #1db954;
-            border-radius: 5px;
-            height: 100%;
-            width: 0%;
-            transition: width 0.1s;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .controls button {
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-size: 24px;
-            padding: 10px;
-        }
-
-        .controls button:focus {
-            outline: none;
-        }
-
-        .controls button:hover {
-            color: #1db954;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <div class="music-player">
-        <div class="cover">
-            <img src="cover1.jpg" alt="Album Cover" id="cover-image">
-        </div>
-        <div class="info">
-            <h2 id="title">Song Title</h2>
-            <h3 id="artist">Artist</h3>
-        </div>
-        <div class="progress-container">
-            <div class="progress" id="progress"></div>
-        </div>
-        <div class="controls">
-            <button id="prev"><i class="fas fa-backward"></i></button>
-            <button id="play"><i class="fas fa-play"></i></button>
-            <button id="next"><i class="fas fa-forward"></i></button>
-        </div>
-        <audio id="audio" src="song1.mp3"></audio>
+    <div class="player">
+        <h2>Simple Music Player</h2>
+        <audio controls>
+            <source src="Vallinam/Maaman-Machan-MassTamilan.com.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
     </div>
-
-    <script>
-        const songs = [
-            { title: "Song One", artist: "Artist One", cover: "cover1.jpg", src: "Vallinam/Maaman-Machan-MassTamilan.com.mp3" }
-        ];
-
-        let currentSongIndex = 0;
-        const audio = document.getElementById('audio');
-        const coverImage = document.getElementById('cover-image');
-        const title = document.getElementById('title');
-        const artist = document.getElementById('artist');
-        const progressContainer = document.getElementById('progress-container');
-        const progress = document.getElementById('progress');
-        const playBtn = document.getElementById('play');
-        const prevBtn = document.getElementById('prev');
-        const nextBtn = document.getElementById('next');
-
-        function loadSong(song) {
-            title.innerText = song.title;
-            artist.innerText = song.artist;
-            coverImage.src = song.cover;
-            audio.src = song.src;
-        }
-
-        function playSong() {
-            playBtn.querySelector('i').classList.remove('fa-play');
-            playBtn.querySelector('i').classList.add('fa-pause');
-            audio.play();
-        }
-
-        function pauseSong() {
-            playBtn.querySelector('i').classList.remove('fa-pause');
-            playBtn.querySelector('i').classList.add('fa-play');
-            audio.pause();
-        }
-
-        function prevSong() {
-            currentSongIndex--;
-            if (currentSongIndex < 0) {
-                currentSongIndex = songs.length - 1;
-            }
-            loadSong(songs[currentSongIndex]);
-            playSong();
-        }
-
-        function nextSong() {
-            currentSongIndex++;
-            if (currentSongIndex > songs.length - 1) {
-                currentSongIndex = 0;
-            }
-            loadSong(songs[currentSongIndex]);
-            playSong();
-        }
-
-        function updateProgress(e) {
-            const { duration, currentTime } = e.srcElement;
-            const progressPercent = (currentTime / duration) * 100;
-            progress.style.width = `${progressPercent}%`;
-        }
-
-        function setProgress(e) {
-            const width = this.clientWidth;
-            const clickX = e.offsetX;
-            const duration = audio.duration;
-            audio.currentTime = (clickX / width) * duration;
-        }
-
-        playBtn.addEventListener('click', () => {
-            const isPlaying = playBtn.querySelector('i').classList.contains('fa-pause');
-            if (isPlaying) {
-                pauseSong();
-            } else {
-                playSong();
-            }
-        });
-
-        prevBtn.addEventListener('click', prevSong);
-        nextBtn.addEventListener('click', nextSong);
-        audio.addEventListener('timeupdate', updateProgress);
-        progressContainer.addEventListener('click', setProgress);
-        audio.addEventListener('ended', nextSong);
-
-        // Load the first song
-        loadSong(songs[currentSongIndex]);
-    </script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
