@@ -21,10 +21,34 @@
 <body>
     <div class="player">
         <h2>Simple Music Player</h2>
-        <audio controls>
+        <audio id="audioPlayer" controls loop>
             <source src="Vallinam/Maaman-Machan-MassTamilan.com.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
+        <button onclick="toggleRepeat()">Toggle Repeat</button>
     </div>
+    
+    <script>
+        const audioPlayer = document.getElementById("audioPlayer");
+        const playlist = [
+            "Vallinam/Maaman-Machan-MassTamilan.com.mp3",
+            "Vallinam/Nakula-MassTamilan.com.mp3",
+            "Vallinam/Uyiril-Uyiril-II-MassTamilan.com.mp3",
+            "Vallinam/Uyiril-Uyiril-MassTamilan.com.mp3",
+            "Vallinam/Vallinam-MassTamilan.com.mp3",
+            "Vallinam/Chittuku-Chittuku-MassTamilan.org.mp3"
+        ];
+        let currentIndex = 0;
+
+        audioPlayer.addEventListener("ended", function() {
+            currentIndex = (currentIndex + 1) % playlist.length;
+            audioPlayer.src = playlist[currentIndex];
+            audioPlayer.play();
+        });
+
+        function toggleRepeat() {
+            audioPlayer.loop = !audioPlayer.loop;
+        }
+    </script>
 </body>
 </html>
