@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Delivery Path Optimization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .control-panel {
+            flex: 1;
+            min-width: 350px;
+            padding: 25px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .graph-container {
+            flex: 2;
+            min-width: 500px;
+            height: 550px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input, button, textarea {
+            margin: 5px 0;
+            padding: 10px;
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            margin-top: 15px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .remove-point {
+            background-color: #e74c3c;
+            width: auto;
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+        
+        .remove-point:hover {
+            background-color: #c0392b;
+        }
+        
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .generation-info {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+        }
+        
+        .point-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .point-input input {
+            flex: 1;
+            margin: 0;
+        }
+        
+        .point-input button {
+            margin: 0;
+            flex: 0 0 auto;
+            width: 100px;
+        }
+        
+        #pointsContainer {
+            margin: 20px 0;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        
+        .point-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+        
+        .point-item span {
+            margin-right: 10px;
+            min-width: 80px;
+            font-weight: 600;
+        }
+        
+        .point-item input {
+            margin: 0 5px;
+            padding: 8px;
+        }
+        
+        #bestPath, #bestDistance, #executionTime {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .section-title {
+            color: #3498db;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Drone Delivery Path Optimization</h1>
+    <p>Find the optimal delivery path using genetic algorithms</p>
+    
+    <div class="container">
+        <div class="control-panel">
+            <h2 class="section-title">Delivery Points</h2>
+            <div id="pointsContainer">
+                <div class="point-item">
+                    <span>Start/End:</span>
+                    <input type="number" class="x-coord" value="0" placeholder="X">
+                    <input type="number" class="y-coord" value="0" placeholder="Y" readonly>
+                </div>
+                <!-- Points will be added here -->
+            </div>
+            
+            <div class="point-input">
+                <input type="number" id="newX" placeholder="X coordinate">
+                <input type="number" id="newY" placeholder="Y coordinate">
+                <button id="addPoint">Add Point</button>
+            </div>
+            
+            <h2 class="section-title">Algorithm Parameters</h2>
+            <label for="populationSize">Population Size:</label>
+            <input type="number" id="populationSize" min="10" max="500" value="100">
+            
+            <label for="mutationRate">Mutation Rate (0-1):</label>
+            <input type="number" id="mutationRate" min="0" max="1" step="0.01" value="0.01">
+            
+            <label for="generations">Number of Generations:</label>
+            <input type="number" id="generations" min="1" max="1000" value="100">
+            
+            <label for="elitism">Elitism (best solutions to keep):</label>
+            <input type="number" id="elitism" min="0" max="10" value="2">
+            
+            <button id="runAlgorithm">Run Genetic Algorithm</button>
+            <button id="stopAlgorithm" disabled>Stop Algorithm</button>
+            
+            <div class="generation-info" id="generationInfo">
+                Generation: 0 | Best Distance: -
+            </div>
+        </div>
+        
+        <div class="graph-container">
+            <canvas id="deliveryGraph"></canvas>
+        </div>
+    </div>
+    
+    <div class="results">
+        <h2>Results</h2>
+        <div id="bestPath">Best path: -</div>
+        <div id="bestDistance">Total distance: -</div>
+        <div id="executionTime">Execution time: -</div>
+    </div>
+
+    <script>
+        // DOM elements
+        const populationSizeInput = document.getElementById('populationSize');
+        const mutationRateInput = document.getElementById('mutationRate');
+        const generationsInput = document.getElementById('generations');
+        const elitismInput = document.getElementById('elitism');
+        const runAlgorithmBtn = document.getElementById('runAlgorithm');
+        const stopAlgorithmBtn = document.getElementById('stopAlgorithm');
+        const generationInfo = document.getElementById('generationInfo');
+        const bestPathDiv = document.getElementById('bestPath');
+        const bestDistanceDiv = document.getElementById('bestDistance');
+        const executionTimeDiv = document.getElementById('executionTime');
+        const pointsContainer = document.getElementById('pointsContainer');
+        const addPointBtn = document.getElementById('addPoint');
+        const newXInput = document.getElementById('newX');
+        const newYInput = document.getElementById('newY');
+        
+        // Canvas setup
+        const canvas = document.getElementById('deliveryGraph');
+        const ctx = canvas.getContext('2d');
+        
+        // Global variables
+        let points = [{x: 0, y: 0}]; // Start with just the start/end point
+        let population = [];
+        let bestPath = [];
+        let bestDistance = Infinity;
+        let generation = 0;
+        let animationId = null;
+        let isRunning = false;
+        let startTime = 0;
+        
+        // Initialize chart
+        function initCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            drawPoints();
+        }
+        
+        // Add a new delivery point
+        function addPoint(x, y) {
+            points.push({x: parseFloat(x), y: parseFloat(y)});
+            
+            const pointItem = document.createElement('div');
+            pointItem.className = 'point-item';
+            pointItem.innerHTML = `
+                <span>Point ${points.length-1}:</span>
+                <input type="number" class="x-coord" value="${x}" placeholder="X">
+                <input type="number" class="y-coord" value="${y}" placeholder="Y">
+                <button class="remove-point">Remove</button>
+            `;
+            pointsContainer.appendChild(pointItem);
+            
+            // Add event listener for remove button
+            pointItem.querySelector('.remove-point').addEventListener('click', () => {
+                const index = Array.from(pointsContainer.children).indexOf(pointItem);
+                if (index > 0) { // Don't remove the start/end point
+                    points.splice(index, 1);
+                    pointsContainer.removeChild(pointItem);
+                    // Renumber remaining points
+                    const pointLabels = pointsContainer.querySelectorAll('.point-item span');
+                    for (let i = 1; i < pointLabels.length; i++) {
+                        pointLabels[i].textContent = `Point ${i}:`;
+                    }
+                    drawPoints();
+                }
+            });
+            
+            // Add event listeners for coordinate changes
+            const xInput = pointItem.querySelector('.x-coord');
+            const yInput = pointItem.querySelector('.y-coord');
+            
+            xInput.addEventListener('change', (e) => {
+                const index = Array.from(pointsContainer.children).indexOf(pointItem);
+                points[index].x = parseFloat(e.target.value);
+                drawPoints();
+            });
+            
+            yInput.addEventListener('change', (e) => {
+                const index = Array.from(pointsContainer.children).indexOf(pointItem);
+                points[index].y = parseFloat(e.target.value);
+                drawPoints();
+            });
+            
+            drawPoints();
+        }
+        
+        // Calculate Euclidean distance between two points
+        function distance(p1, p2) {
+            return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+        }
+        
+        // Calculate total path distance
+        function calculateDistance(path) {
+            let total = 0;
+            // From start to first point
+            total += distance(points[0], points[path[0]]);
+            
+            // Between delivery points
+            for (let i = 0; i < path.length - 1; i++) {
+                total += distance(points[path[i]], points[path[i + 1]]);
+            }
+            
+            // From last point back to start
+            total += distance(points[path[path.length - 1]], points[0]);
+            return total;
+        }
+        
+        // Initialize population with random paths
+        function initializePopulation() {
+            const size = parseInt(populationSizeInput.value);
+            population = [];
+            
+            // We only permute the delivery points (excluding the start/end point)
+            const deliveryPoints = Array.from({length: points.length - 1}, (_, i) => i + 1);
+            
+            for (let i = 0; i < size; i++) {
+                // Create a shuffled copy of the delivery points
+                const path = [...deliveryPoints];
+                for (let j = path.length - 1; j > 0; j--) {
+                    const k = Math.floor(Math.random() * (j + 1));
+                    [path[j], path[k]] = [path[k], path[j]];
+                }
+                population.push({
+                    path: path,
+                    distance: calculateDistance(path)
+                });
+            }
+        }
+        
+        // Tournament selection
+        function selectParent() {
+            const tournamentSize = 5;
+            let best = null;
+            
+            for (let i = 0; i < tournamentSize; i++) {
+                const candidate = population[Math.floor(Math.random() * population.length)];
+                if (!best || candidate.distance < best.distance) {
+                    best = candidate;
+                }
+            }
+            
+            return best;
+        }
+        
+        // Ordered crossover (OX1)
+        function crossover(parent1, parent2) {
+            const path1 = parent1.path;
+            const path2 = parent2.path;
+            const length = path1.length;
+            
+            // Select random start and end points for the segment
+            let start = Math.floor(Math.random() * length);
+            let end = Math.floor(Math.random() * length);
+            
+            if (start > end) {
+                [start, end] = [end, start];
+            }
+            
+            // Initialize child with segment from parent1
+            const child = new Array(length).fill(-1);
+            for (let i = start; i <= end; i++) {
+                child[i] = path1[i];
+            }
+            
+            // Fill remaining positions with elements from parent2 in order
+            let currentPos = (end + 1) % length;
+            for (const gene of path2) {
+                if (!child.includes(gene)) {
+                    child[currentPos] = gene;
+                    currentPos = (currentPos + 1) % length;
+                }
+            }
+            
+            return {
+                path: child,
+                distance: calculateDistance(child)
+            };
+        }
+        
+        // Swap mutation
+        function mutate(individual) {
+            const mutationRate = parseFloat(mutationRateInput.value);
+            
+            if (Math.random() < mutationRate) {
+                const path = [...individual.path];
+                const i = Math.floor(Math.random() * path.length);
+                let j = Math.floor(Math.random() * path.length);
+                
+                // Ensure we swap with a different index
+                while (j === i) {
+                    j = Math.floor(Math.random() * path.length);
+                }
+                
+                // Swap genes
+                [path[i], path[j]] = [path[j], path[i]];
+                
+                return {
+                    path: path,
+                    distance: calculateDistance(path)
+                };
+            }
+            
+            return individual;
+        }
+        
+        // Evolve the population to the next generation
+        function evolvePopulation() {
+            const elitism = parseInt(elitismInput.value);
+            const newPopulation = [];
+            
+            // Sort population by fitness (distance)
+            population.sort((a, b) => a.distance - b.distance);
+            
+            // Keep the best individuals (elitism)
+            for (let i = 0; i < elitism && i < population.length; i++) {
+                newPopulation.push(population[i]);
+            }
+            
+            // Fill the rest of the population with offspring
+            while (newPopulation.length < population.length) {
+                const parent1 = selectParent();
+                const parent2 = selectParent();
+                let child = crossover(parent1, parent2);
+                child = mutate(child);
+                newPopulation.push(child);
+            }
+            
+            population = newPopulation;
+            generation++;
+            
+            // Update best path
+            const currentBest = population[0];
+            if (currentBest.distance < bestDistance) {
+                bestDistance = currentBest.distance;
+                bestPath = currentBest.path;
+            }
+            
+            // Update UI
+            generationInfo.textContent = `Generation: ${generation} | Best Distance: ${bestDistance.toFixed(2)}`;
+        }
+        
+        // Draw delivery points and paths
+        function drawPoints() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (points.length === 0) return;
+            
+            // Calculate bounds for scaling
+            const allX = points.map(p => p.x);
+            const allY = points.map(p => p.y);
+            const minX = Math.min(...allX);
+            const maxX = Math.max(...allX);
+            const minY = Math.min(...allY);
+            const maxY = Math.max(...allY);
+            
+            // Add some padding
+            const padding = 50;
+            const rangeX = Math.max(maxX - minX, 10);
+            const rangeY = Math.max(maxY - minY, 10);
+            
+            // Scale points to fit canvas
+            const scaleX = (canvas.width - 2 * padding) / rangeX;
+            const scaleY = (canvas.height - 2 * padding) / rangeY;
+            const scale = Math.min(scaleX, scaleY);
+            
+            // Center the drawing
+            const offsetX = (canvas.width - rangeX * scale) / 2 - minX * scale;
+            const offsetY = (canvas.height - rangeY * scale) / 2 - minY * scale;
+            
+            // Function to convert coordinates to canvas position
+            const toCanvas = (x, y) => ({
+                x: x * scale + offsetX,
+                y: y * scale + offsetY
+            });
+            
+            // Draw connections for best path if available
+            if (bestPath.length > 0) {
+                ctx.beginPath();
+                const startPos = toCanvas(points[0].x, points[0].y);
+                ctx.moveTo(startPos.x, startPos.y);
+                
+                // Draw to first point
+                const firstPos = toCanvas(points[bestPath[0]].x, points[bestPath[0]].y);
+                ctx.lineTo(firstPos.x, firstPos.y);
+                
+                // Draw path between delivery points
+                for (let i = 1; i < bestPath.length; i++) {
+                    const pos = toCanvas(points[bestPath[i]].x, points[bestPath[i]].y);
+                    ctx.lineTo(pos.x, pos.y);
+                }
+                
+                // Close the loop back to start
+                ctx.lineTo(startPos.x, startPos.y);
+                ctx.strokeStyle = '#3498db';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+            
+            // Draw points
+            for (let i = 0; i < points.length; i++) {
+                const pos = toCanvas(points[i].x, points[i].y);
+                
+                // Start/end point is green
+                ctx.fillStyle = i === 0 ? '#2ecc71' : '#e74c3c';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add white border
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Label points
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                if (i === 0) {
+                    ctx.fillText('Start/End', pos.x, pos.y - 20);
+                } else {
+                    ctx.fillText(`P${i}`, pos.x, pos.y - 20);
+                }
+            }
+        }
+        
+        // Animation loop for the genetic algorithm
+        function animate() {
+            if (!isRunning) return;
+            
+            const maxGenerations = parseInt(generationsInput.value);
+            
+            if (generation < maxGenerations) {
+                evolvePopulation();
+                drawPoints();
+                animationId = requestAnimationFrame(animate);
+            } else {
+                stopAlgorithm();
+                updateResults();
+            }
+        }
+        
+        // Update results display
+        function updateResults() {
+            const endTime = performance.now();
+            const elapsedTime = (endTime - startTime) / 1000;
+            
+            bestPathDiv.textContent = `Best path: Start → ${bestPath.map(p => `P${p}`).join(' → ')} → Start`;
+            bestDistanceDiv.textContent = `Total distance: ${bestDistance.toFixed(2)}`;
+            executionTimeDiv.textContent = `Execution time: ${elapsedTime.toFixed(2)} seconds`;
+        }
+        
+        // Start the algorithm
+        function startAlgorithm() {
+            if (points.length < 2) {
+                alert('Please add at least 1 delivery point first.');
+                return;
+            }
+            
+            isRunning = true;
+            generation = 0;
+            bestDistance = Infinity;
+            bestPath = [];
+            
+            initializePopulation();
+            startTime = performance.now();
+            
+            runAlgorithmBtn.disabled = true;
+            stopAlgorithmBtn.disabled = false;
+            addPointBtn.disabled = true;
+            
+            // Disable all point inputs during algorithm run
+            document.querySelectorAll('.point-item input').forEach(input => {
+                input.disabled = true;
+            });
+            
+            animate();
+        }
+        
+        // Stop the algorithm
+        function stopAlgorithm() {
+            isRunning = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            
+            runAlgorithmBtn.disabled = false;
+            stopAlgorithmBtn.disabled = true;
+            addPointBtn.disabled = false;
+            
+            // Re-enable point inputs
+            document.querySelectorAll('.point-item input').forEach(input => {
+                input.disabled = false;
+            });
+            
+            updateResults();
+        }
+        
+        // Event listeners
+        addPointBtn.addEventListener('click', () => {
+            const x = parseFloat(newXInput.value);
+            const y = parseFloat(newYInput.value);
+            
+            if (isNaN(x) || isNaN(y)) {
+                alert('Please enter valid coordinates');
+                return;
+            }
+            
+            addPoint(x, y);
+            newXInput.value = '';
+            newYInput.value = '';
+            newXInput.focus();
+        });
+        
+        runAlgorithmBtn.addEventListener('click', startAlgorithm);
+        stopAlgorithmBtn.addEventListener('click', stopAlgorithm);
+        
+        // Handle Enter key in coordinate inputs
+        newXInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addPointBtn.click();
+            }
+        });
+        
+        newYInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addPointBtn.click();
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            initCanvas();
+        });
+        
+        // Initialize with some example points
+        initCanvas();
+        addPoint(3, 5);
+        addPoint(7, 2);
+        addPoint(4, 8);
+    </script>
+</body>
+</html>
