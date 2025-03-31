@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Cycloid Animations</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --background-color: #f8f9fa;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        h1 {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        label {
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+        
+        select, input {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: white;
+            font-size: 14px;
+        }
+        
+        input[type="range"] {
+            padding: 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: var(--text-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 500px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            font-size: 14px;
+        }
+        
+        .tab-group {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .tab {
+            padding: 8px 15px;
+            background-color: #e0e0e0;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Advanced Cycloid Animations</h1>
+    
+    <div class="container">
+        <div class="card">
+            <div class="tab-group">
+                <div class="tab active" data-tab="basic">Basic Cycloids</div>
+                <div class="tab" data-tab="advanced">Advanced Cases</div>
+            </div>
+            
+            <div id="basic-controls">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="animationType">Animation Type:</label>
+                        <select id="animationType">
+                            <option value="cycloid">Cycloid (Horizontal)</option>
+                            <option value="cycloidVertical">Cycloid (Vertical)</option>
+                            <option value="cycloidBoth">Combined Motion</option>
+                            <option value="hypocycloid">Hypocycloid</option>
+                            <option value="epicycloid">Epicycloid</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group" id="rollingRadiusGroup">
+                        <label for="rollingRadius">Rolling Circle Radius (mm):</label>
+                        <input type="number" id="rollingRadius" value="25" min="5" max="200">
+                    </div>
+                    
+                    <div class="control-group" id="fixedRadiusGroup" style="display:none;">
+                        <label for="fixedRadius">Fixed Circle Radius (mm):</label>
+                        <input type="number" id="fixedRadius" value="75" min="10" max="300">
+                    </div>
+                    
+                    <div class="control-group" id="pointOffsetGroup">
+                        <label for="pointOffset">Point Offset (mm):</label>
+                        <input type="number" id="pointOffset" value="25" min="1" max="200">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="animationSpeed">Animation Speed:</label>
+                        <input type="range" id="animationSpeed" min="1" max="20" value="10">
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button id="startAnimation" class="btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 2L13 8L3 14V2Z" fill="white"/>
+                        </svg>
+                        Start
+                    </button>
+                    <button id="resetAnimation" class="btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.5 8C13.5 11.0376 11.0376 13.5 8 13.5C4.96243 13.5 2.5 11.0376 2.5 8C2.5 4.96243 4.96243 2.5 8 2.5C9.61929 2.5 11.0755 3.21249 12.0533 4.33333M13.5 4V2M13.5 2H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div id="advanced-controls" style="display:none;">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="advancedType">Advanced Case:</label>
+                        <select id="advancedType">
+                            <option value="horizontalThenVertical">Horizontal then Vertical</option>
+                            <option value="inclined60">Inclined at 60°</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="advancedRadius">Rolling Circle Diameter (mm):</label>
+                        <input type="number" id="advancedRadius" value="50" min="10" max="200">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="advancedSpeed">Animation Speed:</label>
+                        <input type="range" id="advancedSpeed" min="1" max="20" value="10">
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button id="startAdvanced" class="btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 2L13 8L3 14V2Z" fill="white"/>
+                        </svg>
+                        Start
+                    </button>
+                    <button id="resetAdvanced" class="btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.5 8C13.5 11.0376 11.0376 13.5 8 13.5C4.96243 13.5 2.5 11.0376 2.5 8C2.5 4.96243 4.96243 2.5 8 2.5C9.61929 2.5 11.0755 3.21249 12.0533 4.33333M13.5 4V2M13.5 2H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div class="info-panel" id="infoText">
+                <strong>Cycloid (Horizontal):</strong> The curve traced by a point on the circumference of a circle rolling along a straight line without slipping.
+            </div>
+        </div>
+        
+        <canvas id="animationCanvas" width="960" height="500"></canvas>
+    </div>
+
+    <script>
+        // DOM Elements
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d');
+        const tabs = document.querySelectorAll('.tab');
+        const basicControls = document.getElementById('basic-controls');
+        const advancedControls = document.getElementById('advanced-controls');
+        const infoText = document.getElementById('infoText');
+        
+        // Set canvas resolution
+        function resizeCanvas() {
+            const displayWidth = canvas.clientWidth;
+            const displayHeight = canvas.clientHeight;
+            
+            if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+                canvas.width = displayWidth;
+                canvas.height = displayHeight;
+                draw();
+            }
+        }
+        
+        // Animation variables
+        let animationId = null;
+        let time = 0;
+        let points = [];
+        let isAnimating = false;
+        let currentMode = 'basic';
+        let currentPhase = 0; // For advanced animations
+        
+        // Info text for different animation types
+        const infoTexts = {
+            'cycloid': '<strong>Cycloid (Horizontal):</strong> The curve traced by a point on the circumference of a circle rolling along a straight line without slipping.',
+            'cycloidVertical': '<strong>Cycloid (Vertical):</strong> The curve traced by a point on the circumference of a circle rolling along a vertical line without slipping.',
+            'cycloidBoth': '<strong>Combined Motion Cycloid:</strong> The curve traced by a point on a circle rolling with both horizontal and vertical motion components.',
+            'hypocycloid': '<strong>Hypocycloid:</strong> The curve traced by a point on the circumference of a circle rolling <em>inside</em> another fixed circle without slipping.',
+            'epicycloid': '<strong>Epicycloid:</strong> The curve traced by a point on the circumference of a circle rolling <em>outside</em> another fixed circle without slipping.',
+            'horizontalThenVertical': '<strong>Horizontal then Vertical:</strong> A circle rolls horizontally for a distance, then vertically for another distance, tracing a combined cycloid path.',
+            'inclined60': '<strong>Inclined at 60°:</strong> A circle rolls horizontally for half a revolution, then along a 60° inclined line for another half revolution.'
+        };
+        
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                currentMode = this.dataset.tab;
+                
+                if (currentMode === 'basic') {
+                    basicControls.style.display = 'block';
+                    advancedControls.style.display = 'none';
+                } else {
+                    basicControls.style.display = 'none';
+                    advancedControls.style.display = 'block';
+                }
+                
+                resetAnimation();
+                updateInfoText();
+            });
+        });
+        
+        function updateInfoText() {
+            if (currentMode === 'basic') {
+                const animationType = document.getElementById('animationType').value;
+                infoText.innerHTML = infoTexts[animationType];
+            } else {
+                const advancedType = document.getElementById('advancedType').value;
+                infoText.innerHTML = infoTexts[advancedType];
+            }
+        }
+        
+        // Event listeners for basic controls
+        document.getElementById('animationType').addEventListener('change', function() {
+            if (this.value === 'hypocycloid' || this.value === 'epicycloid') {
+                document.getElementById('fixedRadiusGroup').style.display = 'block';
+            } else {
+                document.getElementById('fixedRadiusGroup').style.display = 'none';
+            }
+            updateInfoText();
+            resetAnimation();
+        });
+        
+        document.getElementById('advancedType').addEventListener('change', function() {
+            updateInfoText();
+            resetAnimation();
+        });
+        
+        document.getElementById('startAnimation').addEventListener('click', function() {
+            if (isAnimating) {
+                pauseAnimation();
+                this.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L13 8L3 14V2Z" fill="white"/></svg> Resume';
+            } else {
+                startOrResumeAnimation();
+                this.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3H10V13H6V3Z" fill="white"/></svg> Pause';
+            }
+        });
+        
+        document.getElementById('startAdvanced').addEventListener('click', function() {
+            if (isAnimating) {
+                pauseAnimation();
+                this.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L13 8L3 14V2Z" fill="white"/></svg> Resume';
+            } else {
+                startOrResumeAnimation();
+                this.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3H10V13H6V3Z" fill="white"/></svg> Pause';
+            }
+        });
+        
+        document.getElementById('resetAnimation').addEventListener('click', resetAnimation);
+        document.getElementById('resetAdvanced').addEventListener('click', resetAnimation);
+        
+        // Animation control functions
+        function startOrResumeAnimation() {
+            if (!isAnimating) {
+                isAnimating = true;
+                time = points.length > 0 ? time : 0; // Resume from current time if points exist
+                animate();
+            }
+        }
+        
+        function pauseAnimation() {
+            isAnimating = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        }
+        
+        function resetAnimation() {
+            pauseAnimation();
+            time = 0;
+            points = [];
+            currentPhase = 0;
+            resizeCanvas();
+            draw();
+            
+            if (currentMode === 'basic') {
+                document.getElementById('startAnimation').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L13 8L3 14V2Z" fill="white"/></svg> Start';
+            } else {
+                document.getElementById('startAdvanced').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L13 8L3 14V2Z" fill="white"/></svg> Start';
+            }
+        }
+        
+        // Drawing functions
+        function draw() {
+            resizeCanvas();
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (currentMode === 'basic') {
+                drawBasicAnimation();
+            } else {
+                drawAdvancedAnimation();
+            }
+        }
+        
+        function drawBasicAnimation() {
+            // Get parameters
+            const animationType = document.getElementById('animationType').value;
+            const rollingRadius = parseInt(document.getElementById('rollingRadius').value);
+            const fixedRadius = parseInt(document.getElementById('fixedRadius').value);
+            const pointOffset = parseInt(document.getElementById('pointOffset').value);
+            
+            // Set origin point
+            const originX = 100;
+            const originY = canvas.height / 2;
+            
+            // Draw reference lines/circles
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 3]);
+            
+            if (animationType === 'cycloid' || animationType === 'cycloidBoth') {
+                // Horizontal line for cycloid
+                ctx.beginPath();
+                ctx.moveTo(0, originY);
+                ctx.lineTo(canvas.width, originY);
+                ctx.stroke();
+            }
+            
+            if (animationType === 'cycloidVertical' || animationType === 'cycloidBoth') {
+                // Vertical line for vertical cycloid
+                ctx.beginPath();
+                ctx.moveTo(originX, 0);
+                ctx.lineTo(originX, canvas.height);
+                ctx.stroke();
+            }
+            
+            if (animationType === 'hypocycloid' || animationType === 'epicycloid') {
+                // Draw fixed circle
+                ctx.beginPath();
+                ctx.arc(originX, originY, fixedRadius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            
+            ctx.setLineDash([]);
+            
+            // Calculate current position
+            let circleX, circleY, pointX, pointY;
+            const speed = parseInt(document.getElementById('animationSpeed').value) * 0.005;
+            
+            if (animationType === 'cycloid') {
+                // Regular cycloid (horizontal)
+                circleX = originX + time * rollingRadius;
+                circleY = originY - rollingRadius;
+                
+                const angle = time;
+                pointX = circleX - pointOffset * Math.sin(angle);
+                pointY = circleY + pointOffset * Math.cos(angle);
+            } 
+            else if (animationType === 'cycloidVertical') {
+                // Vertical cycloid
+                circleX = originX;
+                circleY = originY + time * rollingRadius;
+                
+                const angle = time;
+                pointX = circleX + pointOffset * Math.cos(angle);
+                pointY = circleY - pointOffset * Math.sin(angle);
+            }
+            else if (animationType === 'cycloidBoth') {
+                // Both horizontal and vertical
+                circleX = originX + time * rollingRadius;
+                circleY = originY + time * rollingRadius;
+                
+                const angle = time;
+                pointX = circleX - pointOffset * Math.sin(angle);
+                pointY = circleY - pointOffset * Math.sin(angle);
+            }
+            else if (animationType === 'hypocycloid') {
+                // Hypocycloid
+                const R = fixedRadius;
+                const r = rollingRadius;
+                const d = pointOffset;
+                const k = R / r;
+                
+                const angle = time;
+                circleX = originX + (R - r) * Math.cos(angle);
+                circleY = originY + (R - r) * Math.sin(angle);
+                
+                pointX = originX + (R - r) * Math.cos(angle) + d * Math.cos((1 - k) * angle);
+                pointY = originY + (R - r) * Math.sin(angle) - d * Math.sin((1 - k) * angle);
+            }
+            else if (animationType === 'epicycloid') {
+                // Epicycloid
+                const R = fixedRadius;
+                const r = rollingRadius;
+                const d = pointOffset;
+                const k = R / r;
+                
+                const angle = time;
+                circleX = originX + (R + r) * Math.cos(angle);
+                circleY = originY + (R + r) * Math.sin(angle);
+                
+                pointX = originX + (R + r) * Math.cos(angle) - d * Math.cos((1 + k) * angle);
+                pointY = originY + (R + r) * Math.sin(angle) - d * Math.sin((1 + k) * angle);
+            }
+            
+            // Add current point to path
+            if (isAnimating) {
+                points.push({x: pointX, y: pointY});
+            }
+            
+            // Draw rolling circle
+            ctx.strokeStyle = '#166088';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(circleX, circleY, rollingRadius, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Draw radius to tracing point
+            ctx.beginPath();
+            ctx.moveTo(circleX, circleY);
+            ctx.lineTo(pointX, pointY);
+            ctx.stroke();
+            
+            // Draw tracing point
+            ctx.fillStyle = '#e53935';
+            ctx.beginPath();
+            ctx.arc(pointX, pointY, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw the path
+            if (points.length > 1) {
+                ctx.strokeStyle = '#e53935';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                
+                ctx.stroke();
+            }
+            
+            // Draw labels
+            ctx.fillStyle = '#333333';
+            ctx.font = '14px "Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
+            ctx.fillText(`${animationType.replace(/([A-Z])/g, ' $1').trim()} Path`, 20, 30);
+        }
+        
+        function drawAdvancedAnimation() {
+            const advancedType = document.getElementById('advancedType').value;
+            const diameter = parseInt(document.getElementById('advancedRadius').value);
+            const radius = diameter / 2;
+            const speed = parseInt(document.getElementById('advancedSpeed').value) * 0.005;
+            
+            // Set origin point
+            const originX = 100;
+            const originY = canvas.height / 2;
+            
+            // Draw reference lines
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 3]);
+            
+            if (advancedType === 'horizontalThenVertical') {
+                // Horizontal line
+                ctx.beginPath();
+                ctx.moveTo(0, originY);
+                ctx.lineTo(canvas.width, originY);
+                ctx.stroke();
+                
+                // Vertical line
+                ctx.beginPath();
+                ctx.moveTo(originX + Math.PI * radius, 0);
+                ctx.lineTo(originX + Math.PI * radius, canvas.height);
+                ctx.stroke();
+            } else if (advancedType === 'inclined60') {
+                // Horizontal line
+                ctx.beginPath();
+                ctx.moveTo(0, originY);
+                ctx.lineTo(originX + Math.PI * radius, originY);
+                ctx.stroke();
+                
+                // Inclined line at 60 degrees
+                const inclinedLength = Math.PI * radius * 2;
+                ctx.beginPath();
+                ctx.moveTo(originX + Math.PI * radius, originY);
+                ctx.lineTo(
+                    originX + Math.PI * radius + inclinedLength * Math.cos(Math.PI/3),
+                    originY - inclinedLength * Math.sin(Math.PI/3)
+                );
+                ctx.stroke();
+            }
+            
+            ctx.setLineDash([]);
+            
+            // Calculate current position
+            let circleX, circleY, pointX, pointY;
+            let angle = time;
+            
+            if (advancedType === 'horizontalThenVertical') {
+                if (time < Math.PI) {
+                    // First phase - horizontal motion
+                    currentPhase = 0;
+                    circleX = originX + angle * radius;
+                    circleY = originY - radius;
+                    
+                    pointX = circleX - radius * Math.sin(angle);
+                    pointY = circleY + radius * Math.cos(angle);
+                } else {
+                    // Second phase - vertical motion
+                    currentPhase = 1;
+                    const verticalAngle = angle - Math.PI;
+                    circleX = originX + Math.PI * radius;
+                    circleY = originY - radius + verticalAngle * radius;
+                    
+                    pointX = circleX + radius * Math.cos(verticalAngle);
+                    pointY = circleY - radius * Math.sin(verticalAngle);
+                }
+            } else if (advancedType === 'inclined60') {
+                if (time < Math.PI) {
+                    // First phase - horizontal motion
+                    currentPhase = 0;
+                    circleX = originX + angle * radius;
+                    circleY = originY - radius;
+                    
+                    pointX = circleX - radius * Math.sin(angle);
+                    pointY = circleY + radius * Math.cos(angle);
+                } else {
+                    // Second phase - inclined motion at 60 degrees
+                    currentPhase = 1;
+                    const inclinedAngle = angle - Math.PI;
+                    const inclinedX = Math.PI/3; // 60 degrees in radians
+                    
+                    circleX = originX + Math.PI * radius + inclinedAngle * radius * Math.cos(inclinedX);
+                    circleY = originY - radius - inclinedAngle * radius * Math.sin(inclinedX);
+                    
+                    pointX = circleX - radius * Math.sin(inclinedAngle + inclinedX);
+                    pointY = circleY + radius * Math.cos(inclinedAngle + inclinedX);
+                }
+            }
+            
+            // Add current point to path
+            if (isAnimating) {
+                points.push({x: pointX, y: pointY});
+            }
+            
+            // Draw rolling circle
+            ctx.strokeStyle = '#166088';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Draw radius to tracing point
+            ctx.beginPath();
+            ctx.moveTo(circleX, circleY);
+            ctx.lineTo(pointX, pointY);
+            ctx.stroke();
+            
+            // Draw tracing point
+            ctx.fillStyle = '#e53935';
+            ctx.beginPath();
+            ctx.arc(pointX, pointY, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw the path
+            if (points.length > 1) {
+                ctx.strokeStyle = '#e53935';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                
+                ctx.stroke();
+            }
+            
+            // Draw labels
+            ctx.fillStyle = '#333333';
+            ctx.font = '14px "Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
+            
+            if (advancedType === 'horizontalThenVertical') {
+                ctx.fillText('Horizontal then Vertical Cycloid', 20, 30);
+                ctx.fillText(`Phase: ${currentPhase === 0 ? 'Horizontal' : 'Vertical'}`, 20, 50);
+            } else if (advancedType === 'inclined60') {
+                ctx.fillText('Inclined at 60° Cycloid', 20, 30);
+                ctx.fillText(`Phase: ${currentPhase === 0 ? 'Horizontal' : 'Inclined'}`, 20, 50);
+            }
+        }
+        
+        function animate() {
+            time += parseInt(
+                currentMode === 'basic' 
+                    ? document.getElementById('animationSpeed').value 
+                    : document.getElementById('advancedSpeed').value
+            ) * 0.005;
+            
+            draw();
+            
+            // Continue animation if not paused
+            if (isAnimating) {
+                animationId = requestAnimationFrame(animate);
+            }
+        }
+        
+        // Initial setup
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        updateInfoText();
+    </script>
+</body>
+</html>
