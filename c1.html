@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Programming Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .spinner-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .spinner {
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.5s;
+            user-select: none;
+        }
+        .spinner:hover {
+            background-color: #2980b9;
+        }
+        .spinner.spinning {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .question-set {
+            display: none;
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .question h3 {
+            margin-top: 0;
+        }
+        button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        .correct {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>C Programming Quiz</h1>
+        
+        <div class="spinner-container">
+            <div class="spinner" id="spinner">SPIN</div>
+        </div>
+        
+        <div id="question-set-container"></div>
+        
+        <button id="submit-btn" style="display: none;">Submit Answers</button>
+        <button id="next-btn" style="display: none;">Next Question Set</button>
+    </div>
+
+    <script>
+        // Question sets data
+        const questionSets = [
+            {
+                title: "SET 1",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nint a = 5, b = 10;\nprintf(\"%d\", a + b);",
+                        answer: "15"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\n15",
+                        answer: "printf(\"%d\", 5 + 10);"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nint a = 5, b = 10;\nprintf(\"___\", a + b);",
+                        answer: "%d"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\n#include<stdio.h>\n\nint main() {\n    int a = 5 b = 10;\n    printf(\"%d\", a + b);\n    return 0;\n}",
+                        answer: "int a = 5, b = 10;"
+                    }
+                ]
+            },
+            {
+                title: "SET 2",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nchar ch = 'A';\nprintf(\"%c\", ch);",
+                        answer: "A"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\nA",
+                        answer: "printf(\"%c\", 'A');"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nchar ch = 'A';\nprintf(\"___\", ch);",
+                        answer: "%c"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\nint main() {\n    char ch = 'A'\n    printf(\"%c\", ch);\n    return 0;\n}",
+                        answer: "char ch = 'A';"
+                    }
+                ]
+            },
+            {
+                title: "SET 3",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nfloat x = 3.5;\nprintf(\"%f\", x);",
+                        answer: "3.500000"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\n3.500000",
+                        answer: "printf(\"%f\", 3.5);"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nfloat x = ___;\nprintf(\"%f\", x);",
+                        answer: "3.5"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\n#include<stdio.h>\nint main() {\n    float x = 3.5;\n    printf(%f, x);\n    return 0;\n}",
+                        answer: "printf(\"%f\", x);"
+                    }
+                ]
+            },
+            {
+                title: "SET 4",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nint a = 2, b = 3;\nprintf(\"%d\", a * b);",
+                        answer: "6"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\n6",
+                        answer: "printf(\"%d\", 2 * 3);"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nint a = ___, b = ___;\nprintf(\"%d\", a * b);",
+                        answer: "2, 3"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\n#include<stdio.h>\nint main()\n{\n    int a = 2, b = 3;\n    printf(\"%d\" a * b);\n    return 0;\n}",
+                        answer: "printf(\"%d\", a * b);"
+                    }
+                ]
+            },
+            {
+                title: "SET 5",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nint a = 10;\nprintf(\"%d\", a++);",
+                        answer: "10"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\n10",
+                        answer: "printf(\"%d\", 10);"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nint a = 10;\nprintf(\"___\", ___);",
+                        answer: "%d, a++"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\nint main() {\n    int a = 10;\n    printf(\"%d\", a++);",
+                        answer: "Add closing brace }"
+                    }
+                ]
+            },
+            {
+                title: "SET 6",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nint a = 5;\nint b = ++a;\nprintf(\"%d\", b);",
+                        answer: "6"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\n6",
+                        answer: "printf(\"%d\", 6);"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nint a = 5;\nint b = ___;\nprintf(\"%d\", b);",
+                        answer: "++a"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\n#include<stdio.h>\nint main() {\n    int a = 5\n    int b = ++a;\n    printf(\"%d\", b);\n    return 0;\n}",
+                        answer: "int a = 5;"
+                    }
+                ]
+            },
+            {
+                title: "SET 7",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nint a = 5, b = 2;\nprintf(\"%d\", a / b);",
+                        answer: "2"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\n2",
+                        answer: "printf(\"%d\", 5 / 2);"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nint a = 5, b = 2;\nprintf(\"___\", a / b);",
+                        answer: "%d"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\n#include<stdio.h>\nint main() {\n    int a = 5, b = 2;\n    printf(\"%d\", a b);\n    return 0;\n}",
+                        answer: "printf(\"%d\", a / b);"
+                    }
+                ]
+            },
+            {
+                title: "SET 8",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nint x = 1;\nx = x + 2;\nprintf(\"%d\", x);",
+                        answer: "3"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\n3",
+                        answer: "printf(\"%d\", 3);"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nint x = ___;\nx = x + ___;\nprintf(\"___\", x);",
+                        answer: "1, 2, %d"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\n#include<stdio.h>\nint main()\n{\n    int x = 1;\n    x += 2\n    printf(\"%d\", x);\n    return 0;\n}",
+                        answer: "x += 2;"
+                    }
+                ]
+            },
+            {
+                title: "SET 9",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nprintf(\"Hello\\nWorld\");",
+                        answer: "Hello\nWorld"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\nHello\nWorld",
+                        answer: "printf(\"Hello\\nWorld\");"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nprintf(\"Hello___World\");",
+                        answer: "\\n"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\n#include<stdio.h>\nint main() {\n    printf(Hello\\nWorld);\n    return 0;\n}",
+                        answer: "printf(\"Hello\\nWorld\");"
+                    }
+                ]
+            },
+            {
+                title: "SET 10",
+                questions: [
+                    {
+                        type: "predict",
+                        question: "Predict the Output:\nint a = 4;\nint b = 6;\nint c = a + b;\nprintf(\"%d\", c);",
+                        answer: "10"
+                    },
+                    {
+                        type: "output",
+                        question: "Write the code that produces this output:\n10",
+                        answer: "printf(\"%d\", 10);"
+                    },
+                    {
+                        type: "fill",
+                        question: "Fill in the Blanks:\nint a = 4, b = 6;\nint c = ___;\nprintf(\"___\", ___);",
+                        answer: "a + b, %d, c"
+                    },
+                    {
+                        type: "fix",
+                        question: "Find and Fix the Error:\n#include<stdio.h>\nint main() {\n    int a = 4, b = 6;\n    int c = a + b;\n    printf(\"%d\", c)\n    return 0;\n}",
+                        answer: "printf(\"%d\", c);"
+                    }
+                ]
+            }
+        ];
+
+        // DOM elements
+        const spinner = document.getElementById('spinner');
+        const questionSetContainer = document.getElementById('question-set-container');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        let currentSetIndex = -1;
+        let userAnswers = [];
+
+        // Spinner click event
+        spinner.addEventListener('click', function() {
+            // Start spinning animation
+            this.classList.add('spinning');
+            
+            // Randomly select a question set after a delay
+            setTimeout(() => {
+                this.classList.remove('spinning');
+                
+                // Get a random set that's not the current one
+                let newIndex;
+                do {
+                    newIndex = Math.floor(Math.random() * questionSets.length);
+                } while (newIndex === currentSetIndex && questionSets.length > 1);
+                
+                currentSetIndex = newIndex;
+                displayQuestionSet(currentSetIndex);
+                
+                // Show submit button
+                submitBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'none';
+            }, 2000);
+        });
+
+        // Display question set
+        function displayQuestionSet(index) {
+            const set = questionSets[index];
+            questionSetContainer.innerHTML = '';
+            userAnswers = [];
+            
+            // Create set title
+            const title = document.createElement('h2');
+            title.textContent = set.title;
+            questionSetContainer.appendChild(title);
+            
+            // Create questions
+            set.questions.forEach((q, i) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                const questionTitle = document.createElement('h3');
+                questionTitle.textContent = `Question ${i+1}`;
+                questionDiv.appendChild(questionTitle);
+                
+                const questionText = document.createElement('pre');
+                questionText.textContent = q.question;
+                questionDiv.appendChild(questionText);
+                
+                const answerInput = document.createElement('input');
+                answerInput.type = 'text';
+                answerInput.placeholder = 'Your answer...';
+                answerInput.dataset.index = i;
+                questionDiv.appendChild(answerInput);
+                
+                const answerDisplay = document.createElement('div');
+                answerDisplay.className = 'answer-display';
+                answerDisplay.dataset.index = i;
+                questionDiv.appendChild(answerDisplay);
+                
+                questionSetContainer.appendChild(questionDiv);
+                userAnswers.push('');
+                
+                // Store answer change
+                answerInput.addEventListener('input', function() {
+                    userAnswers[this.dataset.index] = this.value.trim();
+                });
+            });
+        }
+
+        // Submit button click event
+        submitBtn.addEventListener('click', function() {
+            const set = questionSets[currentSetIndex];
+            let allAnswered = true;
+            
+            // Check if all questions are answered
+            for (let i = 0; i < set.questions.length; i++) {
+                const answerDisplay = document.querySelector(`.answer-display[data-index="${i}"]`);
+                answerDisplay.textContent = '';
+                
+                if (userAnswers[i] === '') {
+                    answerDisplay.textContent = 'Please answer this question';
+                    answerDisplay.className = 'answer-display incorrect';
+                    allAnswered = false;
+                }
+            }
+            
+            if (!allAnswered) return;
+            
+            // Check answers
+            for (let i = 0; i < set.questions.length; i++) {
+                const answerDisplay = document.querySelector(`.answer-display[data-index="${i}"]`);
+                const correctAnswer = set.questions[i].answer;
+                
+                // For fill-in-the-blank questions, accept multiple possible answers
+                if (set.questions[i].type === 'fill') {
+                    const possibleAnswers = correctAnswer.split(', ');
+                    if (possibleAnswers.some(ans => userAnswers[i].toLowerCase() === ans.toLowerCase())) {
+                        answerDisplay.textContent = 'Correct!';
+                        answerDisplay.className = 'answer-display correct';
+                    } else {
+                        answerDisplay.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
+                        answerDisplay.className = 'answer-display incorrect';
+                    }
+                } else {
+                    if (userAnswers[i].toLowerCase() === correctAnswer.toLowerCase()) {
+                        answerDisplay.textContent = 'Correct!';
+                        answerDisplay.className = 'answer-display correct';
+                    } else {
+                        answerDisplay.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
+                        answerDisplay.className = 'answer-display incorrect';
+                    }
+                }
+            }
+            
+            // Hide submit button and show next button
+            submitBtn.style.display = 'none';
+            nextBtn.style.display = 'inline-block';
+        });
+
+        // Next button click event
+        nextBtn.addEventListener('click', function() {
+            currentSetIndex = -1;
+            questionSetContainer.innerHTML = '';
+            submitBtn.style.display = 'none';
+            this.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
