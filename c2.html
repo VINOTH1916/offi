@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Programming Quiz - 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .spinner-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .spinner {
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.5s;
+            user-select: none;
+        }
+        .spinner:hover {
+            background-color: #2980b9;
+        }
+        .spinner.spinning {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .question-set {
+            display: none;
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .question h3 {
+            margin-top: 0;
+        }
+        .options {
+            margin-left: 20px;
+        }
+        .option {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .option input {
+            margin-right: 10px;
+        }
+        button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        .correct {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        #score-display {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Basic C Programming Quiz</h1>
+        
+        <div class="spinner-container">
+            <div class="spinner" id="spinner">SPIN</div>
+        </div>
+        
+        <div id="score-display"></div>
+        <div id="question-set-container"></div>
+        
+        <button id="submit-btn" style="display: none;">Submit Answers</button>
+        <button id="next-btn" style="display: none;">Next Question Set</button>
+    </div>
+
+    <script>
+        // Question sets data (10 sets with 4 basic questions each)
+        const questionSets = [
+            {
+                title: "SET 1: Basic Output",
+                questions: [
+                    {
+                        question: "What is missing in this code to print a number?\nint x = 5;\nprintf(\"___\", x);",
+                        options: ["%d", "%c", "%f", "%s"],
+                        answer: "%d"
+                    },
+                    {
+                        question: "What will be the output?\nprintf(\"%d\", 3 + 2);",
+                        options: ["5", "32", "3+2", "Error"],
+                        answer: "5"
+                    },
+                    {
+                        question: "Which header file is needed for printf()?",
+                        options: ["<stdio.h>", "<math.h>", "<conio.h>", "None"],
+                        answer: "<stdio.h>"
+                    },
+                    {
+                        question: "What is the correct way to print a float variable y?",
+                        options: ["printf(\"%d\", y);", "printf(\"%f\", y);", "printf(\"%c\", y);", "printf(y);"],
+                        answer: "printf(\"%f\", y);"
+                    }
+                ]
+            },
+            {
+                title: "SET 2: Data Types",
+                questions: [
+                    {
+                        question: "What is the size of 'int' data type typically?",
+                        options: ["1 byte", "2 bytes", "4 bytes", "8 bytes"],
+                        answer: "4 bytes"
+                    },
+                    {
+                        question: "Which data type would you use for a single character?",
+                        options: ["int", "float", "char", "string"],
+                        answer: "char"
+                    },
+                    {
+                        question: "What is the ASCII value of 'A'?",
+                        options: ["48", "65", "97", "32"],
+                        answer: "65"
+                    },
+                    {
+                        question: "Which is NOT a valid C data type?",
+                        options: ["int", "float", "double", "real"],
+                        answer: "real"
+                    }
+                ]
+            },
+            {
+                title: "SET 3: Basic Operations",
+                questions: [
+                    {
+                        question: "What is 7 % 3?",
+                        options: ["2", "1", "3", "0"],
+                        answer: "1"
+                    },
+                    {
+                        question: "What is the result of 5 / 2 in C?",
+                        options: ["2.5", "2", "3", "2.0"],
+                        answer: "2"
+                    },
+                    {
+                        question: "What does ++x do?",
+                        options: ["Adds 2 to x", "Increments x by 1", "Doubles x", "Does nothing"],
+                        answer: "Increments x by 1"
+                    },
+                    {
+                        question: "What is the value of x after: int x = 3; x += 2;",
+                        options: ["3", "5", "6", "Error"],
+                        answer: "5"
+                    }
+                ]
+            },
+            {
+                title: "SET 4: Simple Programs",
+                questions: [
+                    {
+                        question: "What is missing in this program?\nint main() {\n    printf(\"Hello\");\n    return 0;\n}",
+                        options: ["#include<stdio.h>", "void before main()", "getch()", "Nothing"],
+                        answer: "#include<stdio.h>"
+                    },
+                    {
+                        question: "What will this print?\nprintf(\"%c\", 65);",
+                        options: ["65", "A", "a", "Error"],
+                        answer: "A"
+                    },
+                    {
+                        question: "What is the output?\nint x = 5;\nprintf(\"%d\", x++);",
+                        options: ["5", "6", "0", "Error"],
+                        answer: "5"
+                    },
+                    {
+                        question: "How to print a new line?",
+                        options: ["\\n", "\\t", "\\r", "\\a"],
+                        answer: "\\n"
+                    }
+                ]
+            },
+            {
+                title: "SET 5: Basic Math",
+                questions: [
+                    {
+                        question: "What is the formula for area of circle?",
+                        options: ["πd", "2πr", "πr²", "4πr²"],
+                        answer: "πr²"
+                    },
+                    {
+                        question: "What is 3 * 4 + 5?",
+                        options: ["17", "27", "12", "Error"],
+                        answer: "17"
+                    },
+                    {
+                        question: "What is the value of 5 * (2 + 3)?",
+                        options: ["10", "15", "25", "13"],
+                        answer: "25"
+                    },
+                    {
+                        question: "What is 10 / 3 in C?",
+                        options: ["3.333", "3", "4", "3.0"],
+                        answer: "3"
+                    }
+                ]
+            },
+            {
+                title: "SET 6: Variables",
+                questions: [
+                    {
+                        question: "Which is a valid variable name?",
+                        options: ["1var", "var-name", "var_name", "int"],
+                        answer: "var_name"
+                    },
+                    {
+                        question: "What is the value of x?\nint x = 5 / 2;",
+                        options: ["2.5", "2", "3", "2.0"],
+                        answer: "2"
+                    },
+                    {
+                        question: "How to declare a constant PI with value 3.14?",
+                        options: ["const PI = 3.14;", "#define PI 3.14", "float PI = 3.14;", "Both 1 and 2"],
+                        answer: "#define PI 3.14"
+                    },
+                    {
+                        question: "What is the default value of an uninitialized variable?",
+                        options: ["0", "1", "Garbage value", "NULL"],
+                        answer: "Garbage value"
+                    }
+                ]
+            },
+            {
+                title: "SET 7: Basic Syntax",
+                questions: [
+                    {
+                        question: "What is missing?\nint main()\n    printf(\"Hello\");\n    return 0;\n}",
+                        options: ["{ after main()", ")", ";", "#include"],
+                        answer: "{ after main()"
+                    },
+                    {
+                        question: "What ends every statement in C?",
+                        options: [".", ";", ":", "New line"],
+                        answer: ";"
+                    },
+                    {
+                        question: "Which is correct for main function?",
+                        options: ["int main()", "void main()", "main()", "All of these"],
+                        answer: "All of these"
+                    },
+                    {
+                        question: "What is wrong?\nint x = 5\nprintf(\"%d\", x);",
+                        options: ["Missing ;", "Missing ,", "Missing ()", "Nothing"],
+                        answer: "Missing ;"
+                    }
+                ]
+            },
+            {
+                title: "SET 8: Character Operations",
+                questions: [
+                    {
+                        question: "What is 'a' - 32?",
+                        options: ["A", "97", "65", "Space"],
+                        answer: "A"
+                    },
+                    {
+                        question: "What is the ASCII value of '0'?",
+                        options: ["0", "32", "48", "65"],
+                        answer: "48"
+                    },
+                    {
+                        question: "How to print a tab space?",
+                        options: ["\\n", "\\t", "\\a", "\\s"],
+                        answer: "\\t"
+                    },
+                    {
+                        question: "What will this print?\nprintf(\"%d\", 'B' - 'A');",
+                        options: ["0", "1", "65", "66"],
+                        answer: "1"
+                    }
+                ]
+            },
+            {
+                title: "SET 9: Basic Programs",
+                questions: [
+                    {
+                        question: "What is missing?\n___\nint main() {\n    printf(\"Hello\");\n    return 0;\n}",
+                        options: ["#include<stdio.h>", "void", "getch();", "Nothing"],
+                        answer: "#include<stdio.h>"
+                    },
+                    {
+                        question: "What will this print?\nprintf(\"%d\", sizeof(char));",
+                        options: ["1", "2", "4", "8"],
+                        answer: "1"
+                    },
+                    {
+                        question: "What is the output?\nprintf(\"%.1f\", 5.0 / 2);",
+                        options: ["2", "2.5", "2.0", "2.50"],
+                        answer: "2.5"
+                    },
+                    {
+                        question: "How to print % symbol?",
+                        options: ["\\%", "%%", "%", "%%%"],
+                        answer: "%%"
+                    }
+                ]
+            },
+            {
+                title: "SET 10: Mixed Basics",
+                questions: [
+                    {
+                        question: "What is the output?\nprintf(\"%c\", 97);",
+                        options: ["97", "a", "A", "Error"],
+                        answer: "a"
+                    },
+                    {
+                        question: "What is missing?\nint x = 5\ny = 10;",
+                        options: ["; after 5", ", between x and y", "int before y", "All of these"],
+                        answer: "int before y"
+                    },
+                    {
+                        question: "What is the value of 3 * 4 / 2?",
+                        options: ["6", "12", "1.5", "Error"],
+                        answer: "6"
+                    },
+                    {
+                        question: "What is the size of float typically?",
+                        options: ["2 bytes", "4 bytes", "8 bytes", "16 bytes"],
+                        answer: "4 bytes"
+                    }
+                ]
+            }
+        ];
+
+        // DOM elements
+        const spinner = document.getElementById('spinner');
+        const questionSetContainer = document.getElementById('question-set-container');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreDisplay = document.getElementById('score-display');
+
+        let currentSetIndex = -1;
+        let userAnswers = [];
+        let score = 0;
+
+        // Spinner click event
+        spinner.addEventListener('click', function() {
+            // Start spinning animation
+            this.classList.add('spinning');
+            scoreDisplay.textContent = "";
+            
+            // Randomly select a question set after a delay
+            setTimeout(() => {
+                this.classList.remove('spinning');
+                
+                // Get a random set that's not the current one
+                let newIndex;
+                do {
+                    newIndex = Math.floor(Math.random() * questionSets.length);
+                } while (newIndex === currentSetIndex && questionSets.length > 1);
+                
+                currentSetIndex = newIndex;
+                displayQuestionSet(currentSetIndex);
+                
+                // Show submit button
+                submitBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'none';
+            }, 2000);
+        });
+
+        // Display question set
+        function displayQuestionSet(index) {
+            const set = questionSets[index];
+            questionSetContainer.innerHTML = '';
+            userAnswers = Array(set.questions.length).fill(null);
+            
+            // Create set title
+            const title = document.createElement('h2');
+            title.textContent = set.title;
+            questionSetContainer.appendChild(title);
+            
+            // Create questions
+            set.questions.forEach((q, i) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                const questionTitle = document.createElement('h3');
+                questionTitle.textContent = `Q${i+1}:`;
+                questionDiv.appendChild(questionTitle);
+                
+                // Format code-like questions with <pre>
+                if (q.question.includes('\n')) {
+                    const codePre = document.createElement('pre');
+                    codePre.textContent = q.question;
+                    questionDiv.appendChild(codePre);
+                } else {
+                    const questionText = document.createElement('p');
+                    questionText.textContent = q.question;
+                    questionDiv.appendChild(questionText);
+                }
+                
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+                
+                // Create radio buttons for each option
+                q.options.forEach((option, j) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `question-${i}`;
+                    radio.value = option;
+                    radio.id = `q${i}-opt${j}`;
+                    
+                    radio.addEventListener('change', function() {
+                        if (this.checked) {
+                            userAnswers[i] = this.value;
+                        }
+                    });
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = `q${i}-opt${j}`;
+                    label.textContent = option;
+                    
+                    optionDiv.appendChild(radio);
+                    optionDiv.appendChild(label);
+                    optionsDiv.appendChild(optionDiv);
+                });
+                
+                questionDiv.appendChild(optionsDiv);
+                
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.className = 'feedback';
+                feedbackDiv.dataset.index = i;
+                questionDiv.appendChild(feedbackDiv);
+                
+                questionSetContainer.appendChild(questionDiv);
+            });
+        }
+
+        // Submit button click event
+        submitBtn.addEventListener('click', function() {
+            const set = questionSets[currentSetIndex];
+            let allAnswered = true;
+            let currentScore = 0;
+            
+            // Check answers and provide feedback
+            for (let i = 0; i < set.questions.length; i++) {
+                const feedbackDiv = document.querySelector(`.feedback[data-index="${i}"]`);
+                feedbackDiv.textContent = '';
+                feedbackDiv.className = 'feedback';
+                
+                if (userAnswers[i] === null) {
+                    feedbackDiv.textContent = 'Please select an answer';
+                    feedbackDiv.classList.add('incorrect');
+                    allAnswered = false;
+                } else {
+                    if (userAnswers[i] === set.questions[i].answer) {
+                        feedbackDiv.textContent = 'Correct!';
+                        feedbackDiv.classList.add('correct');
+                        currentScore++;
+                    } else {
+                        feedbackDiv.textContent = `Incorrect. The correct answer is: ${set.questions[i].answer}`;
+                        feedbackDiv.classList.add('incorrect');
+                    }
+                }
+            }
+            
+            if (!allAnswered) return;
+            
+            // Update score
+            score = currentScore;
+            scoreDisplay.textContent = `Score: ${score}/${set.questions.length}`;
+            
+            // Hide submit button and show next button
+            submitBtn.style.display = 'none';
+            nextBtn.style.display = 'inline-block';
+        });
+
+        // Next button click event
+        nextBtn.addEventListener('click', function() {
+            currentSetIndex = -1;
+            questionSetContainer.innerHTML = '';
+            submitBtn.style.display = 'none';
+            this.style.display = 'none';
+            scoreDisplay.textContent = "";
+        });
+    </script>
+</body>
+</html>
