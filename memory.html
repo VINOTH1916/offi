@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary/Integer Converter with Memory Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .conversion-section {
+            background-color: #f9f9f9;
+        }
+        .memory-section {
+            background-color: #f0f7ff;
+        }
+        .dual-conversion {
+            background-color: #fff9f0;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"], input[type="text"], select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .binary-digit {
+            display: inline-block;
+            width: 25px;
+            height: 35px;
+            text-align: center;
+            line-height: 35px;
+            margin: 0 2px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        .binary-digit.active {
+            background-color: #4CAF50;
+            color: white;
+            transform: scale(1.1);
+        }
+        .memory-header {
+            display: flex;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .memory-header div {
+            width: 30px;
+            text-align: center;
+            margin: 0 2px;
+        }
+        .memory-row {
+            display: flex;
+            margin-bottom: 5px;
+        }
+        .memory-address {
+            width: 100px;
+            font-family: monospace;
+            color: #666;
+        }
+        .memory-cell {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            background-color: #e0e0e0;
+            margin: 0 2px;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        .memory-cell.active {
+            background-color: #2196F3;
+            color: white;
+            transform: scale(1.1);
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .result-box {
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+        .dual-columns {
+            display: flex;
+            gap: 20px;
+        }
+        .dual-column {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Binary/Integer Converter with Memory Visualization</h1>
+        
+        <div class="section conversion-section">
+            <h2>Integer to Binary Conversion</h2>
+            
+            <div class="input-group">
+                <label for="numberInput">Enter an integer:</label>
+                <input type="number" id="numberInput" value="42">
+                
+                <label for="memorySize">Select memory size:</label>
+                <select id="memorySize">
+                    <option value="1">1 byte (8 bits)</option>
+                    <option value="2">2 bytes (16 bits)</option>
+                    <option value="4">4 bytes (32 bits)</option>
+                </select>
+                
+                <button id="convertBtn">Convert & Store</button>
+            </div>
+            
+            <div class="input-group">
+                <label>Binary Representation:</label>
+                <div id="binaryDisplay"></div>
+            </div>
+            
+            <div class="memory-section">
+                <h3>Memory Storage:</h3>
+                <div class="memory-header">
+                    <div class="memory-address">Address</div>
+                    <div class="bit-indices"></div>
+                </div>
+                <div id="memoryDisplay"></div>
+            </div>
+            
+            <div class="explanation">
+                <p><strong>How memory storage works:</strong> The memory address is shown in hexadecimal format. For multi-byte values, we use little-endian format (least significant byte at the lowest address). Negative numbers are represented using two's complement.</p>
+            </div>
+        </div>
+        
+        <div class="section dual-conversion">
+            <h2>Dual Conversion Tools</h2>
+            <div class="dual-columns">
+                <div class="dual-column">
+                    <h3>Binary to Integer</h3>
+                    <div class="input-group">
+                        <label for="binaryInput">Enter binary (e.g., 1010):</label>
+                        <input type="text" id="binaryInput" placeholder="Enter binary digits">
+                        <button id="binaryToIntBtn">Convert to Integer</button>
+                    </div>
+                    <div class="input-group">
+                        <label>Integer Result:</label>
+                        <div class="result-box" id="binaryToIntResult"></div>
+                    </div>
+                </div>
+                
+                <div class="dual-column">
+                    <h3>Integer to Binary</h3>
+                    <div class="input-group">
+                        <label for="intInput">Enter integer:</label>
+                        <input type="number" id="intInput" placeholder="Enter integer">
+                        <button id="intToBinaryBtn">Convert to Binary</button>
+                    </div>
+                    <div class="input-group">
+                        <label>Binary Result:</label>
+                        <div class="result-box" id="intToBinaryResult"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the bit indices display based on default memory size
+        updateBitIndices(1);
+        
+        document.getElementById('memorySize').addEventListener('change', function() {
+            const size = parseInt(this.value);
+            updateBitIndices(size);
+        });
+        
+        document.getElementById('convertBtn').addEventListener('click', function() {
+            const input = document.getElementById('numberInput');
+            const number = parseInt(input.value);
+            const size = parseInt(document.getElementById('memorySize').value);
+            
+            if (isNaN(number)) {
+                alert('Please enter a valid number');
+                return;
+            }
+            
+            animateBinaryConversion(number, size);
+        });
+        
+        document.getElementById('binaryToIntBtn').addEventListener('click', function() {
+            const binaryInput = document.getElementById('binaryInput').value.trim();
+            
+            if (!binaryInput.match(/^[01]+$/)) {
+                alert('Please enter valid binary digits (0s and 1s only)');
+                return;
+            }
+            
+            const decimal = parseInt(binaryInput, 2);
+            document.getElementById('binaryToIntResult').textContent = decimal;
+        });
+        
+        document.getElementById('intToBinaryBtn').addEventListener('click', function() {
+            const intInput = document.getElementById('intInput').value.trim();
+            const number = parseInt(intInput);
+            
+            if (isNaN(number)) {
+                alert('Please enter a valid integer');
+                return;
+            }
+            
+            // Handle negative numbers
+            let binaryStr;
+            if (number < 0) {
+                // For demonstration, we'll use 32-bit representation
+                const maxBits = 32;
+                binaryStr = (number >>> 0).toString(2).slice(-maxBits);
+            } else {
+                binaryStr = number.toString(2);
+            }
+            
+            document.getElementById('intToBinaryResult').textContent = binaryStr;
+        });
+        
+        function updateBitIndices(size) {
+
+        }
+        
+        function animateBinaryConversion(number, size) {
+            const binaryDisplay = document.getElementById('binaryDisplay');
+            binaryDisplay.innerHTML = '';
+            
+            const bits = size * 8;
+            let binaryStr;
+            
+            // Handle negative numbers using two's complement
+            if (number < 0) {
+                // Calculate two's complement
+                const max = Math.pow(2, bits);
+                binaryStr = (number + max).toString(2);
+            } else {
+                binaryStr = number.toString(2);
+            }
+            
+            // Pad with leading zeros
+            while (binaryStr.length < bits) {
+                binaryStr = '0' + binaryStr;
+            }
+            
+            // Create digit elements
+            const digits = [];
+            for (let i = 0; i < bits; i++) {
+                const digit = document.createElement('div');
+                digit.className = 'binary-digit';
+                digit.textContent = binaryStr[i];
+                binaryDisplay.appendChild(digit);
+                digits.push(digit);
+            }
+            
+            // Animate each digit
+            let delay = 0;
+            digits.forEach((digit, index) => {
+                setTimeout(() => {
+                    digit.classList.add('active');
+                    setTimeout(() => {
+                        digit.classList.remove('active');
+                        
+                        // When last digit is done, animate memory storage
+                        if (index === bits-1) {
+                            setTimeout(() => {
+                                animateMemoryStorage(binaryStr, size);
+                            }, 300);
+                        }
+                    }, 300);
+                }, delay);
+                delay += 300 / Math.min(bits, 8); // Faster animation for more bits
+            });
+        }
+        
+        function animateMemoryStorage(binaryStr, size) {
+            const memoryDisplay = document.getElementById('memoryDisplay');
+            memoryDisplay.innerHTML = '';
+            
+            // Generate a random memory address aligned to size
+            const baseAddress = Math.floor(Math.random() * 0x1000) * size;
+            const addressHex = '0x' + baseAddress.toString(16).padStart(4, '0').toUpperCase();
+            
+            // Split binary string into bytes (8 bits each)
+            const bytes = [];
+            for (let i = 0; i < size; i++) {
+                const start = i * 8;
+                const end = start + 8;
+                bytes.push(binaryStr.slice(start, end));
+            }
+            
+            // For little-endian, we reverse the byte order
+            bytes.reverse();
+            
+            // Create memory rows (one per byte)
+            const allCells = [];
+            bytes.forEach((byte, byteIndex) => {
+                const row = document.createElement('div');
+                row.className = 'memory-row';
+                
+                const addressCell = document.createElement('div');
+                addressCell.className = 'memory-address';
+                addressCell.textContent = addressHex + ' + ' + byteIndex;
+                row.appendChild(addressCell);
+                
+                // Create memory cells (bits) for this byte
+                const cells = [];
+                for (let i = 7; i >= 0; i--) {
+                    const cell = document.createElement('div');
+                    cell.className = 'memory-cell';
+                    cell.textContent = byte[7-i]; // We store MSB first
+                    row.appendChild(cell);
+                    cells.push(cell);
+                }
+                
+                memoryDisplay.appendChild(row);
+                allCells.push(...cells);
+            });
+            
+            // Animate each memory cell
+            let delay = 0;
+            allCells.forEach((cell, index) => {
+                setTimeout(() => {
+                    cell.classList.add('active');
+                    setTimeout(() => {
+                        cell.classList.remove('active');
+                    }, 300);
+                }, delay);
+                delay += 300 / Math.min(size, 4); // Adjust speed based on size
+            });
+        }
+    </script>
+</body>
+</html>
