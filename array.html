@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        select, input {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .array-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .array-cell {
+            width: 120px;
+            height: 150px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .array-cell:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .index {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .value {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            transition: background-color 0.5s;
+        }
+        
+        .type {
+            background-color: #ecf0f1;
+            padding: 6px;
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .address {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 10px;
+            color: #95a5a6;
+        }
+        
+        .info-panel {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .highlight {
+            animation: highlight 1.5s;
+        }
+        
+        @keyframes highlight {
+            0% { background-color: #fffacd; }
+            50% { background-color: #ffeb3b; }
+            100% { background-color: white; }
+        }
+        
+        .memory-visualization {
+            margin-top: 30px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .memory-block {
+            display: flex;
+            margin-bottom: 5px;
+            align-items: center;
+        }
+        
+        .memory-address {
+            width: 100px;
+            font-family: monospace;
+            color: #e74c3c;
+        }
+        
+        .memory-content {
+            flex-grow: 1;
+            background-color: #f9f9f9;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <h1>Array Visualization Tool</h1>
+    
+    <div class="controls">
+        <select id="dataType">
+            <option value="number">Number</option>
+            <option value="string">String</option>
+            <option value="boolean">Boolean</option>
+            <option value="object">Object</option>
+            <option value="null">null</option>
+            <option value="undefined">undefined</option>
+        </select>
+        
+        <input type="text" id="valueInput" placeholder="Enter value">
+        
+        <button id="addBtn">Add to Array</button>
+        <button id="resetBtn">Reset Array</button>
+    </div>
+    
+    <div class="array-container" id="arrayContainer">
+        <!-- Array cells will be added here dynamically -->
+    </div>
+    
+    <div class="info-panel">
+        <h3>Array Information</h3>
+        <p><strong>Length:</strong> <span id="arrayLength">0</span></p>
+        <p><strong>Data Type:</strong> <span id="arrayType">Empty array</span></p>
+        <p><strong>Memory Representation:</strong> Contiguous block of memory where each element is stored sequentially.</p>
+    </div>
+    
+    <div class="memory-visualization" id="memoryVisualization">
+        <h3>Memory Address Visualization</h3>
+        <!-- Memory blocks will be added here dynamically -->
+    </div>
+    
+    <script>
+        const arrayContainer = document.getElementById('arrayContainer');
+        const memoryVisualization = document.getElementById('memoryVisualization');
+        const dataTypeSelect = document.getElementById('dataType');
+        const valueInput = document.getElementById('valueInput');
+        const addBtn = document.getElementById('addBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const arrayLengthSpan = document.getElementById('arrayLength');
+        const arrayTypeSpan = document.getElementById('arrayType');
+        
+        let demoArray = [];
+        let baseMemoryAddress = 0x1000; // Starting memory address (hexadecimal)
+        
+        // Update the UI based on the selected data type
+        dataTypeSelect.addEventListener('change', function() {
+            const type = this.value;
+            valueInput.placeholder = `Enter ${type} value`;
+            
+            // Set example values for different types
+            switch(type) {
+                case 'number':
+                    valueInput.value = '42';
+                    break;
+                case 'string':
+                    valueInput.value = '"hello"';
+                    break;
+                case 'boolean':
+                    valueInput.value = 'true';
+                    break;
+                case 'object':
+                    valueInput.value = '{key: "value"}';
+                    break;
+                case 'null':
+                    valueInput.value = 'null';
+                    break;
+                case 'undefined':
+                    valueInput.value = 'undefined';
+                    break;
+            }
+        });
+        
+        // Add an element to the array
+        addBtn.addEventListener('click', function() {
+            const type = dataTypeSelect.value;
+            let value = valueInput.value;
+            
+            try {
+                // Parse the value based on type
+                switch(type) {
+                    case 'number':
+                        value = parseFloat(value);
+                        if (isNaN(value)) throw new Error('Invalid number');
+                        break;
+                    case 'string':
+                        // Remove surrounding quotes if present
+                        if ((value.startsWith('"') && value.endsWith('"')) || 
+                            (value.startsWith("'") && value.endsWith("'"))) {
+                            value = value.slice(1, -1);
+                        }
+                        break;
+                    case 'boolean':
+                        value = value.toLowerCase() === 'true';
+                        break;
+                    case 'object':
+                        value = JSON.parse(value.replace(/(\w+):/g, '"$1":'));
+                        break;
+                    case 'null':
+                        value = null;
+                        break;
+                    case 'undefined':
+                        value = undefined;
+                        break;
+                }
+                
+                // Add to array
+                demoArray.push(value);
+                
+                // Update visualization
+                updateArrayVisualization();
+                updateMemoryVisualization();
+                updateArrayInfo();
+                
+                // Highlight the newly added cell
+                const cells = document.querySelectorAll('.array-cell');
+                cells[cells.length - 1].classList.add('highlight');
+                
+                // Reset the highlight after animation
+                setTimeout(() => {
+                    cells[cells.length - 1].classList.remove('highlight');
+                }, 1500);
+                
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        });
+        
+        // Reset the array
+        resetBtn.addEventListener('click', function() {
+            demoArray = [];
+            updateArrayVisualization();
+            updateMemoryVisualization();
+            updateArrayInfo();
+        });
+        
+        // Update the array visualization
+        function updateArrayVisualization() {
+            arrayContainer.innerHTML = '';
+            
+            demoArray.forEach((value, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'array-cell';
+                
+                // Calculate memory address for this element
+                const address = (baseMemoryAddress + (index * 4)).toString(16);
+                
+                // Determine the type of the value
+                let type = typeof value;
+                if (value === null) type = 'null';
+                
+                cell.innerHTML = `
+                    <div class="index">Index ${index}</div>
+                    <div class="value">${formatValue(value)}</div>
+                    <div class="type">${type}</div>
+                    <div class="address">0x${address}</div>
+                `;
+                
+                arrayContainer.appendChild(cell);
+            });
+            
+            arrayLengthSpan.textContent = demoArray.length;
+        }
+        
+        // Update the memory visualization
+        function updateMemoryVisualization() {
+            memoryVisualization.innerHTML = '<h3>Memory Address Visualization</h3>';
+            
+            demoArray.forEach((value, index) => {
+                const block = document.createElement('div');
+                block.className = 'memory-block';
+                
+                // Calculate memory address for this element
+                const address = (baseMemoryAddress + (index * 4)).toString(16).padStart(4, '0');
+                
+                block.innerHTML = `
+                    <div class="memory-address">0x${address}</div>
+                    <div class="memory-content">
+                        <strong>Index ${index}:</strong> ${formatValue(value)} (${typeof value === 'object' ? (value === null ? 'null' : 'object') : typeof value})
+                    </div>
+                `;
+                
+                memoryVisualization.appendChild(block);
+            });
+        }
+        
+        // Update array information
+        function updateArrayInfo() {
+            if (demoArray.length === 0) {
+                arrayTypeSpan.textContent = 'Empty array';
+                return;
+            }
+            
+            // Check if all elements are of the same type
+            const firstType = typeof demoArray[0];
+            const allSameType = demoArray.every(item => typeof item === firstType);
+            
+            if (allSameType) {
+                arrayTypeSpan.textContent = `Homogeneous (all ${firstType}${firstType === 'object' && demoArray[0] === null ? ' (null)' : ''})`;
+            } else {
+                arrayTypeSpan.textContent = 'Heterogeneous (mixed types)';
+            }
+        }
+        
+        // Format values for display
+        function formatValue(value) {
+            if (value === null) return 'null';
+            if (value === undefined) return 'undefined';
+            if (typeof value === 'object') return JSON.stringify(value);
+            if (typeof value === 'string') return `"${value}"`;
+            return value.toString();
+        }
+        
+        // Initialize with some examples
+        function initializeExamples() {
+            // Set default values
+            dataTypeSelect.value = 'number';
+            valueInput.value = '42';
+            
+            // Add a couple of example elements
+            demoArray = [42, '"hello"', true];
+            updateArrayVisualization();
+            updateMemoryVisualization();
+            updateArrayInfo();
+        }
+        
+        // Initialize the page
+        initializeExamples();
+    </script>
+</body>
+</html>
