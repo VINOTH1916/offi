@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happy Number Check</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .problem-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .algorithm {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .example {
+            background-color: #e8f8f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            font-family: 'Consolas', monospace;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .solution {
+            display: none;
+            background: #f5f5f5;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .password-container {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff8e1;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .flow-chart {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Happy Number Check</h1>
+    
+    <div class="problem-box">
+        <h3>Problem Statement</h3>
+        <p>Check if a number is "happy" (eventually reaches 1 when replaced by the sum of squares of its digits).</p>
+        
+        <h4>Input:</h4>
+        <p>An integer n (1 ≤ n ≤ 10<sup>6</sup>)</p>
+        
+        <h4>Output:</h4>
+        <p>"Happy Number" if it reaches 1, otherwise "Not Happy Number".</p>
+    </div>
+    
+    <div class="algorithm">
+        <h3>Algorithm (Floyd's Cycle Detection)</h3>
+        <ol>
+            <li>Define helper function sumOfSquares(n) that:
+                <ul>
+                    <li>Computes sum of squares of digits</li>
+                </ul>
+            </li>
+            <li>Initialize slow = fast = n</li>
+            <li>Do:
+                <ul>
+                    <li>slow = sumOfSquares(slow) (move 1 step)</li>
+                    <li>fast = sumOfSquares(sumOfSquares(fast)) (move 2 steps)</li>
+                </ul>
+            </li>
+            <li>While slow != fast</li>
+            <li>If slow == 1, return "Happy Number"</li>
+            <li>Else, return "Not Happy Number"</li>
+        </ol>
+        
+        <div class="flow-chart">
+            <h4>Visualization for n=19:</h4>
+            <p>19 → 1² + 9² = 82</p>
+            <p>82 → 8² + 2² = 68</p>
+            <p>68 → 6² + 8² = 100</p>
+            <p>100 → 1² + 0² + 0² = 1 (Happy!)</p>
+        </div>
+    </div>
+    
+    <div class="example">
+        <h3>Examples</h3>
+        <table>
+            <tr>
+                <th>Input</th>
+                <th>Output</th>
+                <th>Explanation</th>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>"Happy Number"</td>
+                <td>Reaches 1 (19→82→68→100→1)</td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>"Not Happy Number"</td>
+                <td>Enters cycle (20→4→16→37→58→89→145→42→20)</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>"Happy Number"</td>
+                <td>7→49→97→130→10→1</td>
+            </tr>
+        </table>
+    </div>
+    
+    <h3>Try It Yourself</h3>
+    <textarea placeholder="Write your C code here..."></textarea><br>
+    <button onclick="runCode()">Run Code</button>
+    
+    <div class="password-container">
+        <h3>Need the solution?</h3>
+        <p>Enter password to reveal:</p>
+        <input type="password" id="password4" placeholder="Enter password">
+        <button onclick="showSolution(4)">Show Solution</button>
+        <div id="solution4" class="solution"></div>
+    </div>
+
+    <script>
+        function showSolution(q) {
+            const password = document.getElementById(`password${q}`).value;
+            let correctPass = "";
+            let solution = "";
+            
+            if(q === 4) {
+                correctPass = "19";
+                solution = `#include <stdio.h>\n\nint sumOfSquares(int n) {\n    int sum = 0, digit;\n    while (n > 0) {\n        digit = n % 10;\n        sum += digit * digit;\n        n /= 10;\n    }\n    return sum;\n}\n\nint main() {\n    int n, slow, fast;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n\n    slow = fast = n;\n\n    do {\n        slow = sumOfSquares(slow);\n        fast = sumOfSquares(sumOfSquares(fast));\n    } while (slow != fast);\n\n    if (slow == 1)\n        printf("%d is a Happy Number.\\n", n);\n    else\n        printf("%d is not a Happy Number.\\n", n);\n\n    return 0;\n}`;
+            }
+            
+            if(password === correctPass) {
+                document.getElementById(`solution${q}`).style.display = 'block';
+                document.getElementById(`solution${q}`).innerHTML = `<pre>${solution}</pre>`;
+            } else {
+                alert("Incorrect password!");
+            }
+        }
+        
+        function runCode() {
+            alert("Code execution simulated - implement your own compiler/execution here");
+        }
+    </script>
+</body>
+</html>
