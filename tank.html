@@ -600,4 +600,189 @@
                 new Date(record.startTime).toDateString() === today
             );
             
-            const dailyStats = d
+            const dailyStats = document.getElementById('daily-stats');
+            dailyStats.innerHTML = '<p>No records today</p>';
+            
+            if (todayRecords.length > 0) {
+                let html = '<p>Today\'s fillings: ' + todayRecords.length + '</p>';
+                
+                // Group by tank
+                const tankStats = {};
+                todayRecords.forEach(record => {
+                    if (!tankStats[record.tank]) {
+                        tankStats[record.tank] = {
+                            count: 0,
+                            totalDuration: 0
+                        };
+                    }
+                    tankStats[record.tank].count++;
+                    tankStats[record.tank].totalDuration += record.duration;
+                });
+                
+                for (const tank in tankStats) {
+                    const avgDuration = formatDuration(tankStats[tank].totalDuration / tankStats[tank].count);
+                    html += `<p>${getTankName(tank)}: ${tankStats[tank].count} times (avg: ${avgDuration})</p>`;
+                }
+                
+                dailyStats.innerHTML = html;
+            }
+        }
+        
+        function updateWeeklyStats() {
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            
+            const weekRecords = records.filter(record => 
+                new Date(record.startTime) >= oneWeekAgo
+            );
+            
+            const weeklyStats = document.getElementById('weekly-stats');
+            weeklyStats.innerHTML = '<p>No records this week</p>';
+            
+            if (weekRecords.length > 0) {
+                let html = '<p>This week\'s fillings: ' + weekRecords.length + '</p>';
+                
+                // Group by tank
+                const tankStats = {};
+                weekRecords.forEach(record => {
+                    if (!tankStats[record.tank]) {
+                        tankStats[record.tank] = {
+                            count: 0,
+                            totalDuration: 0
+                        };
+                    }
+                    tankStats[record.tank].count++;
+                    tankStats[record.tank].totalDuration += record.duration;
+                });
+                
+                for (const tank in tankStats) {
+                    const avgDuration = formatDuration(tankStats[tank].totalDuration / tankStats[tank].count);
+                    html += `<p>${getTankName(tank)}: ${tankStats[tank].count} times (avg: ${avgDuration})</p>`;
+                }
+                
+                weeklyStats.innerHTML = html;
+            }
+        }
+        
+        function updateMonthlyStats() {
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+            
+            const monthRecords = records.filter(record => 
+                new Date(record.startTime) >= oneMonthAgo
+            );
+            
+            const monthlyStats = document.getElementById('monthly-stats');
+            monthlyStats.innerHTML = '<p>No records this month</p>';
+            
+            if (monthRecords.length > 0) {
+                let html = '<p>This month\'s fillings: ' + monthRecords.length + '</p>';
+                
+                // Group by tank
+                const tankStats = {};
+                monthRecords.forEach(record => {
+                    if (!tankStats[record.tank]) {
+                        tankStats[record.tank] = {
+                            count: 0,
+                            totalDuration: 0
+                        };
+                    }
+                    tankStats[record.tank].count++;
+                    tankStats[record.tank].totalDuration += record.duration;
+                });
+                
+                for (const tank in tankStats) {
+                    const avgDuration = formatDuration(tankStats[tank].totalDuration / tankStats[tank].count);
+                    html += `<p>${getTankName(tank)}: ${tankStats[tank].count} times (avg: ${avgDuration})</p>`;
+                }
+                
+                monthlyStats.innerHTML = html;
+            }
+        }
+        
+        function renderChart() {
+            const chart = document.getElementById('chart');
+            chart.innerHTML = '';
+            
+            // Group by tank
+            const tankStats = {};
+            records.forEach(record => {
+                if (!tankStats[record.tank]) {
+                    tankStats[record.tank] = {
+                        count: 0,
+                        totalDuration: 0
+                    };
+                }
+                tankStats[record.tank].count++;
+                tankStats[record.tank].totalDuration += record.duration;
+            });
+            
+            // Find max for scaling
+            let maxCount = 0;
+            for (const tank in tankStats) {
+                if (tankStats[tank].count > maxCount) maxCount = tankStats[tank].count;
+            }
+            
+            // Create bars
+            const tanks = Object.keys(tankStats);
+            const barWidth = 100 / tanks.length;
+            
+            tanks.forEach((tank, index) {
+                const barHeight = maxCount > 0 ? (tankStats[tank].count / maxCount) * 180 : 0;
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.left = (index * barWidth + 5) + '%';
+                bar.style.width = (barWidth - 10) + '%';
+                bar.style.height = barHeight + 'px';
+                bar.title = `${getTankName(tank)}: ${tankStats[tank].count} fillings`;
+                chart.appendChild(bar);
+            });
+        }
+        
+        // Utility functions
+        function getTankName(tankId) {
+            switch(tankId) {
+                case 'yellow-500': return 'Yellow Tank (500ml)';
+                case 'white-1000': return 'White Tank (1000ml)';
+                case 'yellow-1000': return 'Yellow Tank (1000ml)';
+                default: return tankId;
+            }
+        }
+        
+        function formatDateTime(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString();
+        }
+        
+        function formatDateTimeLocal(isoString) {
+            const date = new Date(isoString);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+        
+        function formatDuration(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        function getCurrentDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+    </script>
+</body>
+</html>
