@@ -1,788 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Tank Filling Tracker</title>
-    <style>
-        :root {
-            --yellow: #ffeb3b;
-            --white: #f5f5f5;
-            --dark-yellow: #ffc107;
-            --shadow: 0 2px 8px rgba(0,0,0,0.1);
-            --radius: 8px;
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-        
-        h1 {
-            margin-bottom: 10px;
-        }
-        
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-        }
-        
-        .tank-controls {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .tank {
-            padding: 15px;
-            border-radius: var(--radius);
-            text-align: center;
-        }
-        
-        .tank-yellow-500 {
-            background-color: var(--yellow);
-            border: 2px solid var(--dark-yellow);
-        }
-        
-        .tank-white-1000 {
-            background-color: var(--white);
-            border: 2px solid #ccc;
-        }
-        
-        .tank-yellow-1000 {
-            background-color: var(--yellow);
-            border: 2px solid var(--dark-yellow);
-        }
-        
-        .tank h3 {
-            margin-bottom: 15px;
-        }
-        
-        .timer {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-        
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .btn-start {
-            background-color: #4CAF50;
-            color: white;
-        }
-        
-        .btn-stop {
-            background-color: #f44336;
-            color: white;
-        }
-        
-        .btn-start:hover {
-            background-color: #45a049;
-        }
-        
-        .btn-stop:hover {
-            background-color: #d32f2f;
-        }
-        
-        .btn-action {
-            background-color: #2196F3;
-            color: white;
-            margin: 5px;
-        }
-        
-        .btn-delete {
-            background-color: #ff5722;
-            color: white;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .stat-box {
-            background: white;
-            padding: 15px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-        
-        .stat-box h3 {
-            margin-bottom: 15px;
-            text-align: center;
-            color: #2575fc;
-        }
-        
-        .chart-container {
-            height: 200px;
-            margin-top: 15px;
-            position: relative;
-        }
-        
-        .chart-bar {
-            position: absolute;
-            bottom: 0;
-            width: 30%;
-            background-color: #2575fc;
-            border-radius: 4px 4px 0 0;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: var(--radius);
-            width: 400px;
-            max-width: 90%;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        
-        .btn-submit {
-            background-color: #4CAF50;
-            color: white;
-            width: 100%;
-            padding: 12px;
-        }
-        
-        .btn-cancel {
-            background-color: #f44336;
-            color: white;
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-        }
-        
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Water Tank Filling Tracker</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f7fa; }
+    h1 { text-align: center; }
+    .tank { border: 2px solid #ccc; padding: 15px; margin: 10px; border-radius: 10px; }
+    .yellow { background: #fff8dc; }
+    .white { background: #f8f8f8; }
+    button { margin: 5px; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+    table { border-collapse: collapse; width: 100%; margin-top: 15px; }
+    th, td { border: 1px solid #999; padding: 8px; text-align: center; }
+    th { background: #ddd; }
+    .stats { margin-top: 20px; padding: 10px; border: 2px solid #999; border-radius: 10px; }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Water Tank Filling Time Tracker</h1>
-        <p>Monitor and analyze your water tank filling patterns</p>
-    </header>
-    
-    <div class="container">
-        <div class="tank-controls">
-            <div class="tank tank-yellow-500">
-                <h3>Yellow Tank (500ml)</h3>
-                <div class="timer" id="timer-yellow-500">00:00:00</div>
-                <button class="btn-start" onclick="startTimer('yellow-500')">Start Filling</button>
-                <button class="btn-stop" onclick="stopTimer('yellow-500')" disabled>Stop Filling</button>
-            </div>
-            
-            <div class="tank tank-white-1000">
-                <h3>White Tank (1000ml)</h3>
-                <div class="timer" id="timer-white-1000">00:00:00</div>
-                <button class="btn-start" onclick="startTimer('white-1000')">Start Filling</button>
-                <button class="btn-stop" onclick="stopTimer('white-1000')" disabled>Stop Filling</button>
-            </div>
-            
-            <div class="tank tank-yellow-1000">
-                <h3>Yellow Tank (1000ml)</h3>
-                <div class="timer" id="timer-yellow-1000">00:00:00</div>
-                <button class="btn-start" onclick="startTimer('yellow-1000')">Start Filling</button>
-                <button class="btn-stop" onclick="stopTimer('yellow-1000')" disabled>Stop Filling</button>
-            </div>
-        </div>
-        
-        <div class="card">
-            <h2>Today's Records</h2>
-            <table id="records-table">
-                <thead>
-                    <tr>
-                        <th>Tank</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Duration</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Records will be inserted here -->
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="card">
-            <h2>Add Manual Entry</h2>
-            <form id="manual-form">
-                <div class="form-group">
-                    <label for="tank-select">Select Tank:</label>
-                    <select id="tank-select" required>
-                        <option value="yellow-500">Yellow Tank (500ml)</option>
-                        <option value="white-1000">White Tank (1000ml)</option>
-                        <option value="yellow-1000">Yellow Tank (1000ml)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="start-time">Start Time:</label>
-                    <input type="datetime-local" id="start-time" required>
-                </div>
-                <div class="form-group">
-                    <label for="end-time">End Time:</label>
-                    <input type="datetime-local" id="end-time" required>
-                </div>
-                <button type="submit" class="btn-submit">Add Entry</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="stats">
-        <div class="stat-box">
-            <h3>Daily Statistics</h3>
-            <div id="daily-stats">
-                <!-- Daily stats will be inserted here -->
-            </div>
-        </div>
-        
-        <div class="stat-box">
-            <h3>Weekly Statistics</h3>
-            <div id="weekly-stats">
-                <!-- Weekly stats will be inserted here -->
-            </div>
-        </div>
-        
-        <div class="stat-box">
-            <h3>Monthly Statistics</h3>
-            <div id="monthly-stats">
-                <!-- Monthly stats will be inserted here -->
-            </div>
-        </div>
-        
-        <div class="stat-box">
-            <h3>Comparison Chart</h3>
-            <div class="chart-container" id="chart">
-                <!-- Chart will be inserted here -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- Edit Modal -->
-    <div class="modal" id="edit-modal">
-        <div class="modal-content">
-            <h2>Edit Record</h2>
-            <form id="edit-form">
-                <input type="hidden" id="edit-id">
-                <div class="form-group">
-                    <label for="edit-tank">Tank:</label>
-                    <select id="edit-tank" required>
-                        <option value="yellow-500">Yellow Tank (500ml)</option>
-                        <option value="white-1000">White Tank (1000ml)</option>
-                        <option value="yellow-1000">Yellow Tank (1000ml)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="edit-start">Start Time:</label>
-                    <input type="datetime-local" id="edit-start" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-end">End Time:</label>
-                    <input type="datetime-local" id="edit-end" required>
-                </div>
-                <button type="submit" class="btn-submit">Save Changes</button>
-                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
-            </form>
-        </div>
-    </div>
+  <h1>Water Tank Filling Tracker</h1>
 
-    <script>
-        // Data storage and initialization
-        let records = JSON.parse(localStorage.getItem('tankRecords')) || [];
-        let timers = {
-            'yellow-500': { start: null, interval: null, running: false },
-            'white-1000': { start: null, interval: null, running: false },
-            'yellow-1000': { start: null, interval: null, running: false }
-        };
-        
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            renderRecords();
-            updateStatistics();
-            document.getElementById('start-time').value = getCurrentDateTime();
-            document.getElementById('end-time').value = getCurrentDateTime();
-        });
-        
-        // Timer functions
-        function startTimer(tankId) {
-            if (timers[tankId].running) return;
-            
-            timers[tankId].start = new Date();
-            timers[tankId].running = true;
-            
-            // Update UI
-            document.querySelector(`.tank-${tankId} .btn-start`).disabled = true;
-            document.querySelector(`.tank-${tankId} .btn-stop`).disabled = false;
-            
-            // Update timer display every second
-            timers[tankId].interval = setInterval(() => {
-                const elapsed = Math.floor((new Date() - timers[tankId].start) / 1000);
-                const hours = Math.floor(elapsed / 3600).toString().padStart(2, '0');
-                const minutes = Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0');
-                const seconds = (elapsed % 60).toString().padStart(2, '0');
-                document.getElementById(`timer-${tankId}`).textContent = `${hours}:${minutes}:${seconds}`;
-            }, 1000);
-        }
-        
-        function stopTimer(tankId) {
-            if (!timers[tankId].running) return;
-            
-            const endTime = new Date();
-            clearInterval(timers[tankId].interval);
-            
-            // Create record
-            const record = {
-                id: Date.now(),
-                tank: tankId,
-                startTime: timers[tankId].start.toISOString(),
-                endTime: endTime.toISOString(),
-                duration: Math.floor((endTime - timers[tankId].start) / 1000)
-            };
-            
-            // Save record
-            records.push(record);
-            localStorage.setItem('tankRecords', JSON.stringify(records));
-            
-            // Reset timer
-            timers[tankId].running = false;
-            document.getElementById(`timer-${tankId}`).textContent = '00:00:00';
-            document.querySelector(`.tank-${tankId} .btn-start`).disabled = false;
-            document.querySelector(`.tank-${tankId} .btn-stop`).disabled = true;
-            
-            // Update UI
-            renderRecords();
-            updateStatistics();
-        }
-        
-        // Manual form submission
-        document.getElementById('manual-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const tank = document.getElementById('tank-select').value;
-            const startTime = new Date(document.getElementById('start-time').value);
-            const endTime = new Date(document.getElementById('end-time').value);
-            
-            if (endTime <= startTime) {
-                alert('End time must be after start time');
-                return;
-            }
-            
-            const record = {
-                id: Date.now(),
-                tank: tank,
-                startTime: startTime.toISOString(),
-                endTime: endTime.toISOString(),
-                duration: Math.floor((endTime - startTime) / 1000)
-            };
-            
-            records.push(record);
-            localStorage.setItem('tankRecords', JSON.stringify(records));
-            
-            // Reset form
-            document.getElementById('start-time').value = getCurrentDateTime();
-            document.getElementById('end-time').value = getCurrentDateTime();
-            
-            // Update UI
-            renderRecords();
-            updateStatistics();
-            
-            alert('Record added successfully!');
-        });
-        
-        // Edit record
-        function editRecord(id) {
-            const record = records.find(r => r.id === id);
-            if (!record) return;
-            
-            document.getElementById('edit-id').value = record.id;
-            document.getElementById('edit-tank').value = record.tank;
-            document.getElementById('edit-start').value = formatDateTimeLocal(record.startTime);
-            document.getElementById('edit-end').value = formatDateTimeLocal(record.endTime);
-            
-            document.getElementById('edit-modal').style.display = 'flex';
-        }
-        
-        // Submit edit form
-        document.getElementById('edit-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const id = parseInt(document.getElementById('edit-id').value);
-            const tank = document.getElementById('edit-tank').value;
-            const startTime = new Date(document.getElementById('edit-start').value);
-            const endTime = new Date(document.getElementById('edit-end').value);
-            
-            if (endTime <= startTime) {
-                alert('End time must be after start time');
-                return;
-            }
-            
-            const index = records.findIndex(r => r.id === id);
-            if (index !== -1) {
-                records[index] = {
-                    id: id,
-                    tank: tank,
-                    startTime: startTime.toISOString(),
-                    endTime: endTime.toISOString(),
-                    duration: Math.floor((endTime - startTime) / 1000)
-                };
-                
-                localStorage.setItem('tankRecords', JSON.stringify(records));
-                
-                // Update UI
-                renderRecords();
-                updateStatistics();
-                closeModal();
-                
-                alert('Record updated successfully!');
-            }
-        });
-        
-        // Delete record
-        function deleteRecord(id) {
-            if (confirm('Are you sure you want to delete this record?')) {
-                records = records.filter(r => r.id !== id);
-                localStorage.setItem('tankRecords', JSON.stringify(records));
-                
-                // Update UI
-                renderRecords();
-                updateStatistics();
-                
-                alert('Record deleted successfully!');
-            }
-        }
-        
-        // Close modal
-        function closeModal() {
-            document.getElementById('edit-modal').style.display = 'none';
-        }
-        
-        // Render records table
-        function renderRecords() {
-            const tableBody = document.querySelector('#records-table tbody');
-            tableBody.innerHTML = '';
-            
-            // Sort records by start time (newest first)
-            const sortedRecords = [...records].sort((a, b) => 
-                new Date(b.startTime) - new Date(a.startTime)
-            );
-            
-            sortedRecords.forEach(record => {
-                const row = document.createElement('tr');
-                
-                const tankName = getTankName(record.tank);
-                const startTime = formatDateTime(record.startTime);
-                const endTime = formatDateTime(record.endTime);
-                const duration = formatDuration(record.duration);
-                
-                row.innerHTML = `
-                    <td>${tankName}</td>
-                    <td>${startTime}</td>
-                    <td>${endTime}</td>
-                    <td>${duration}</td>
-                    <td>
-                        <button class="btn-action" onclick="editRecord(${record.id})">Edit</button>
-                        <button class="btn-delete" onclick="deleteRecord(${record.id})">Delete</button>
-                    </td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-        }
-        
-        // Update statistics
-        function updateStatistics() {
-            updateDailyStats();
-            updateWeeklyStats();
-            updateMonthlyStats();
-            renderChart();
-        }
-        
-        function updateDailyStats() {
-            const today = new Date().toDateString();
-            const todayRecords = records.filter(record => 
-                new Date(record.startTime).toDateString() === today
-            );
-            
-            const dailyStats = document.getElementById('daily-stats');
-            dailyStats.innerHTML = '<p>No records today</p>';
-            
-            if (todayRecords.length > 0) {
-                let html = '<p>Today\'s fillings: ' + todayRecords.length + '</p>';
-                
-                // Group by tank
-                const tankStats = {};
-                todayRecords.forEach(record => {
-                    if (!tankStats[record.tank]) {
-                        tankStats[record.tank] = {
-                            count: 0,
-                            totalDuration: 0
-                        };
-                    }
-                    tankStats[record.tank].count++;
-                    tankStats[record.tank].totalDuration += record.duration;
-                });
-                
-                for (const tank in tankStats) {
-                    const avgDuration = formatDuration(tankStats[tank].totalDuration / tankStats[tank].count);
-                    html += `<p>${getTankName(tank)}: ${tankStats[tank].count} times (avg: ${avgDuration})</p>`;
-                }
-                
-                dailyStats.innerHTML = html;
-            }
-        }
-        
-        function updateWeeklyStats() {
-            const oneWeekAgo = new Date();
-            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-            
-            const weekRecords = records.filter(record => 
-                new Date(record.startTime) >= oneWeekAgo
-            );
-            
-            const weeklyStats = document.getElementById('weekly-stats');
-            weeklyStats.innerHTML = '<p>No records this week</p>';
-            
-            if (weekRecords.length > 0) {
-                let html = '<p>This week\'s fillings: ' + weekRecords.length + '</p>';
-                
-                // Group by tank
-                const tankStats = {};
-                weekRecords.forEach(record => {
-                    if (!tankStats[record.tank]) {
-                        tankStats[record.tank] = {
-                            count: 0,
-                            totalDuration: 0
-                        };
-                    }
-                    tankStats[record.tank].count++;
-                    tankStats[record.tank].totalDuration += record.duration;
-                });
-                
-                for (const tank in tankStats) {
-                    const avgDuration = formatDuration(tankStats[tank].totalDuration / tankStats[tank].count);
-                    html += `<p>${getTankName(tank)}: ${tankStats[tank].count} times (avg: ${avgDuration})</p>`;
-                }
-                
-                weeklyStats.innerHTML = html;
-            }
-        }
-        
-        function updateMonthlyStats() {
-            const oneMonthAgo = new Date();
-            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-            
-            const monthRecords = records.filter(record => 
-                new Date(record.startTime) >= oneMonthAgo
-            );
-            
-            const monthlyStats = document.getElementById('monthly-stats');
-            monthlyStats.innerHTML = '<p>No records this month</p>';
-            
-            if (monthRecords.length > 0) {
-                let html = '<p>This month\'s fillings: ' + monthRecords.length + '</p>';
-                
-                // Group by tank
-                const tankStats = {};
-                monthRecords.forEach(record => {
-                    if (!tankStats[record.tank]) {
-                        tankStats[record.tank] = {
-                            count: 0,
-                            totalDuration: 0
-                        };
-                    }
-                    tankStats[record.tank].count++;
-                    tankStats[record.tank].totalDuration += record.duration;
-                });
-                
-                for (const tank in tankStats) {
-                    const avgDuration = formatDuration(tankStats[tank].totalDuration / tankStats[tank].count);
-                    html += `<p>${getTankName(tank)}: ${tankStats[tank].count} times (avg: ${avgDuration})</p>`;
-                }
-                
-                monthlyStats.innerHTML = html;
-            }
-        }
-        
-        function renderChart() {
-            const chart = document.getElementById('chart');
-            chart.innerHTML = '';
-            
-            // Group by tank
-            const tankStats = {};
-            records.forEach(record => {
-                if (!tankStats[record.tank]) {
-                    tankStats[record.tank] = {
-                        count: 0,
-                        totalDuration: 0
-                    };
-                }
-                tankStats[record.tank].count++;
-                tankStats[record.tank].totalDuration += record.duration;
-            });
-            
-            // Find max for scaling
-            let maxCount = 0;
-            for (const tank in tankStats) {
-                if (tankStats[tank].count > maxCount) maxCount = tankStats[tank].count;
-            }
-            
-            // Create bars
-            const tanks = Object.keys(tankStats);
-            const barWidth = 100 / tanks.length;
-            
-            tanks.forEach((tank, index) {
-                const barHeight = maxCount > 0 ? (tankStats[tank].count / maxCount) * 180 : 0;
-                const bar = document.createElement('div');
-                bar.className = 'chart-bar';
-                bar.style.left = (index * barWidth + 5) + '%';
-                bar.style.width = (barWidth - 10) + '%';
-                bar.style.height = barHeight + 'px';
-                bar.title = `${getTankName(tank)}: ${tankStats[tank].count} fillings`;
-                chart.appendChild(bar);
-            });
-        }
-        
-        // Utility functions
-        function getTankName(tankId) {
-            switch(tankId) {
-                case 'yellow-500': return 'Yellow Tank (500ml)';
-                case 'white-1000': return 'White Tank (1000ml)';
-                case 'yellow-1000': return 'Yellow Tank (1000ml)';
-                default: return tankId;
-            }
-        }
-        
-        function formatDateTime(isoString) {
-            const date = new Date(isoString);
-            return date.toLocaleString();
-        }
-        
-        function formatDateTimeLocal(isoString) {
-            const date = new Date(isoString);
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            
-            return `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
-        
-        function formatDuration(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            const secs = Math.floor(seconds % 60);
-            
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-        
-        function getCurrentDateTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = (now.getMonth() + 1).toString().padStart(2, '0');
-            const day = now.getDate().toString().padStart(2, '0');
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            
-            return `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
-    </script>
+  <div class="tank yellow">
+    <h2>Yellow Tank (500 ml)</h2>
+    <button onclick="startTimer('yellow500')">Start</button>
+    <button onclick="stopTimer('yellow500')">Stop</button>
+    <p id="yellow500-status">Status: Idle</p>
+  </div>
+
+  <div class="tank white">
+    <h2>White Tank (1000 ml)</h2>
+    <button onclick="startTimer('white1000')">Start</button>
+    <button onclick="stopTimer('white1000')">Stop</button>
+    <p id="white1000-status">Status: Idle</p>
+  </div>
+
+  <div class="tank yellow">
+    <h2>Yellow Tank (1000 ml)</h2>
+    <button onclick="startTimer('yellow1000')">Start</button>
+    <button onclick="stopTimer('yellow1000')">Stop</button>
+    <p id="yellow1000-status">Status: Idle</p>
+  </div>
+
+  <h2>Daily Records</h2>
+  <table id="recordsTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Tank</th>
+        <th>Duration (sec)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="stats">
+    <h2>Weekly & Monthly Statistics</h2>
+    <p id="weeklyStats"></p>
+    <p id="monthlyStats"></p>
+  </div>
+
+  <script>
+    let startTimes = {};
+    let records = JSON.parse(localStorage.getItem("tankRecords") || "[]");
+
+    function saveRecords() {
+      localStorage.setItem("tankRecords", JSON.stringify(records));
+      renderTable();
+      updateStats();
+    }
+
+    function startTimer(tank) {
+      startTimes[tank] = Date.now();
+      document.getElementById(tank+"-status").innerText = "Status: Running...";
+    }
+
+    function stopTimer(tank) {
+      if (!startTimes[tank]) return;
+      let duration = Math.floor((Date.now() - startTimes[tank]) / 1000);
+      records.push({
+        id: Date.now(),
+        date: new Date().toLocaleDateString(),
+        tank: tank,
+        duration: duration
+      });
+      startTimes[tank] = null;
+      document.getElementById(tank+"-status").innerText = "Status: Idle";
+      saveRecords();
+    }
+
+    function renderTable() {
+      let tbody = document.querySelector("#recordsTable tbody");
+      tbody.innerHTML = "";
+      records.forEach((rec, i) => {
+        let row = `<tr>
+          <td>${rec.date}</td>
+          <td>${rec.tank}</td>
+          <td>${rec.duration}</td>
+          <td>
+            <button onclick="editRecord(${rec.id})">Edit</button>
+            <button onclick="deleteRecord(${rec.id})">Delete</button>
+          </td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    function editRecord(id) {
+      let rec = records.find(r => r.id === id);
+      let newDuration = prompt("Enter new duration (sec):", rec.duration);
+      if (newDuration !== null) {
+        rec.duration = parseInt(newDuration);
+        saveRecords();
+      }
+    }
+
+    function deleteRecord(id) {
+      records = records.filter(r => r.id !== id);
+      saveRecords();
+    }
+
+    function updateStats() {
+      let now = new Date();
+      let weekAgo = new Date(now); weekAgo.setDate(weekAgo.getDate() - 7);
+      let monthAgo = new Date(now); monthAgo.setMonth(monthAgo.getMonth() - 1);
+
+      let weekly = records.filter(r => new Date(r.date) >= weekAgo)
+                          .reduce((a, r) => a + r.duration, 0);
+      let monthly = records.filter(r => new Date(r.date) >= monthAgo)
+                           .reduce((a, r) => a + r.duration, 0);
+
+      document.getElementById("weeklyStats").innerText = "Weekly Total: " + weekly + " sec";
+      document.getElementById("monthlyStats").innerText = "Monthly Total: " + monthly + " sec";
+    }
+
+    // Initial load
+    renderTable();
+    updateStats();
+  </script>
 </body>
 </html>
