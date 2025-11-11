@@ -1,110 +1,219 @@
+<html><head>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+            <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">                   
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+            <style>
+                /* Default styles */
+                pre {
+                    background: #2d2d2d;
+                    border-radius: 4px;
+                    margin: 0.5em 0;
+                }
+                code {
+                    font-family: 'Fira Code', Consolas, Monaco, monospace;
+                }
+                /* Custom CSS */
+                /* Improved Custom CSS */
+body {
+	font-family: "Barlow", sans-serif;
+	line-height: 1.7;
+	padding: 24px;
+	margin: 0;
+	background: #fafafa;
+	color: #222;
+}
 
+/* Code Blocks */
+pre {
+	background: #1e1e1e;
+	color: #f8f8f2;
+	border-radius: 6px;
+	padding: 12px 14px;
+	overflow-x: auto;
+	margin: 1em 0;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
 
-## **1) Deletion at Beginning**
+code {
+	font-family: 'Fira Code', Consolas, Monaco, monospace;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
 
-### **Definition**
+/* Inline Code */
+:not(pre) > code {
+	background: #f3f3f3;
+	padding: 3px 6px;
+	border-radius: 4px;
+	color: #d63384;
+	font-size: 0.95em;
+}
 
-Deletion at the beginning means removing the **first node** of the linked list.
-The head pointer is moved to the next node and the old first node is freed.
+/* Images */
+img {
+	max-width: 100%;
+	border-radius: 6px;
+	display: block;
+	margin: 12px 0;
+}
 
-### **Algorithm**
+/* Tables */
+table {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 1.2em 0;
+	background: white;
+	border-radius: 6px;
+	overflow: hidden;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
 
-```
-Step 1: If head == NULL, print "List is empty"
+th, td {
+	border: 1px solid #e4e4e4;
+	padding: 10px 12px;
+	text-align: left;
+}
+
+th {
+	background-color: #f7f7f7;
+	font-weight: 600;
+}
+
+/* Blockquotes */
+blockquote {
+	border-left: 4px solid #6c757d;
+	padding-left: 1em;
+	margin-left: 0;
+	color: #555;
+	font-style: italic;
+	background: #f7f7f7;
+	border-radius: 4px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+/* Headings */
+h1, h2, h3 {
+	font-weight: 600;
+	margin-top: 2rem;
+	margin-bottom: .75rem;
+	line-height: 1.3;
+}
+
+h1 {
+	font-size: 2.3em;
+	color: #2c3e50;
+	border-bottom: 2px solid #e7e7e7;
+	padding-bottom: .5rem;
+}
+
+h2 {
+	font-size: 1.9em;
+	color: #34495e;
+}
+
+h3 {
+	font-size: 1.45em;
+	color: #455a64;
+}
+
+/* Links */
+a {
+	color: #0077cc;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+a:hover {
+	color: #005999;
+	text-decoration: underline;
+}
+
+            </style>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+        </head>
+        <body>
+            <h2><strong>1) Deletion at Beginning</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Deletion at the beginning means removing the <strong>first node</strong> of the linked list.<br>The head pointer is moved to the next node and the old first node is freed.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: If head == NULL, print "List is empty"
 Step 2: Set Temp = head
 Step 3: Move head to next node
-        head = head -> link
+        head = head -&gt; link
 Step 4: Free Temp
-```
-
-### **C Code**
-
-```c
-void delete_at_begin() {
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void delete_at_begin() {
     struct node *Temp;
     if(head == NULL) {
         printf("List is empty\n");
     }
     else {
         Temp = head;
-        head = head -> link;
+        head = head -&gt; link;
         free(Temp);
     }
 }
-```
-
----
-
-## **2) Deletion at End**
-
-### **Definition**
-
-Deletion at the end means removing the **last node** of the linked list.
-We find the second last node and make its link NULL, then free the last node.
-
-### **Algorithm**
-
-```
-Step 1: If head == NULL, print "List is empty"
-Step 2: If head -> link == NULL, free head and set head = NULL
+</code></pre>
+<hr>
+<h2><strong>2) Deletion at End</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Deletion at the end means removing the <strong>last node</strong> of the linked list.<br>We find the second last node and make its link NULL, then free the last node.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: If head == NULL, print "List is empty"
+Step 2: If head -&gt; link == NULL, free head and set head = NULL
 Step 3: Else set Temp = head
-Step 4: Traverse until Temp -> link -> link == NULL
-Step 5: Set Temp1 = Temp -> link
-Step 6: Set Temp -> link = NULL
+Step 4: Traverse until Temp -&gt; link -&gt; link == NULL
+Step 5: Set Temp1 = Temp -&gt; link
+Step 6: Set Temp -&gt; link = NULL
 Step 7: Free Temp1
-```
-
-### **C Code**
-
-```c
-void delete_at_end() {
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void delete_at_end() {
     struct node *Temp, *Temp1;
 
     if(head == NULL) {
         printf("List is empty\n");
     }
-    else if(head -> link == NULL) {
+    else if(head -&gt; link == NULL) {
         free(head);
         head = NULL;
     }
     else {
         Temp = head;
-        while(Temp -> link -> link != NULL) {
-            Temp = Temp -> link;
+        while(Temp -&gt; link -&gt; link != NULL) {
+            Temp = Temp -&gt; link;
         }
-        Temp1 = Temp -> link;
-        Temp -> link = NULL;
+        Temp1 = Temp -&gt; link;
+        Temp -&gt; link = NULL;
         free(Temp1);
     }
 }
-```
-
----
-
-## **3) Deletion in Middle (Delete node with value y)**
-
-### **Definition**
-
-Deletion in the middle means removing the node which contains the **value y**.
-We find that node, adjust the links, and free the node.
-
-### **Algorithm**
-
-```
-Step 1: If head == NULL, print "List is empty"
+</code></pre>
+<hr>
+<h2><strong>3) Deletion in Middle (Delete node with value y)</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Deletion in the middle means removing the node which contains the <strong>value y</strong>.<br>We find that node, adjust the links, and free the node.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: If head == NULL, print "List is empty"
 Step 2: Set Temp = head
-Step 3: If Temp -> data == y then
-        head = head -> link, free Temp
-Step 4: Else traverse until Temp -> link -> data == y
-Step 5: Set Temp1 = Temp -> link
-Step 6: Temp -> link = Temp1 -> link
+Step 3: If Temp -&gt; data == y then
+        head = head -&gt; link, free Temp
+Step 4: Else traverse until Temp -&gt; link -&gt; data == y
+Step 5: Set Temp1 = Temp -&gt; link
+Step 6: Temp -&gt; link = Temp1 -&gt; link
 Step 7: Free Temp1
-```
-
-### **C Code**
-
-```c
-void delete_value(int y) {
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void delete_value(int y) {
     struct node *Temp, *Temp1;
 
     if(head == NULL) {
@@ -114,89 +223,71 @@ void delete_value(int y) {
 
     Temp = head;
 
-    if(Temp -> data == y) {
-        head = head -> link;
+    if(Temp -&gt; data == y) {
+        head = head -&gt; link;
         free(Temp);
     }
     else {
-        while(Temp -> link != NULL && Temp -> link -> data != y) {
-            Temp = Temp -> link;
+        while(Temp -&gt; link != NULL &amp;&amp; Temp -&gt; link -&gt; data != y) {
+            Temp = Temp -&gt; link;
         }
 
-        if(Temp -> link == NULL) {
+        if(Temp -&gt; link == NULL) {
             printf("Value %d not found\n", y);
         }
         else {
-            Temp1 = Temp -> link;
-            Temp -> link = Temp1 -> link;
+            Temp1 = Temp -&gt; link;
+            Temp -&gt; link = Temp1 -&gt; link;
             free(Temp1);
         }
     }
 }
-```
-
----
-
-## **Topic:** Searching in Singly Linked List
-
-### **Definition**
-
-Searching in a singly linked list means finding whether a given value **x** is present in any node of the list.
-We start from the head node and move through each node one by one until the value is found or the list ends.
-
----
-
-### **Algorithm**
-
-```
-Step 1: Set Temp = head
+</code></pre>
+<hr>
+<h2><strong>Topic:</strong> Searching in Singly Linked List</h2>
+<h3><strong>Definition</strong></h3>
+<p>Searching in a singly linked list means finding whether a given value <strong>x</strong> is present in any node of the list.<br>We start from the head node and move through each node one by one until the value is found or the list ends.</p>
+<hr>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Set Temp = head
 Step 2: While Temp is not NULL do
-            If Temp -> data == x
+            If Temp -&gt; data == x
                  Print "Element Found"
                  Stop
-            Temp = Temp -> link
+            Temp = Temp -&gt; link
 Step 3: If Temp == NULL
             Print "Element Not Found"
-```
-
----
-
-### **C Code**
-
-```c
-void search(int x) {
+</code></pre>
+<hr>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void search(int x) {
     struct node *Temp;
     Temp = head;
 
     while(Temp != NULL) {
-        if(Temp -> data == x) {
+        if(Temp -&gt; data == x) {
             printf("Element %d found in the list\n", x);
             return;
         }
-        Temp = Temp -> link;
+        Temp = Temp -&gt; link;
     }
     printf("Element %d not found in the list\n", x);
 }
-```
-
-
-Doubly Linked List
-
-1. Insertion at Beginning
-2. Insertion at End
-3. Insertion in Middle (After a given value)
-4. Deletion at Beginning
-5. Deletion at End
-6. Deletion of Specific Value
-7. Searching
-
----
-
-### **Structure Definition (Common for all)**
-
-```c
-#include <stdio.h>
-#include <stdlib.h>
+</code></pre>
+<p>Doubly Linked List</p>
+<ol>
+<li>Insertion at Beginning</li>
+<li>Insertion at End</li>
+<li>Insertion in Middle (After a given value)</li>
+<li>Deletion at Beginning</li>
+<li>Deletion at End</li>
+<li>Deletion of Specific Value</li>
+<li>Searching</li>
+</ol>
+<hr>
+<h3><strong>Structure Definition (Common for all)</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
 struct node {
     int data;
@@ -205,113 +296,83 @@ struct node {
 };
 
 struct node *head = NULL;
-```
-
----
-
-## **1) Insertion at Beginning**
-
-### **Definition**
-
-Insertion at the beginning means adding a new node before the first node and updating head.
-
-### **Algorithm**
-
-```
-Step 1: Create newnode
-Step 2: newnode->data = x
-Step 3: newnode->prev = NULL
-Step 4: newnode->next = head
-Step 5: If head != NULL then head->prev = newnode
+</code></pre>
+<hr>
+<h2><strong>1) Insertion at Beginning</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Insertion at the beginning means adding a new node before the first node and updating head.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Create newnode
+Step 2: newnode-&gt;data = x
+Step 3: newnode-&gt;prev = NULL
+Step 4: newnode-&gt;next = head
+Step 5: If head != NULL then head-&gt;prev = newnode
 Step 6: head = newnode
-```
-
-### **Code**
-
-```c
-void insert_begin(int x) {
+</code></pre>
+<h3><strong>Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void insert_begin(int x) {
     struct node *newnode = (struct node*)malloc(sizeof(struct node));
-    newnode->data = x;
-    newnode->prev = NULL;
-    newnode->next = head;
+    newnode-&gt;data = x;
+    newnode-&gt;prev = NULL;
+    newnode-&gt;next = head;
 
     if(head != NULL)
-        head->prev = newnode;
+        head-&gt;prev = newnode;
 
     head = newnode;
 }
-```
-
----
-
-## **2) Insertion at End**
-
-### **Definition**
-
-Insertion at the end means adding a new node after the last node.
-
-### **Algorithm**
-
-```
-Step 1: Create newnode
-Step 2: newnode->data = x, newnode->next = NULL
+</code></pre>
+<hr>
+<h2><strong>2) Insertion at End</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Insertion at the end means adding a new node after the last node.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Create newnode
+Step 2: newnode-&gt;data = x, newnode-&gt;next = NULL
 Step 3: If head == NULL, head = newnode
 Step 4: Else traverse to last node (Temp)
-Step 5: Temp->next = newnode
-Step 6: newnode->prev = Temp
-```
-
-### **Code**
-
-```c
-void insert_end(int x) {
+Step 5: Temp-&gt;next = newnode
+Step 6: newnode-&gt;prev = Temp
+</code></pre>
+<h3><strong>Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void insert_end(int x) {
     struct node *newnode = (struct node*)malloc(sizeof(struct node));
     struct node *Temp = head;
 
-    newnode->data = x;
-    newnode->next = NULL;
+    newnode-&gt;data = x;
+    newnode-&gt;next = NULL;
 
     if(head == NULL) {
-        newnode->prev = NULL;
+        newnode-&gt;prev = NULL;
         head = newnode;
     }
     else {
-        while(Temp->next != NULL)
-            Temp = Temp->next;
+        while(Temp-&gt;next != NULL)
+            Temp = Temp-&gt;next;
 
-        Temp->next = newnode;
-        newnode->prev = Temp;
+        Temp-&gt;next = newnode;
+        newnode-&gt;prev = Temp;
     }
 }
-```
-
----
-
-## **3) Insertion After a Value y**
-
-### **Definition**
-
-Insert the new node after the node that contains value `y`.
-
-### **Algorithm**
-
-```
-Step 1: Traverse list to find node with data y (Temp)
+</code></pre>
+<hr>
+<h2><strong>3) Insertion After a Value y</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Insert the new node after the node that contains value <code>y</code>.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Traverse list to find node with data y (Temp)
 Step 2: Create newnode
-Step 3: newnode->next = Temp->next
-Step 4: newnode->prev = Temp
-Step 5: If Temp->next != NULL then Temp->next->prev = newnode
-Step 6: Temp->next = newnode
-```
-
-### **Code**
-
-```c
-void insert_after(int x, int y) {
+Step 3: newnode-&gt;next = Temp-&gt;next
+Step 4: newnode-&gt;prev = Temp
+Step 5: If Temp-&gt;next != NULL then Temp-&gt;next-&gt;prev = newnode
+Step 6: Temp-&gt;next = newnode
+</code></pre>
+<h3><strong>Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void insert_after(int x, int y) {
     struct node *Temp = head, *newnode;
 
-    while(Temp != NULL && Temp->data != y)
-        Temp = Temp->next;
+    while(Temp != NULL &amp;&amp; Temp-&gt;data != y)
+        Temp = Temp-&gt;next;
 
     if(Temp == NULL) {
         printf("Value %d not found\n", y);
@@ -319,40 +380,30 @@ void insert_after(int x, int y) {
     }
 
     newnode = (struct node*)malloc(sizeof(struct node));
-    newnode->data = x;
+    newnode-&gt;data = x;
 
-    newnode->next = Temp->next;
-    newnode->prev = Temp;
+    newnode-&gt;next = Temp-&gt;next;
+    newnode-&gt;prev = Temp;
 
-    if(Temp->next != NULL)
-        Temp->next->prev = newnode;
+    if(Temp-&gt;next != NULL)
+        Temp-&gt;next-&gt;prev = newnode;
 
-    Temp->next = newnode;
+    Temp-&gt;next = newnode;
 }
-```
-
----
-
-## **4) Deletion at Beginning**
-
-### **Definition**
-
-Removes the first node and moves head to the next node.
-
-### **Algorithm**
-
-```
-Step 1: If head == NULL print empty
+</code></pre>
+<hr>
+<h2><strong>4) Deletion at Beginning</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Removes the first node and moves head to the next node.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: If head == NULL print empty
 Step 2: Temp = head
-Step 3: head = head->next
-Step 4: If head != NULL head->prev = NULL
+Step 3: head = head-&gt;next
+Step 4: If head != NULL head-&gt;prev = NULL
 Step 5: Free Temp
-```
-
-### **Code**
-
-```c
-void delete_begin() {
+</code></pre>
+<h3><strong>Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void delete_begin() {
     struct node *Temp;
 
     if(head == NULL) {
@@ -361,36 +412,26 @@ void delete_begin() {
     }
 
     Temp = head;
-    head = head->next;
+    head = head-&gt;next;
 
     if(head != NULL)
-        head->prev = NULL;
+        head-&gt;prev = NULL;
 
     free(Temp);
 }
-```
-
----
-
-## **5) Deletion at End**
-
-### **Definition**
-
-Removes the last node of the list.
-
-### **Algorithm**
-
-```
-Step 1: If head == NULL print empty
+</code></pre>
+<hr>
+<h2><strong>5) Deletion at End</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Removes the last node of the list.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: If head == NULL print empty
 Step 2: Traverse to last node (Temp)
-Step 3: Temp->prev->next = NULL
+Step 3: Temp-&gt;prev-&gt;next = NULL
 Step 4: Free Temp
-```
-
-### **Code**
-
-```c
-void delete_end() {
+</code></pre>
+<h3><strong>Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void delete_end() {
     struct node *Temp = head;
 
     if(head == NULL) {
@@ -398,125 +439,92 @@ void delete_end() {
         return;
     }
 
-    while(Temp->next != NULL)
-        Temp = Temp->next;
+    while(Temp-&gt;next != NULL)
+        Temp = Temp-&gt;next;
 
-    if(Temp->prev != NULL)
-        Temp->prev->next = NULL;
+    if(Temp-&gt;prev != NULL)
+        Temp-&gt;prev-&gt;next = NULL;
     else
         head = NULL;
 
     free(Temp);
 }
-```
-
----
-
-## **6) Deletion of Value y**
-
-### **Definition**
-
-Removes the node that contains value `y`.
-
-### **Algorithm**
-
-```
-Step 1: Traverse to find Temp with data y
-Step 2: Temp->prev->next = Temp->next
-Step 3: Temp->next->prev = Temp->prev (if not NULL)
+</code></pre>
+<hr>
+<h2><strong>6) Deletion of Value y</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Removes the node that contains value <code>y</code>.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Traverse to find Temp with data y
+Step 2: Temp-&gt;prev-&gt;next = Temp-&gt;next
+Step 3: Temp-&gt;next-&gt;prev = Temp-&gt;prev (if not NULL)
 Step 4: Free Temp
-```
-
-### **Code**
-
-```c
-void delete_value(int y) {
+</code></pre>
+<h3><strong>Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void delete_value(int y) {
     struct node *Temp = head;
 
-    while(Temp != NULL && Temp->data != y)
-        Temp = Temp->next;
+    while(Temp != NULL &amp;&amp; Temp-&gt;data != y)
+        Temp = Temp-&gt;next;
 
     if(Temp == NULL) {
         printf("Value %d not found\n", y);
         return;
     }
 
-    if(Temp->prev != NULL)
-        Temp->prev->next = Temp->next;
+    if(Temp-&gt;prev != NULL)
+        Temp-&gt;prev-&gt;next = Temp-&gt;next;
     else
-        head = Temp->next;
+        head = Temp-&gt;next;
 
-    if(Temp->next != NULL)
-        Temp->next->prev = Temp->prev;
+    if(Temp-&gt;next != NULL)
+        Temp-&gt;next-&gt;prev = Temp-&gt;prev;
 
     free(Temp);
 }
-```
-
----
-
-## **7) Searching**
-
-### **Definition**
-
-Searching means checking whether a particular value exists in the list.
-
-### **Algorithm**
-
-```
-Step 1: Temp = head
+</code></pre>
+<hr>
+<h2><strong>7) Searching</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Searching means checking whether a particular value exists in the list.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Temp = head
 Step 2: Traverse until Temp == NULL
-Step 3: If Temp->data == x, found
+Step 3: If Temp-&gt;data == x, found
 Step 4: Else not found
-```
-
-### **Code**
-
-```c
-void search(int x) {
+</code></pre>
+<h3><strong>Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void search(int x) {
     struct node *Temp = head;
 
     while(Temp != NULL) {
-        if(Temp->data == x) {
+        if(Temp-&gt;data == x) {
             printf("Element %d found\n", x);
             return;
         }
-        Temp = Temp->next;
+        Temp = Temp-&gt;next;
     }
     printf("Element %d not found\n", x);
 }
-```
-
-
----
-
-## **1) Hashing using Linear Probing**
-
-### **Definition**
-
-Linear probing is a collision handling technique where, if the calculated hash index is occupied, we **check the next position (index + 1)** and continue moving forward until an empty slot is found.
-
----
-
-### **Algorithm**
-
-```
-Step 1: Compute index = key % size
+</code></pre>
+<hr>
+<h2><strong>1) Hashing using Linear Probing</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Linear probing is a collision handling technique where, if the calculated hash index is occupied, we <strong>check the next position (index + 1)</strong> and continue moving forward until an empty slot is found.</p>
+<hr>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Compute index = key % size
 Step 2: While hash[index] is occupied
             index = (index + 1) % size
 Step 3: Insert key at hash[index]
-```
-
----
-
-### **C Code**
-
-```c
-#define size 10
+</code></pre>
+<hr>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">#define size 10
 int hash[size];
 
 void init() {
-    for(int i=0; i<size; i++)
+    for(int i=0; i&lt;size; i++)
         hash[i] = -1;
 }
 
@@ -527,36 +535,23 @@ void insert_linear(int key) {
     }
     hash[index] = key;
 }
-```
-
----
-
-## **2) Hashing using Quadratic Probing**
-
-### **Definition**
-
-Quadratic probing resolves collisions by checking squares of step values i.e.,
-(index + 1²), (index + 2²), (index + 3²), etc., until an empty space is found.
-
----
-
-### **Algorithm**
-
-```
-Step 1: Compute index = key % size
+</code></pre>
+<hr>
+<h2><strong>2) Hashing using Quadratic Probing</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Quadratic probing resolves collisions by checking squares of step values i.e.,<br>(index + 1²), (index + 2²), (index + 3²), etc., until an empty space is found.</p>
+<hr>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Compute index = key % size
 Step 2: Set i = 1
 Step 3: While hash[index] is occupied
             index = (index + i*i) % size
             i = i + 1
 Step 4: Insert key at hash[index]
-```
-
----
-
-### **C Code**
-
-```c
-void insert_quadratic(int key) {
+</code></pre>
+<hr>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void insert_quadratic(int key) {
     int index = key % size;
     int i = 1;
     while(hash[index] != -1) {
@@ -565,40 +560,25 @@ void insert_quadratic(int key) {
     }
     hash[index] = key;
 }
-```
-
----
-
-## **3) Double Hashing**
-
-### **Definition**
-
-Double hashing uses **two hash functions**.
-If collision occurs, we move using steps of the second hash function.
-
-```
-New Index = (h1(key) + i * h2(key)) % size
-```
-
----
-
-### **Algorithm**
-
-```
-Step 1: h1 = key % size
+</code></pre>
+<hr>
+<h2><strong>3) Double Hashing</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Double hashing uses <strong>two hash functions</strong>.<br>If collision occurs, we move using steps of the second hash function.</p>
+<pre><code>New Index = (h1(key) + i * h2(key)) % size
+</code></pre>
+<hr>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: h1 = key % size
 Step 2: h2 = 7 - (key % 7)
 Step 3: Set i = 0
 Step 4: While hash[(h1 + i*h2) % size] is occupied
             i = i + 1
 Step 5: Insert key at (h1 + i*h2) % size
-```
-
----
-
-### **C Code**
-
-```c
-void insert_double(int key) {
+</code></pre>
+<hr>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void insert_double(int key) {
     int h1 = key % size;
     int h2 = 7 - (key % 7);
     int index, i = 0;
@@ -612,24 +592,158 @@ void insert_double(int key) {
         i++;
     }
 }
-```
-
----
-
-### **To Print the Hash Table**
-
-```c
-void display() {
-    for(int i=0; i<size; i++)
+</code></pre>
+<hr>
+<h3><strong>To Print the Hash Table</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void display() {
+    for(int i=0; i&lt;size; i++)
         printf("%d ", hash[i]);
     printf("\n");
 }
-```
+</code></pre>
+<hr>
+<p> <strong>Binary Search Tree (BST)</strong></p>
+<ol>
+<li>Insertion</li>
+<li>Inorder Traversal</li>
+<li>Searching</li>
+<li>Deletion</li>
+</ol>
+<hr>
+<h2><strong>Structure Definition (Common)</strong></h2>
+<pre class="language-c" tabindex="0"><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
----
+struct node {
+    int data;
+    struct node *left, *right;
+};
 
+struct node *root = NULL;
+</code></pre>
+<hr>
+<h2><strong>1) Insertion in BST</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Insertion in BST means placing a new node in the tree such that:</p>
+<ul>
+<li>Values smaller go to the <strong>left subtree</strong></li>
+<li>Values larger go to the <strong>right subtree</strong></li>
+</ul>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Create new node
+Step 2: If root is NULL, root = new node
+Step 3: Else compare new value with root
+Step 4: If value &lt; root data, go to left subtree
+Step 5: If value &gt; root data, go to right subtree
+Step 6: Repeat until correct leaf position is found
+Step 7: Insert node
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">struct node* insert(struct node* root, int x) {
+    if(root == NULL) {
+        root = (struct node*)malloc(sizeof(struct node));
+        root-&gt;data = x;
+        root-&gt;left = root-&gt;right = NULL;
+        return root;
+    }
+    if(x &lt; root-&gt;data)
+        root-&gt;left = insert(root-&gt;left, x);
+    else if(x &gt; root-&gt;data)
+        root-&gt;right = insert(root-&gt;right, x);
+    return root;
+}
+</code></pre>
+<hr>
+<h2><strong>2) Inorder Traversal</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Inorder traversal visits nodes in the order:</p>
+<pre><code>Left Subtree → Root → Right Subtree
+</code></pre>
+<p>This prints BST in <strong>ascending order</strong>.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Traverse left subtree
+Step 2: Visit (print) the root
+Step 3: Traverse right subtree
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void inorder(struct node* root) {
+    if(root != NULL) {
+        inorder(root-&gt;left);
+        printf("%d ", root-&gt;data);
+        inorder(root-&gt;right);
+    }
+}
+</code></pre>
+<hr>
+<h2><strong>3) Searching in BST</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Searching in BST is done by comparing the value and moving either left or right.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: If root is NULL, element not found
+Step 2: If x == root-&gt;data, element found
+Step 3: If x &lt; root-&gt;data, search left subtree
+Step 4: If x &gt; root-&gt;data, search right subtree
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">struct node* search(struct node* root, int x) {
+    if(root == NULL || root-&gt;data == x)
+        return root;
 
+    if(x &lt; root-&gt;data)
+        return search(root-&gt;left, x);
+    else
+        return search(root-&gt;right, x);
+}
+</code></pre>
+<hr>
+<h2><strong>4) Deletion in BST</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Deletion removes a node from BST while maintaining BST properties.</p>
+<h3><strong>Cases</strong></h3>
+<ol>
+<li>Node has <strong>no child</strong> → delete directly</li>
+<li>Node has <strong>one child</strong> → replace with child</li>
+<li>Node has <strong>two children</strong> → replace with <strong>smallest value in right subtree</strong></li>
+</ol>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Search node to delete
+Step 2: If node has no child → free node
+Step 3: If node has one child → replace node with child
+Step 4: If node has two children
+        Find inorder successor (smallest in right subtree)
+        Replace node value with successor value
+        Delete successor node
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">struct node* findMin(struct node* root) {
+    while(root-&gt;left != NULL)
+        root = root-&gt;left;
+    return root;
+}
 
+struct node* delete(struct node* root, int x) {
+    if(root == NULL) return root;
 
+    if(x &lt; root-&gt;data)
+        root-&gt;left = delete(root-&gt;left, x);
+    else if(x &gt; root-&gt;data)
+        root-&gt;right = delete(root-&gt;right, x);
+    else {
+        if(root-&gt;left == NULL) { struct node* temp = root-&gt;right; free(root); return temp; }
+        else if(root-&gt;right == NULL){ struct node* temp = root-&gt;left; free(root); return temp; }
 
+        struct node* temp = findMin(root-&gt;right);
+        root-&gt;data = temp-&gt;data;
+        root-&gt;right = delete(root-&gt;right, temp-&gt;data);
+    }
+    return root;
+}
+</code></pre>
+<hr>
 
+            <script>
+                Prism.highlightAll();
+            </script>
+        
+        
+    </body></html>
