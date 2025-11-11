@@ -1,80 +1,635 @@
-<h1 id="-1-explain-the-structure-and-representation-of-a-singly-linked-list-with-a-neat-diagram-"><strong>1. Explain the structure and representation of a Singly Linked List with a neat diagram.</strong></h1>
-<h2 id="-introduction-"><strong>Introduction</strong></h2>
-<p>A <strong>Singly Linked List</strong> is a <strong>dynamic data structure</strong> that consists of a sequence of nodes. Each node contains <strong>data</strong> and a <strong>pointer</strong> that stores the address of the next node in the list. It allows efficient insertion and deletion operations.</p>
-<p>A linked list does not require <strong>contiguous memory</strong> like an array. Nodes are created in memory as needed using dynamic memory allocation.</p>
-<hr>
-<h2 id="-node-structure-"><strong>Node Structure</strong></h2>
-<p>Each node has two parts:</p>
-<ol>
-<li><strong>Data field</strong> – stores the information.</li>
-<li><strong>Next pointer</strong> – stores the address of the next node.</li>
-</ol>
-<h3 id="-diagram-of-a-node-"><strong>Diagram of a Node</strong></h3>
-<pre><code><span class="hljs-code">+-----------+</span>------------+
-<span class="hljs-section">|   Data    |   Next     | ---&gt; Points to next node
-+-----------+------------+</span>
-</code></pre><hr>
-<h2 id="-representation-"><strong>Representation</strong></h2>
-<p>The first node of the list is pointed to by a pointer called <strong>HEAD</strong>.
-If the list is empty, <strong>HEAD = NULL</strong>.</p>
-<h3 id="-example-linked-list-"><strong>Example Linked List</strong></h3>
-<pre><code> <span class="hljs-comment">HEAD</span>
-  <span class="hljs-comment">|</span>
-  <span class="hljs-comment">v</span>
-<span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>
-<span class="hljs-comment">|</span> <span class="hljs-comment">10</span> <span class="hljs-comment">|</span>  <span class="hljs-comment">o</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">|</span> <span class="hljs-comment">20</span> <span class="hljs-comment">|</span>  <span class="hljs-comment">o</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">|</span> <span class="hljs-comment">30</span> <span class="hljs-comment">|</span>  <span class="hljs-comment">o</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">|</span>  <span class="hljs-comment">NULL</span>  <span class="hljs-comment">|</span>
-<span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>
-</code></pre><p>Here:</p>
-<ul>
-<li>10, 20, 30 are <strong>data</strong></li>
-<li>Arrows represent pointers storing the address of the next node</li>
-</ul>
-<hr>
-<h2 id="-node-definition-"><strong>Node Definition</strong></h2>
-<h3 id="-in-c-"><strong>In C</strong></h3>
-<pre><code class="lang-c">struct <span class="hljs-keyword">node</span> <span class="hljs-title">{
-    int</span> data;
-    struct <span class="hljs-keyword">node</span> <span class="hljs-title">*next</span>;
-};
-struct <span class="hljs-keyword">node</span> <span class="hljs-title">*head</span> = NULL;
-</code></pre>
-<h3 id="-in-java-"><strong>In Java</strong></h3>
-<pre><code class="lang-java">class <span class="hljs-keyword">Node</span> <span class="hljs-title">{
-    int</span> data;
-    <span class="hljs-keyword">Node</span> <span class="hljs-title">next</span>;
+
+
+## **1) Deletion at Beginning**
+
+### **Definition**
+
+Deletion at the beginning means removing the **first node** of the linked list.
+The head pointer is moved to the next node and the old first node is freed.
+
+### **Algorithm**
+
+```
+Step 1: If head == NULL, print "List is empty"
+Step 2: Set Temp = head
+Step 3: Move head to next node
+        head = head -> link
+Step 4: Free Temp
+```
+
+### **C Code**
+
+```c
+void delete_at_begin() {
+    struct node *Temp;
+    if(head == NULL) {
+        printf("List is empty\n");
+    }
+    else {
+        Temp = head;
+        head = head -> link;
+        free(Temp);
+    }
 }
-<span class="hljs-keyword">Node</span> <span class="hljs-title">head</span> = null;
-</code></pre>
-<hr>
-<h2 id="-how-nodes-are-linked-"><strong>How Nodes are Linked</strong></h2>
-<p>When a new node is created, its memory address is stored in the <strong>next</strong> pointer of the previous node. This forms a chain-like structure.</p>
-<p>Memory allocation is done using:</p>
-<ul>
-<li><code>malloc()</code> in C</li>
-<li><code>new</code> operator in Java</li>
-</ul>
-<hr>
-<h2 id="-advantages-"><strong>Advantages</strong></h2>
-<ol>
-<li><strong>Dynamic Size</strong>: The list grows and shrinks based on memory availability.</li>
-<li><strong>Efficient Insertions/Deletions</strong>: No shifting of elements like arrays.</li>
-<li><strong>Memory Utilization</strong>: Uses memory effectively.</li>
-</ol>
-<hr>
-<h2 id="-disadvantages-"><strong>Disadvantages</strong></h2>
-<ol>
-<li><strong>No Direct Access</strong>: Must traverse to reach an element.</li>
-<li><strong>Extra Memory</strong>: Pointer takes additional space.</li>
-<li><strong>Slower Traversal</strong>: Compared to index-based access in arrays.</li>
-</ol>
-<hr>
-<h2 id="-applications-"><strong>Applications</strong></h2>
-<ul>
-<li>Implementation of Stacks and Queues</li>
-<li>Polynomial expressions</li>
-<li>Adjacency representation in Graphs</li>
-<li>Memory management systems</li>
-</ul>
-<hr>
-<h2 id="-conclusion-"><strong>Conclusion</strong></h2>
-<p>A Singly Linked List is a flexible and efficient data structure used where frequent insertion and deletion operations are required. Understanding node structure and pointer manipulation is essential for implementing linked lists effectively.</p>
+```
+
+---
+
+## **2) Deletion at End**
+
+### **Definition**
+
+Deletion at the end means removing the **last node** of the linked list.
+We find the second last node and make its link NULL, then free the last node.
+
+### **Algorithm**
+
+```
+Step 1: If head == NULL, print "List is empty"
+Step 2: If head -> link == NULL, free head and set head = NULL
+Step 3: Else set Temp = head
+Step 4: Traverse until Temp -> link -> link == NULL
+Step 5: Set Temp1 = Temp -> link
+Step 6: Set Temp -> link = NULL
+Step 7: Free Temp1
+```
+
+### **C Code**
+
+```c
+void delete_at_end() {
+    struct node *Temp, *Temp1;
+
+    if(head == NULL) {
+        printf("List is empty\n");
+    }
+    else if(head -> link == NULL) {
+        free(head);
+        head = NULL;
+    }
+    else {
+        Temp = head;
+        while(Temp -> link -> link != NULL) {
+            Temp = Temp -> link;
+        }
+        Temp1 = Temp -> link;
+        Temp -> link = NULL;
+        free(Temp1);
+    }
+}
+```
+
+---
+
+## **3) Deletion in Middle (Delete node with value y)**
+
+### **Definition**
+
+Deletion in the middle means removing the node which contains the **value y**.
+We find that node, adjust the links, and free the node.
+
+### **Algorithm**
+
+```
+Step 1: If head == NULL, print "List is empty"
+Step 2: Set Temp = head
+Step 3: If Temp -> data == y then
+        head = head -> link, free Temp
+Step 4: Else traverse until Temp -> link -> data == y
+Step 5: Set Temp1 = Temp -> link
+Step 6: Temp -> link = Temp1 -> link
+Step 7: Free Temp1
+```
+
+### **C Code**
+
+```c
+void delete_value(int y) {
+    struct node *Temp, *Temp1;
+
+    if(head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    Temp = head;
+
+    if(Temp -> data == y) {
+        head = head -> link;
+        free(Temp);
+    }
+    else {
+        while(Temp -> link != NULL && Temp -> link -> data != y) {
+            Temp = Temp -> link;
+        }
+
+        if(Temp -> link == NULL) {
+            printf("Value %d not found\n", y);
+        }
+        else {
+            Temp1 = Temp -> link;
+            Temp -> link = Temp1 -> link;
+            free(Temp1);
+        }
+    }
+}
+```
+
+---
+
+## **Topic:** Searching in Singly Linked List
+
+### **Definition**
+
+Searching in a singly linked list means finding whether a given value **x** is present in any node of the list.
+We start from the head node and move through each node one by one until the value is found or the list ends.
+
+---
+
+### **Algorithm**
+
+```
+Step 1: Set Temp = head
+Step 2: While Temp is not NULL do
+            If Temp -> data == x
+                 Print "Element Found"
+                 Stop
+            Temp = Temp -> link
+Step 3: If Temp == NULL
+            Print "Element Not Found"
+```
+
+---
+
+### **C Code**
+
+```c
+void search(int x) {
+    struct node *Temp;
+    Temp = head;
+
+    while(Temp != NULL) {
+        if(Temp -> data == x) {
+            printf("Element %d found in the list\n", x);
+            return;
+        }
+        Temp = Temp -> link;
+    }
+    printf("Element %d not found in the list\n", x);
+}
+```
+
+
+Doubly Linked List
+
+1. Insertion at Beginning
+2. Insertion at End
+3. Insertion in Middle (After a given value)
+4. Deletion at Beginning
+5. Deletion at End
+6. Deletion of Specific Value
+7. Searching
+
+---
+
+### **Structure Definition (Common for all)**
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *prev;
+    struct node *next;
+};
+
+struct node *head = NULL;
+```
+
+---
+
+## **1) Insertion at Beginning**
+
+### **Definition**
+
+Insertion at the beginning means adding a new node before the first node and updating head.
+
+### **Algorithm**
+
+```
+Step 1: Create newnode
+Step 2: newnode->data = x
+Step 3: newnode->prev = NULL
+Step 4: newnode->next = head
+Step 5: If head != NULL then head->prev = newnode
+Step 6: head = newnode
+```
+
+### **Code**
+
+```c
+void insert_begin(int x) {
+    struct node *newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->data = x;
+    newnode->prev = NULL;
+    newnode->next = head;
+
+    if(head != NULL)
+        head->prev = newnode;
+
+    head = newnode;
+}
+```
+
+---
+
+## **2) Insertion at End**
+
+### **Definition**
+
+Insertion at the end means adding a new node after the last node.
+
+### **Algorithm**
+
+```
+Step 1: Create newnode
+Step 2: newnode->data = x, newnode->next = NULL
+Step 3: If head == NULL, head = newnode
+Step 4: Else traverse to last node (Temp)
+Step 5: Temp->next = newnode
+Step 6: newnode->prev = Temp
+```
+
+### **Code**
+
+```c
+void insert_end(int x) {
+    struct node *newnode = (struct node*)malloc(sizeof(struct node));
+    struct node *Temp = head;
+
+    newnode->data = x;
+    newnode->next = NULL;
+
+    if(head == NULL) {
+        newnode->prev = NULL;
+        head = newnode;
+    }
+    else {
+        while(Temp->next != NULL)
+            Temp = Temp->next;
+
+        Temp->next = newnode;
+        newnode->prev = Temp;
+    }
+}
+```
+
+---
+
+## **3) Insertion After a Value y**
+
+### **Definition**
+
+Insert the new node after the node that contains value `y`.
+
+### **Algorithm**
+
+```
+Step 1: Traverse list to find node with data y (Temp)
+Step 2: Create newnode
+Step 3: newnode->next = Temp->next
+Step 4: newnode->prev = Temp
+Step 5: If Temp->next != NULL then Temp->next->prev = newnode
+Step 6: Temp->next = newnode
+```
+
+### **Code**
+
+```c
+void insert_after(int x, int y) {
+    struct node *Temp = head, *newnode;
+
+    while(Temp != NULL && Temp->data != y)
+        Temp = Temp->next;
+
+    if(Temp == NULL) {
+        printf("Value %d not found\n", y);
+        return;
+    }
+
+    newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->data = x;
+
+    newnode->next = Temp->next;
+    newnode->prev = Temp;
+
+    if(Temp->next != NULL)
+        Temp->next->prev = newnode;
+
+    Temp->next = newnode;
+}
+```
+
+---
+
+## **4) Deletion at Beginning**
+
+### **Definition**
+
+Removes the first node and moves head to the next node.
+
+### **Algorithm**
+
+```
+Step 1: If head == NULL print empty
+Step 2: Temp = head
+Step 3: head = head->next
+Step 4: If head != NULL head->prev = NULL
+Step 5: Free Temp
+```
+
+### **Code**
+
+```c
+void delete_begin() {
+    struct node *Temp;
+
+    if(head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    Temp = head;
+    head = head->next;
+
+    if(head != NULL)
+        head->prev = NULL;
+
+    free(Temp);
+}
+```
+
+---
+
+## **5) Deletion at End**
+
+### **Definition**
+
+Removes the last node of the list.
+
+### **Algorithm**
+
+```
+Step 1: If head == NULL print empty
+Step 2: Traverse to last node (Temp)
+Step 3: Temp->prev->next = NULL
+Step 4: Free Temp
+```
+
+### **Code**
+
+```c
+void delete_end() {
+    struct node *Temp = head;
+
+    if(head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    while(Temp->next != NULL)
+        Temp = Temp->next;
+
+    if(Temp->prev != NULL)
+        Temp->prev->next = NULL;
+    else
+        head = NULL;
+
+    free(Temp);
+}
+```
+
+---
+
+## **6) Deletion of Value y**
+
+### **Definition**
+
+Removes the node that contains value `y`.
+
+### **Algorithm**
+
+```
+Step 1: Traverse to find Temp with data y
+Step 2: Temp->prev->next = Temp->next
+Step 3: Temp->next->prev = Temp->prev (if not NULL)
+Step 4: Free Temp
+```
+
+### **Code**
+
+```c
+void delete_value(int y) {
+    struct node *Temp = head;
+
+    while(Temp != NULL && Temp->data != y)
+        Temp = Temp->next;
+
+    if(Temp == NULL) {
+        printf("Value %d not found\n", y);
+        return;
+    }
+
+    if(Temp->prev != NULL)
+        Temp->prev->next = Temp->next;
+    else
+        head = Temp->next;
+
+    if(Temp->next != NULL)
+        Temp->next->prev = Temp->prev;
+
+    free(Temp);
+}
+```
+
+---
+
+## **7) Searching**
+
+### **Definition**
+
+Searching means checking whether a particular value exists in the list.
+
+### **Algorithm**
+
+```
+Step 1: Temp = head
+Step 2: Traverse until Temp == NULL
+Step 3: If Temp->data == x, found
+Step 4: Else not found
+```
+
+### **Code**
+
+```c
+void search(int x) {
+    struct node *Temp = head;
+
+    while(Temp != NULL) {
+        if(Temp->data == x) {
+            printf("Element %d found\n", x);
+            return;
+        }
+        Temp = Temp->next;
+    }
+    printf("Element %d not found\n", x);
+}
+```
+
+
+---
+
+## **1) Hashing using Linear Probing**
+
+### **Definition**
+
+Linear probing is a collision handling technique where, if the calculated hash index is occupied, we **check the next position (index + 1)** and continue moving forward until an empty slot is found.
+
+---
+
+### **Algorithm**
+
+```
+Step 1: Compute index = key % size
+Step 2: While hash[index] is occupied
+            index = (index + 1) % size
+Step 3: Insert key at hash[index]
+```
+
+---
+
+### **C Code**
+
+```c
+#define size 10
+int hash[size];
+
+void init() {
+    for(int i=0; i<size; i++)
+        hash[i] = -1;
+}
+
+void insert_linear(int key) {
+    int index = key % size;
+    while(hash[index] != -1) {
+        index = (index + 1) % size;
+    }
+    hash[index] = key;
+}
+```
+
+---
+
+## **2) Hashing using Quadratic Probing**
+
+### **Definition**
+
+Quadratic probing resolves collisions by checking squares of step values i.e.,
+(index + 1²), (index + 2²), (index + 3²), etc., until an empty space is found.
+
+---
+
+### **Algorithm**
+
+```
+Step 1: Compute index = key % size
+Step 2: Set i = 1
+Step 3: While hash[index] is occupied
+            index = (index + i*i) % size
+            i = i + 1
+Step 4: Insert key at hash[index]
+```
+
+---
+
+### **C Code**
+
+```c
+void insert_quadratic(int key) {
+    int index = key % size;
+    int i = 1;
+    while(hash[index] != -1) {
+        index = (index + i*i) % size;
+        i++;
+    }
+    hash[index] = key;
+}
+```
+
+---
+
+## **3) Double Hashing**
+
+### **Definition**
+
+Double hashing uses **two hash functions**.
+If collision occurs, we move using steps of the second hash function.
+
+```
+New Index = (h1(key) + i * h2(key)) % size
+```
+
+---
+
+### **Algorithm**
+
+```
+Step 1: h1 = key % size
+Step 2: h2 = 7 - (key % 7)
+Step 3: Set i = 0
+Step 4: While hash[(h1 + i*h2) % size] is occupied
+            i = i + 1
+Step 5: Insert key at (h1 + i*h2) % size
+```
+
+---
+
+### **C Code**
+
+```c
+void insert_double(int key) {
+    int h1 = key % size;
+    int h2 = 7 - (key % 7);
+    int index, i = 0;
+
+    while(1) {
+        index = (h1 + i*h2) % size;
+        if(hash[index] == -1) {
+            hash[index] = key;
+            break;
+        }
+        i++;
+    }
+}
+```
+
+---
+
+### **To Print the Hash Table**
+
+```c
+void display() {
+    for(int i=0; i<size; i++)
+        printf("%d ", hash[i]);
+    printf("\n");
+}
+```
+
+---
+
+
+
+
+
+
