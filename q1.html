@@ -140,7 +140,92 @@ a:hover {
             <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
         </head>
         <body>
-            <h2><strong>1) Deletion at Beginning</strong></h2>
+            <h2><strong>2 marks</strong></h2>
+<h2><strong>1) Linked List and Types of Linked List</strong></h2>
+<p>A linked list is a dynamic data structure used to store elements in memory. Each element is stored in a node. A node contains two fields: <strong>data</strong> and <strong>link</strong>. The link field stores the address of the next node. The linked list grows and shrinks during program execution because memory is allocated at runtime. This avoids wastage of memory which is seen in arrays.</p>
+<h3><strong>Types of Linked List</strong></h3>
+<ol>
+<li><p><strong>Singly Linked List</strong><br>Each node contains data and a pointer to the next node.<br>Example:<br><code>head → |data|next| → |data|next| → NULL</code></p>
+</li>
+<li><p><strong>Doubly Linked List</strong><br>Each node has two links. One link points to previous node and the other to the next node.</p>
+</li>
+<li><p><strong>Circular Linked List</strong><br>The last node does not point to NULL. Instead, it points back to the first node forming a circular chain.</p>
+</li>
+</ol>
+<p>Linked lists are used in implementing stacks, queues and memory management.</p>
+<hr>
+<h2><strong>2) ADT Stack and Queue with Operations</strong></h2>
+<h3><strong>Stack</strong></h3>
+<p>A stack is a <strong>LIFO</strong> structure. The insertion and deletion operations happen at the same end called <strong>top</strong>.</p>
+<p><strong>Operations:</strong></p>
+<ul>
+<li><code>push(x)</code> inserts x at the top.</li>
+<li><code>pop()</code> removes and returns the element at the top.</li>
+<li><code>peek()</code> returns the top element without removing it.</li>
+</ul>
+<p>Example:</p>
+<pre><code>push(5) -&gt; stack: 5
+push(10) -&gt; stack: 10, 5
+pop() -&gt; returns 10 -&gt; stack: 5
+</code></pre>
+<h3><strong>Queue</strong></h3>
+<p>A queue is a <strong>FIFO</strong> structure. Insertion takes place at <strong>rear</strong>, deletion at <strong>front</strong>.</p>
+<p><strong>Operations:</strong></p>
+<ul>
+<li><code>enqueue(x)</code> inserts x at the rear.</li>
+<li><code>dequeue()</code> removes element from the front.</li>
+</ul>
+<p>Queues are used in scheduling, buffering and traffic management.</p>
+<hr>
+<h2><strong>3) Binary Tree and Binary Search Tree</strong></h2>
+<p>A binary tree is a hierarchical structure in which each node has up to <strong>two children</strong>, named left child and right child.</p>
+<h3><strong>Binary Search Tree (BST) Properties</strong></h3>
+<ul>
+<li>The left subtree contains values <strong>less</strong> than the root.</li>
+<li>The right subtree contains values <strong>greater</strong> than the root.</li>
+<li>No duplicate values.</li>
+</ul>
+<p>BST is used for searching, insertion and deletion efficiently.</p>
+<h3><strong>Example Tree</strong></h3>
+<pre><code>       50
+      /  \
+    30    70
+   / \    / \
+ 20  40  60  80
+</code></pre>
+<p><strong>Inorder traversal prints sorted output.</strong></p>
+<hr>
+<h2><strong>4) Rehashing</strong></h2>
+<p>In hashing, when too many collisions occur or when the hash table becomes full, performance decreases. Rehashing is used to solve this.</p>
+<h3><strong>Steps in Rehashing</strong></h3>
+<ol>
+<li>Create a new hash table of <strong>larger size</strong>.</li>
+<li>Recompute the index for each existing key and insert them into the new table.</li>
+<li>The load factor becomes lower and searching becomes faster again.</li>
+</ol>
+<p>Rehashing ensures efficient use of hashing even when the data grows.</p>
+<hr>
+<h2><strong>5) Expression Tree Using Stack</strong></h2>
+<p>An expression tree is used to represent arithmetic expressions.<br>Leaf nodes represent <strong>operands</strong> (numbers or variables).<br>Internal nodes represent <strong>operators</strong> (+, -, *, /).</p>
+<h3><strong>Construction from Postfix Expression</strong></h3>
+<ol>
+<li>Scan postfix expression left to right.</li>
+<li>If symbol is operand, push as a node to stack.</li>
+<li>If symbol is operator, pop two nodes, make them children, and push the new tree back.</li>
+</ol>
+<h3><strong>Example</strong></h3>
+<p>Postfix: <code>AB+CD-*</code></p>
+<p>Expression Tree formed:</p>
+<pre><code>        *
+      /   \
+     +     -
+    / \   / \
+   A   B C   D
+</code></pre>
+<p>To evaluate, perform postorder traversal.</p>
+<hr>
+<h2><strong>Answer In Detail</strong></h2>
+<h2><strong>1) Deletion at Beginning</strong></h2>
 <h3><strong>Definition</strong></h3>
 <p>Deletion at the beginning means removing the <strong>first node</strong> of the linked list.<br>The head pointer is moved to the next node and the old first node is freed.</p>
 <h3><strong>Algorithm</strong></h3>
@@ -740,6 +825,233 @@ struct node* delete(struct node* root, int x) {
 }
 </code></pre>
 <hr>
+<ol>
+<li><strong>Inorder Traversal</strong></li>
+<li><strong>Preorder Traversal</strong></li>
+<li><strong>Postorder Traversal</strong></li>
+</ol>
+<hr>
+<h2><strong>Binary Tree Traversals</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Tree Traversal is the process of visiting each node in a tree exactly once.<br>There are <strong>three</strong> common Depth-First Traversal methods:</p>
+<ol>
+<li><strong>Inorder</strong>   : Left → Root → Right</li>
+<li><strong>Preorder</strong>  : Root → Left → Right</li>
+<li><strong>Postorder</strong> : Left → Right → Root</li>
+</ol>
+<hr>
+<h2><strong>1) Inorder Traversal</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>In inorder traversal, we first visit the <strong>left subtree</strong>, then the <strong>root</strong>, and finally the <strong>right subtree</strong>.<br>For Binary Search Trees, inorder gives <strong>ascending order</strong> of values.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Traverse the left subtree
+Step 2: Visit the root node
+Step 3: Traverse the right subtree
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void inorder(struct node* root) {
+    if(root != NULL) {
+        inorder(root-&gt;left);
+        printf("%d ", root-&gt;data);
+        inorder(root-&gt;right);
+    }
+}
+</code></pre>
+<hr>
+<h2><strong>2) Preorder Traversal</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>In preorder traversal, the <strong>root</strong> is visited first, then the <strong>left subtree</strong>, followed by the <strong>right subtree</strong>.<br>This traversal is used to create <strong>prefix expressions</strong> and for <strong>copying trees</strong>.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Visit the root node
+Step 2: Traverse the left subtree
+Step 3: Traverse the right subtree
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void preorder(struct node* root) {
+    if(root != NULL) {
+        printf("%d ", root-&gt;data);
+        preorder(root-&gt;left);
+        preorder(root-&gt;right);
+    }
+}
+</code></pre>
+<hr>
+<h2><strong>3) Postorder Traversal</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>In postorder traversal, we first visit the <strong>left subtree</strong>, then the <strong>right subtree</strong>, and finally the <strong>root</strong>.<br>This traversal is used to <strong>delete or free the tree</strong> safely.</p>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Traverse the left subtree
+Step 2: Traverse the right subtree
+Step 3: Visit the root node
+</code></pre>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">void postorder(struct node* root) {
+    if(root != NULL) {
+        postorder(root-&gt;left);
+        postorder(root-&gt;right);
+        printf("%d ", root-&gt;data);
+    }
+}
+</code></pre>
+<hr>
+<h2><strong>Node Structure (Common)</strong></h2>
+<pre class="language-c" tabindex="0"><code class="language-c">struct node {
+    int data;
+    struct node *left, *right;
+};
+</code></pre>
+<hr>
+<h2><strong>Example Tree Diagram</strong> <em>(Draw this in exam)</em></h2>
+<pre><code>        50
+       /  \
+     30    70
+    / \    / \
+  20  40  60  80
+</code></pre>
+<h3>Traversal Results:</h3>
+<pre><code>Inorder   : 20 30 40 50 60 70 80
+Preorder  : 50 30 20 40 70 60 80
+Postorder : 20 40 30 60 80 70 50
+</code></pre>
+<h2><strong>Topic 1: Infix to Postfix Conversion</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Infix expression is an expression where the operator appears <strong>between</strong> the operands.<br>Example: <code>A + B</code></p>
+<p>Postfix expression is an expression where the operator appears <strong>after</strong> the operands.<br>Example: <code>A B +</code></p>
+<p>To convert infix to postfix, we use a <strong>stack</strong> to manage operators and precedence.</p>
+<hr>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Scan the infix expression from left to right.
+Step 2: If the symbol is an operand, add it to the postfix output.
+Step 3: If the symbol is '(', push it onto stack.
+Step 4: If the symbol is ')', pop from stack until '(' is found.
+Step 5: If the symbol is an operator:
+        While the stack is not empty and precedence of operator on stack
+        is greater or equal to current operator:
+              pop and add to postfix.
+        Push the current operator to stack.
+Step 6: After scanning all characters, pop all remaining operators from stack.
+</code></pre>
+<hr>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;stdlib.h&gt;
+
+char stack[50];
+int top = -1;
+
+void push(char x) {
+    stack[++top] = x;
+}
+
+char pop() {
+    return stack[top--];
+}
+
+int precedence(char x) {
+    if(x=='+' || x=='-') return 1;
+    if(x=='*' || x=='/') return 2;
+    if(x=='^') return 3;
+    return 0;
+}
+
+void infixToPostfix(char infix[]) {
+    char postfix[50];
+    int i, j=0;
+    char x;
+
+    for(i=0; infix[i]!='\0'; i++) {
+        if(isalnum(infix[i])) {
+            postfix[j++] = infix[i];
+        }
+        else if(infix[i] == '(') {
+            push(infix[i]);
+        }
+        else if(infix[i] == ')') {
+            while((x = pop()) != '(')
+                postfix[j++] = x;
+        }
+        else {
+            while(top != -1 &amp;&amp; precedence(stack[top]) &gt;= precedence(infix[i]))
+                postfix[j++] = pop();
+            push(infix[i]);
+        }
+    }
+
+    while(top != -1)
+        postfix[j++] = pop();
+
+    postfix[j] = '\0';
+    printf("Postfix: %s\n", postfix);
+}
+
+int main() {
+    char exp[] = "A+B*C";
+    infixToPostfix(exp);
+    return 0;
+}
+</code></pre>
+<hr>
+<h2><strong>Topic 2: Postfix Expression Evaluation</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>Postfix evaluation means computing the value of a postfix expression.<br>We use a stack:</p>
+<ul>
+<li>Push operands</li>
+<li>When operator comes, pop two operands, apply operation, and push result back.</li>
+</ul>
+<hr>
+<h3><strong>Algorithm</strong></h3>
+<pre><code>Step 1: Scan expression from left to right.
+Step 2: If operand, push into stack.
+Step 3: If operator:
+        Pop top two elements.
+        Apply operator: result = operand2 operator operand1
+        Push result back to stack.
+Step 4: At end, top of stack contains the result.
+</code></pre>
+<hr>
+<h3><strong>C Code</strong></h3>
+<pre class="language-c" tabindex="0"><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int stack1[50];
+int top1 = -1;
+
+void push1(int x) {
+    stack1[++top1] = x;
+}
+
+int pop1() {
+    return stack1[top1--];
+}
+
+int evaluatePostfix(char postfix[]) {
+    int i, op1, op2;
+
+    for(i=0; postfix[i]!='\0'; i++) {
+        if(isdigit(postfix[i])) {
+            push1(postfix[i]-'0');
+        }
+        else {
+            op1 = pop1();
+            op2 = pop1();
+            switch(postfix[i]) {
+                case '+': push1(op2 + op1); break;
+                case '-': push1(op2 - op1); break;
+                case '*': push1(op2 * op1); break;
+                case '/': push1(op2 / op1); break;
+            }
+        }
+    }
+    return pop1();
+}
+
+int main() {
+    char exp[] = "23*54*+";
+    printf("Result = %d\n", evaluatePostfix(exp));
+    return 0;
+}
+</code></pre>
 
             <script>
                 Prism.highlightAll();
