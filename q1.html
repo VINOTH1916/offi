@@ -1,170 +1,80 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Prime Number Check</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .problem-box {
-            background-color: #f8f9fa;
-            border-left: 4px solid #3498db;
-            padding: 15px;
-            margin: 20px 0;
-        }
-        .algorithm {
-            background-color: #e8f4f8;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-        .example {
-            background-color: #e8f8f0;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-        textarea {
-            width: 100%;
-            height: 200px;
-            font-family: 'Consolas', monospace;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            resize: vertical;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px 0;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .solution {
-            display: none;
-            background: #f5f5f5;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 4px;
-        }
-        pre {
-            background-color: #2d2d2d;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-        .password-container {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #fff8e1;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Prime Number Check</h1>
-    
-    <div class="problem-box">
-        <h3>Problem Statement</h3>
-        <p>Determine if a given number is prime.</p>
-        
-        <h4>Input:</h4>
-        <p>An integer n (1 ≤ n ≤ 10<sup>6</sup>)</p>
-        
-        <h4>Output:</h4>
-        <p>"Prime" if n is prime, otherwise "Not Prime".</p>
-    </div>
-    
-    <div class="algorithm">
-        <h3>Algorithm</h3>
-        <ol>
-            <li>If n ≤ 1, return "Not Prime"</li>
-            <li>For i from 2 to √n:
-                <ul>
-                    <li>If n % i == 0, return "Not Prime"</li>
-                </ul>
-            </li>
-            <li>If no divisors found, return "Prime"</li>
-        </ol>
-    </div>
-    
-    <div class="example">
-        <h3>Examples</h3>
-        <table>
-            <tr>
-                <th>Input</th>
-                <th>Output</th>
-                <th>Explanation</th>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>"Prime"</td>
-                <td>13 has no divisors other than 1 and itself</td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>"Not Prime"</td>
-                <td>15 is divisible by 3 and 5</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>"Not Prime"</td>
-                <td>By definition, 1 is not a prime number</td>
-            </tr>
-        </table>
-    </div>
-    
-    <h3>Try It Yourself</h3>
-    <textarea placeholder="Write your C code here..."></textarea><br>
-    <button onclick="runCode()">Run Code</button>
-    
-    <div class="password-container">
-        <h3>Need the solution?</h3>
-        <p>Enter password to reveal:</p>
-        <input type="password" id="password1" placeholder="Enter password">
-        <button onclick="showSolution(1)">Show Solution</button>
-        <div id="solution1" class="solution"></div>
-    </div>
-
-    <script>
-        function showSolution(q) {
-            const password = document.getElementById(`password${q}`).value;
-            let correctPass = "";
-            let solution = "";
-            
-            if(q === 1) {
-                correctPass = "11";
-                solution = `#include <stdio.h>\n#include <math.h>\n\nint main() {\n    int n, i, isPrime = 1;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n\n    if (n <= 1) {\n        isPrime = 0;\n    } else {\n        for (i = 2; i <= sqrt(n); i++) {\n            if (n % i == 0) {\n                isPrime = 0;\n                break;\n            }\n        }\n    }\n\n    if (isPrime)\n        printf("%d is a Prime number.\\n", n);\n    else\n        printf("%d is not a Prime number.\\n", n);\n\n    return 0;\n}`;
-            }
-            
-            if(password === correctPass) {
-                document.getElementById(`solution${q}`).style.display = 'block';
-                document.getElementById(`solution${q}`).innerHTML = `<pre>${solution}</pre>`;
-            } else {
-                alert("Incorrect password!");
-            }
-        }
-        
-        function runCode() {
-            alert("Code execution simulated - implement your own compiler/execution here");
-        }
-    </script>
-</body>
-</html>
+<h1 id="-1-explain-the-structure-and-representation-of-a-singly-linked-list-with-a-neat-diagram-"><strong>1. Explain the structure and representation of a Singly Linked List with a neat diagram.</strong></h1>
+<h2 id="-introduction-"><strong>Introduction</strong></h2>
+<p>A <strong>Singly Linked List</strong> is a <strong>dynamic data structure</strong> that consists of a sequence of nodes. Each node contains <strong>data</strong> and a <strong>pointer</strong> that stores the address of the next node in the list. It allows efficient insertion and deletion operations.</p>
+<p>A linked list does not require <strong>contiguous memory</strong> like an array. Nodes are created in memory as needed using dynamic memory allocation.</p>
+<hr>
+<h2 id="-node-structure-"><strong>Node Structure</strong></h2>
+<p>Each node has two parts:</p>
+<ol>
+<li><strong>Data field</strong> – stores the information.</li>
+<li><strong>Next pointer</strong> – stores the address of the next node.</li>
+</ol>
+<h3 id="-diagram-of-a-node-"><strong>Diagram of a Node</strong></h3>
+<pre><code><span class="hljs-code">+-----------+</span>------------+
+<span class="hljs-section">|   Data    |   Next     | ---&gt; Points to next node
++-----------+------------+</span>
+</code></pre><hr>
+<h2 id="-representation-"><strong>Representation</strong></h2>
+<p>The first node of the list is pointed to by a pointer called <strong>HEAD</strong>.
+If the list is empty, <strong>HEAD = NULL</strong>.</p>
+<h3 id="-example-linked-list-"><strong>Example Linked List</strong></h3>
+<pre><code> <span class="hljs-comment">HEAD</span>
+  <span class="hljs-comment">|</span>
+  <span class="hljs-comment">v</span>
+<span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>
+<span class="hljs-comment">|</span> <span class="hljs-comment">10</span> <span class="hljs-comment">|</span>  <span class="hljs-comment">o</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">|</span> <span class="hljs-comment">20</span> <span class="hljs-comment">|</span>  <span class="hljs-comment">o</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">|</span> <span class="hljs-comment">30</span> <span class="hljs-comment">|</span>  <span class="hljs-comment">o</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">|</span>  <span class="hljs-comment">NULL</span>  <span class="hljs-comment">|</span>
+<span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>     <span class="hljs-literal">+</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">+</span>
+</code></pre><p>Here:</p>
+<ul>
+<li>10, 20, 30 are <strong>data</strong></li>
+<li>Arrows represent pointers storing the address of the next node</li>
+</ul>
+<hr>
+<h2 id="-node-definition-"><strong>Node Definition</strong></h2>
+<h3 id="-in-c-"><strong>In C</strong></h3>
+<pre><code class="lang-c">struct <span class="hljs-keyword">node</span> <span class="hljs-title">{
+    int</span> data;
+    struct <span class="hljs-keyword">node</span> <span class="hljs-title">*next</span>;
+};
+struct <span class="hljs-keyword">node</span> <span class="hljs-title">*head</span> = NULL;
+</code></pre>
+<h3 id="-in-java-"><strong>In Java</strong></h3>
+<pre><code class="lang-java">class <span class="hljs-keyword">Node</span> <span class="hljs-title">{
+    int</span> data;
+    <span class="hljs-keyword">Node</span> <span class="hljs-title">next</span>;
+}
+<span class="hljs-keyword">Node</span> <span class="hljs-title">head</span> = null;
+</code></pre>
+<hr>
+<h2 id="-how-nodes-are-linked-"><strong>How Nodes are Linked</strong></h2>
+<p>When a new node is created, its memory address is stored in the <strong>next</strong> pointer of the previous node. This forms a chain-like structure.</p>
+<p>Memory allocation is done using:</p>
+<ul>
+<li><code>malloc()</code> in C</li>
+<li><code>new</code> operator in Java</li>
+</ul>
+<hr>
+<h2 id="-advantages-"><strong>Advantages</strong></h2>
+<ol>
+<li><strong>Dynamic Size</strong>: The list grows and shrinks based on memory availability.</li>
+<li><strong>Efficient Insertions/Deletions</strong>: No shifting of elements like arrays.</li>
+<li><strong>Memory Utilization</strong>: Uses memory effectively.</li>
+</ol>
+<hr>
+<h2 id="-disadvantages-"><strong>Disadvantages</strong></h2>
+<ol>
+<li><strong>No Direct Access</strong>: Must traverse to reach an element.</li>
+<li><strong>Extra Memory</strong>: Pointer takes additional space.</li>
+<li><strong>Slower Traversal</strong>: Compared to index-based access in arrays.</li>
+</ol>
+<hr>
+<h2 id="-applications-"><strong>Applications</strong></h2>
+<ul>
+<li>Implementation of Stacks and Queues</li>
+<li>Polynomial expressions</li>
+<li>Adjacency representation in Graphs</li>
+<li>Memory management systems</li>
+</ul>
+<hr>
+<h2 id="-conclusion-"><strong>Conclusion</strong></h2>
+<p>A Singly Linked List is a flexible and efficient data structure used where frequent insertion and deletion operations are required. Understanding node structure and pointer manipulation is essential for implementing linked lists effectively.</p>
