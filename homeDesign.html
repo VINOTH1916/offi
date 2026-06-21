@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sankari Home Design · community gallery</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: #f8f5f0;
+      color: #2e241f;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .app {
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    /* header */
+    .brand {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      border-bottom: 3px solid #d9c7b3;
+      padding-bottom: 0.75rem;
+    }
+
+    .brand h1 {
+      font-size: 2.4rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #3f2e24;
+    }
+
+    .brand h1 i {
+      color: #b58a6b;
+      margin-right: 8px;
+    }
+
+    .brand span {
+      font-size: 1rem;
+      background: #e5d6c8;
+      padding: 0.3rem 1.2rem;
+      border-radius: 30px;
+      color: #3f2e24;
+      font-weight: 500;
+    }
+
+    /* upload card */
+    .upload-area {
+      background: #ffffffdd;
+      backdrop-filter: blur(2px);
+      background: #fff;
+      padding: 1.8rem 2rem;
+      border-radius: 40px 40px 20px 20px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      margin-bottom: 2.8rem;
+      border: 1px solid #ede3d9;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.2rem 1.8rem;
+    }
+
+    .upload-area .label {
+      font-weight: 600;
+      color: #4f3b2e;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .upload-area .label i {
+      color: #b58a6b;
+    }
+
+    .category-select {
+      background: #f3ede8;
+      border: none;
+      padding: 0.7rem 1.5rem 0.7rem 1.2rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #2e241f;
+      outline: 1px solid #dccfc4;
+      cursor: pointer;
+      min-width: 160px;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-wrapper .fake-btn {
+      background: #dccfc4;
+      padding: 0.7rem 1.8rem;
+      border-radius: 60px;
+      font-weight: 500;
+      color: #2e241f;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #beaa99;
+    }
+
+    .file-input-wrapper .fake-btn i {
+      color: #5f4433;
+    }
+
+    .file-input-wrapper:hover .fake-btn {
+      background: #cfbcaa;
+      border-color: #a58873;
+    }
+
+    .upload-btn {
+      background: #7f624b;
+      border: none;
+      color: white;
+      padding: 0.7rem 2.2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #6e513c;
+      margin-left: auto;
+    }
+
+    .upload-btn:hover {
+      background: #634b39;
+      transform: scale(0.97);
+    }
+
+    .upload-btn i {
+      font-size: 1rem;
+    }
+
+    /* gallery grid */
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin: 2.5rem 0 1.2rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px dashed #dccfc4;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #3f2e24;
+    }
+
+    .section-title i {
+      color: #a58873;
+      font-size: 1.6rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .design-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+      border: 1px solid #ede3d9;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .design-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+      border-color: #cfbcaa;
+    }
+
+    .design-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: #f0ebe6;
+      display: block;
+      border-bottom: 1px solid #e3d6cb;
+    }
+
+    .design-card .meta {
+      padding: 0.8rem 0.9rem 0.7rem;
+      background: #fcfaf8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #5f4a3b;
+    }
+
+    .design-card .meta i {
+      color: #b58a6b;
+      margin-right: 4px;
+    }
+
+    .design-card .meta .cat-tag {
+      background: #e5d6c8;
+      padding: 0.15rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: #3f2e24;
+    }
+
+    .empty-message {
+      grid-column: 1 / -1;
+      background: #f3ede8;
+      padding: 2.8rem 1rem;
+      border-radius: 60px;
+      text-align: center;
+      color: #7f6b5c;
+      font-style: italic;
+      border: 1px dashed #beaa99;
+      font-size: 1.1rem;
+    }
+
+    .empty-message i {
+      margin-right: 10px;
+      opacity: 0.6;
+    }
+
+    .footer-note {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #8a7667;
+      border-top: 1px solid #e3d6cb;
+      padding-top: 1.8rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* responsive */
+    @media (max-width: 700px) {
+      body { padding: 1.2rem; }
+      .brand h1 { font-size: 1.8rem; }
+      .upload-area { flex-direction: column; align-items: stretch; }
+      .upload-area .label { width: 100%; }
+      .category-select { width: 100%; }
+      .file-input-wrapper .fake-btn { width: 100%; justify-content: center; }
+      .upload-btn { margin-left: 0; justify-content: center; }
+      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- header -->
+  <div class="brand">
+    <h1><i class="fas fa-home"></i> Sankari Home Design</h1>
+    <span><i class="fas fa-users"></i> community gallery</span>
+  </div>
+
+  <!-- upload section -->
+  <div class="upload-area" id="uploadArea">
+    <div class="label"><i class="fas fa-cloud-upload-alt"></i> Upload design</div>
+
+    <select class="category-select" id="categorySelect">
+      <option value="door">🚪 Door design</option>
+      <option value="gate">⛩️ Gate design</option>
+      <option value="tv">📺 TV set design</option>
+      <option value="tiles">🧱 Tiles design</option>
+      <option value="ceiling">⬇️ Fall ceiling design</option>
+    </select>
+
+    <div class="file-input-wrapper">
+      <span class="fake-btn"><i class="fas fa-image"></i> Choose image</span>
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
+
+    <button class="upload-btn" id="uploadBtn"><i class="fas fa-arrow-up"></i> Upload</button>
+  </div>
+
+  <!-- dynamic gallery sections -->
+  <div id="galleryContainer"></div>
+
+  <div class="footer-note">
+    <i class="fas fa-globe"></i> public · all uploaded images are visible to everyone
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ----- storage key -----
+    const STORAGE_KEY = 'sankari_design_gallery';
+
+    // ----- initial demo data (so page isn't empty) -----
+    const defaultImages = [
+      { id: 'd1', category: 'door', url: 'https://placecats.com/300/300?random=1', label: 'Modern door' },
+      { id: 'd2', category: 'gate', url: 'https://placecats.com/300/300?random=2', label: 'Wrought iron gate' },
+      { id: 'd3', category: 'tv', url: 'https://placecats.com/300/300?random=3', label: 'TV unit with wood' },
+      { id: 'd4', category: 'tiles', url: 'https://placecats.com/300/300?random=4', label: 'Marble tiles' },
+      { id: 'd5', category: 'ceiling', url: 'https://placecats.com/300/300?random=5', label: 'Coffered ceiling' },
+    ];
+
+    // ----- helpers -----
+    function loadGallery() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length) return parsed;
+        } catch (_) { /* ignore */ }
+      }
+      // if nothing or invalid, seed with defaults
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultImages));
+      return defaultImages;
+    }
+
+    function saveGallery(images) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+    }
+
+    // ----- render sections by category -----
+    const categories = [
+      { key: 'door', icon: 'fa-door-open', label: 'Door design' },
+      { key: 'gate', icon: 'fa-archway', label: 'Gate design' },
+      { key: 'tv', icon: 'fa-tv', label: 'TV set design' },
+      { key: 'tiles', icon: 'fa-th-large', label: 'Tiles design' },
+      { key: 'ceiling', icon: 'fa-chevron-down', label: 'Fall ceiling design' },
+    ];
+
+    function renderGallery(imagesArray) {
+      const container = document.getElementById('galleryContainer');
+      if (!container) return;
+
+      let html = '';
+
+      categories.forEach(cat => {
+        const items = imagesArray.filter(img => img.category === cat.key);
+        html += `<div class="section-title"><i class="fas ${cat.icon}"></i> ${cat.label}</div>`;
+        html += `<div class="gallery-grid" data-category="${cat.key}">`;
+
+        if (items.length === 0) {
+          html += `<div class="empty-message"><i class="fas fa-upload"></i> No images yet — be the first to upload!</div>`;
+        } else {
+          items.forEach(img => {
+            const label = img.label || 'design';
+            html += `
+              <div class="design-card" data-id="${img.id}">
+                <img src="${img.url}" alt="${label}" loading="lazy" onerror="this.src='https://placecats.com/300/300?error=1'">
+                <div class="meta">
+                  <span><i class="fas fa-tag"></i> ${label}</span>
+                  <span class="cat-tag"><i class="fas fa-${cat.icon}"></i> ${cat.key}</span>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        html += `</div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // ----- upload logic -----
+    function handleUpload() {
+      const fileInput = document.getElementById('fileInput');
+      const categorySelect = document.getElementById('categorySelect');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('Please select an image first.');
+        return;
+      }
+
+      // validate image type
+      if (!file.type.startsWith('image/')) {
+        alert('Only image files are allowed.');
+        return;
+      }
+
+      const category = categorySelect.value;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imageDataUrl = e.target.result;
+
+        // get current gallery
+        const gallery = loadGallery();
+
+        // generate unique id
+        const newId = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+
+        // optional: use filename as label (truncated)
+        let label = file.name.replace(/\.[^/.]+$/, "").substring(0, 28);
+        if (label.length === 0) label = 'design';
+
+        const newImage = {
+          id: newId,
+          category: category,
+          url: imageDataUrl,
+          label: label,
+        };
+
+        gallery.push(newImage);
+        saveGallery(gallery);
+        renderGallery(gallery);
+
+        // reset file input
+        fileInput.value = '';
+        // tiny feedback
+        const btn = document.getElementById('uploadBtn');
+        btn.innerHTML = '<i class="fas fa-check"></i> Uploaded!';
+        setTimeout(() => { btn.innerHTML = '<i class="fas fa-arrow-up"></i> Upload'; }, 1500);
+      };
+
+      reader.onerror = function() {
+        alert('Failed to read file. Please try again.');
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    // ----- init -----
+    function init() {
+      const galleryData = loadGallery();
+      renderGallery(galleryData);
+
+      // event listeners
+      document.getElementById('uploadBtn').addEventListener('click', handleUpload);
+      // allow "enter" on file input? no need
+      // also trigger upload if user presses enter while focused on file input? skip for simplicity
+
+      // optional: drag and drop (stretch goal) – not implemented to keep it clean
+    }
+
+    // expose to global for error fallback in img onerror
+    window.renderGallery = renderGallery;
+    window.loadGallery = loadGallery;
+
+    // run
+    init();
+  })();
+</script>
+<!-- placeholder images from placecats, but users will upload their own -->
+</body>
+</html>
