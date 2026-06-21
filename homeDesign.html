@@ -1,479 +1,994 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sankari Home Design · community gallery</title>
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-    }
-
-    body {
-      background: #f8f5f0;
-      color: #2e241f;
-      padding: 2rem 1.5rem;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .app {
-      max-width: 1400px;
-      width: 100%;
-    }
-
-    /* header */
-    .brand {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-      border-bottom: 3px solid #d9c7b3;
-      padding-bottom: 0.75rem;
-    }
-
-    .brand h1 {
-      font-size: 2.4rem;
-      font-weight: 400;
-      letter-spacing: 1px;
-      color: #3f2e24;
-    }
-
-    .brand h1 i {
-      color: #b58a6b;
-      margin-right: 8px;
-    }
-
-    .brand span {
-      font-size: 1rem;
-      background: #e5d6c8;
-      padding: 0.3rem 1.2rem;
-      border-radius: 30px;
-      color: #3f2e24;
-      font-weight: 500;
-    }
-
-    /* upload card */
-    .upload-area {
-      background: #ffffffdd;
-      backdrop-filter: blur(2px);
-      background: #fff;
-      padding: 1.8rem 2rem;
-      border-radius: 40px 40px 20px 20px;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
-      margin-bottom: 2.8rem;
-      border: 1px solid #ede3d9;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 1.2rem 1.8rem;
-    }
-
-    .upload-area .label {
-      font-weight: 600;
-      color: #4f3b2e;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .upload-area .label i {
-      color: #b58a6b;
-    }
-
-    .category-select {
-      background: #f3ede8;
-      border: none;
-      padding: 0.7rem 1.5rem 0.7rem 1.2rem;
-      border-radius: 60px;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #2e241f;
-      outline: 1px solid #dccfc4;
-      cursor: pointer;
-      min-width: 160px;
-    }
-
-    .file-input-wrapper {
-      position: relative;
-      display: inline-block;
-    }
-
-    .file-input-wrapper input[type="file"] {
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    .file-input-wrapper .fake-btn {
-      background: #dccfc4;
-      padding: 0.7rem 1.8rem;
-      border-radius: 60px;
-      font-weight: 500;
-      color: #2e241f;
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid #beaa99;
-    }
-
-    .file-input-wrapper .fake-btn i {
-      color: #5f4433;
-    }
-
-    .file-input-wrapper:hover .fake-btn {
-      background: #cfbcaa;
-      border-color: #a58873;
-    }
-
-    .upload-btn {
-      background: #7f624b;
-      border: none;
-      color: white;
-      padding: 0.7rem 2.2rem;
-      border-radius: 60px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid #6e513c;
-      margin-left: auto;
-    }
-
-    .upload-btn:hover {
-      background: #634b39;
-      transform: scale(0.97);
-    }
-
-    .upload-btn i {
-      font-size: 1rem;
-    }
-
-    /* gallery grid */
-    .section-title {
-      font-size: 1.8rem;
-      font-weight: 300;
-      margin: 2.5rem 0 1.2rem 0;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px dashed #dccfc4;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: #3f2e24;
-    }
-
-    .section-title i {
-      color: #a58873;
-      font-size: 1.6rem;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-top: 0.5rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .design-card {
-      background: white;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-      transition: all 0.2s ease;
-      border: 1px solid #ede3d9;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .design-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.08);
-      border-color: #cfbcaa;
-    }
-
-    .design-card img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      background: #f0ebe6;
-      display: block;
-      border-bottom: 1px solid #e3d6cb;
-    }
-
-    .design-card .meta {
-      padding: 0.8rem 0.9rem 0.7rem;
-      background: #fcfaf8;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      color: #5f4a3b;
-    }
-
-    .design-card .meta i {
-      color: #b58a6b;
-      margin-right: 4px;
-    }
-
-    .design-card .meta .cat-tag {
-      background: #e5d6c8;
-      padding: 0.15rem 0.9rem;
-      border-radius: 40px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      color: #3f2e24;
-    }
-
-    .empty-message {
-      grid-column: 1 / -1;
-      background: #f3ede8;
-      padding: 2.8rem 1rem;
-      border-radius: 60px;
-      text-align: center;
-      color: #7f6b5c;
-      font-style: italic;
-      border: 1px dashed #beaa99;
-      font-size: 1.1rem;
-    }
-
-    .empty-message i {
-      margin-right: 10px;
-      opacity: 0.6;
-    }
-
-    .footer-note {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: #8a7667;
-      border-top: 1px solid #e3d6cb;
-      padding-top: 1.8rem;
-      text-align: center;
-      width: 100%;
-    }
-
-    /* responsive */
-    @media (max-width: 700px) {
-      body { padding: 1.2rem; }
-      .brand h1 { font-size: 1.8rem; }
-      .upload-area { flex-direction: column; align-items: stretch; }
-      .upload-area .label { width: 100%; }
-      .category-select { width: 100%; }
-      .file-input-wrapper .fake-btn { width: 100%; justify-content: center; }
-      .upload-btn { margin-left: 0; justify-content: center; }
-      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-    }
-  </style>
-</head>
-<body>
-<div class="app" id="app">
-
-  <!-- header -->
-  <div class="brand">
-    <h1><i class="fas fa-home"></i> Sankari Home Design</h1>
-    <span><i class="fas fa-users"></i> community gallery</span>
-  </div>
-
-  <!-- upload section -->
-  <div class="upload-area" id="uploadArea">
-    <div class="label"><i class="fas fa-cloud-upload-alt"></i> Upload design</div>
-
-    <select class="category-select" id="categorySelect">
-      <option value="door">🚪 Door design</option>
-      <option value="gate">⛩️ Gate design</option>
-      <option value="tv">📺 TV set design</option>
-      <option value="tiles">🧱 Tiles design</option>
-      <option value="ceiling">⬇️ Fall ceiling design</option>
-    </select>
-
-    <div class="file-input-wrapper">
-      <span class="fake-btn"><i class="fas fa-image"></i> Choose image</span>
-      <input type="file" id="fileInput" accept="image/*">
-    </div>
-
-    <button class="upload-btn" id="uploadBtn"><i class="fas fa-arrow-up"></i> Upload</button>
-  </div>
-
-  <!-- dynamic gallery sections -->
-  <div id="galleryContainer"></div>
-
-  <div class="footer-note">
-    <i class="fas fa-globe"></i> public · all uploaded images are visible to everyone
-  </div>
-</div>
-
-<script>
-  (function() {
-    // ----- storage key -----
-    const STORAGE_KEY = 'sankari_design_gallery';
-
-    // ----- initial demo data (so page isn't empty) -----
-    const defaultImages = [
-      { id: 'd1', category: 'door', url: 'https://placecats.com/300/300?random=1', label: 'Modern door' },
-      { id: 'd2', category: 'gate', url: 'https://placecats.com/300/300?random=2', label: 'Wrought iron gate' },
-      { id: 'd3', category: 'tv', url: 'https://placecats.com/300/300?random=3', label: 'TV unit with wood' },
-      { id: 'd4', category: 'tiles', url: 'https://placecats.com/300/300?random=4', label: 'Marble tiles' },
-      { id: 'd5', category: 'ceiling', url: 'https://placecats.com/300/300?random=5', label: 'Coffered ceiling' },
-    ];
-
-    // ----- helpers -----
-    function loadGallery() {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length) return parsed;
-        } catch (_) { /* ignore */ }
-      }
-      // if nothing or invalid, seed with defaults
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultImages));
-      return defaultImages;
-    }
-
-    function saveGallery(images) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
-    }
-
-    // ----- render sections by category -----
-    const categories = [
-      { key: 'door', icon: 'fa-door-open', label: 'Door design' },
-      { key: 'gate', icon: 'fa-archway', label: 'Gate design' },
-      { key: 'tv', icon: 'fa-tv', label: 'TV set design' },
-      { key: 'tiles', icon: 'fa-th-large', label: 'Tiles design' },
-      { key: 'ceiling', icon: 'fa-chevron-down', label: 'Fall ceiling design' },
-    ];
-
-    function renderGallery(imagesArray) {
-      const container = document.getElementById('galleryContainer');
-      if (!container) return;
-
-      let html = '';
-
-      categories.forEach(cat => {
-        const items = imagesArray.filter(img => img.category === cat.key);
-        html += `<div class="section-title"><i class="fas ${cat.icon}"></i> ${cat.label}</div>`;
-        html += `<div class="gallery-grid" data-category="${cat.key}">`;
-
-        if (items.length === 0) {
-          html += `<div class="empty-message"><i class="fas fa-upload"></i> No images yet — be the first to upload!</div>`;
-        } else {
-          items.forEach(img => {
-            const label = img.label || 'design';
-            html += `
-              <div class="design-card" data-id="${img.id}">
-                <img src="${img.url}" alt="${label}" loading="lazy" onerror="this.src='https://placecats.com/300/300?error=1'">
-                <div class="meta">
-                  <span><i class="fas fa-tag"></i> ${label}</span>
-                  <span class="cat-tag"><i class="fas fa-${cat.icon}"></i> ${cat.key}</span>
-                </div>
-              </div>
-            `;
-          });
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sankari Home Design · Community Gallery</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- RESET & BASE ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
         }
 
-        html += `</div>`;
-      });
+        body {
+            background: #f5f0eb;
+            color: #2e241f;
+            padding: 1.5rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-      container.innerHTML = html;
-    }
+        .app {
+            max-width: 1300px;
+            width: 100%;
+        }
 
-    // ----- upload logic -----
-    function handleUpload() {
-      const fileInput = document.getElementById('fileInput');
-      const categorySelect = document.getElementById('categorySelect');
-      const file = fileInput.files[0];
-      if (!file) {
-        alert('Please select an image first.');
-        return;
-      }
+        /* ----- HEADER ----- */
+        .brand {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #d9c7b3;
+            padding-bottom: 0.75rem;
+        }
 
-      // validate image type
-      if (!file.type.startsWith('image/')) {
-        alert('Only image files are allowed.');
-        return;
-      }
+        .brand h1 {
+            font-size: 2.2rem;
+            font-weight: 400;
+            color: #3f2e24;
+        }
 
-      const category = categorySelect.value;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const imageDataUrl = e.target.result;
+        .brand h1 i {
+            color: #b58a6b;
+            margin-right: 8px;
+        }
 
-        // get current gallery
-        const gallery = loadGallery();
+        .brand .badge {
+            background: #e5d6c8;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #3f2e24;
+        }
 
-        // generate unique id
-        const newId = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        .brand .badge i {
+            margin-right: 6px;
+        }
 
-        // optional: use filename as label (truncated)
-        let label = file.name.replace(/\.[^/.]+$/, "").substring(0, 28);
-        if (label.length === 0) label = 'design';
+        /* ----- UPLOAD ZONE (with drag & drop) ----- */
+        .upload-zone {
+            background: #fff;
+            border-radius: 32px;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            border: 2px dashed #dccfc4;
+            transition: 0.3s;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
 
-        const newImage = {
-          id: newId,
-          category: category,
-          url: imageDataUrl,
-          label: label,
+        .upload-zone.dragover {
+            border-color: #b58a6b;
+            background: #fcf6f0;
+            box-shadow: 0 0 0 4px rgba(181, 138, 107, 0.15);
+        }
+
+        .upload-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .upload-row .label {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #4f3b2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-row .label i {
+            color: #b58a6b;
+        }
+
+        .category-select {
+            background: #f3ede8;
+            border: 1px solid #dccfc4;
+            padding: 0.65rem 1.5rem 0.65rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #2e241f;
+            cursor: pointer;
+            min-width: 170px;
+            flex: 0 1 auto;
+        }
+
+        .file-input-wrap {
+            position: relative;
+            display: inline-block;
+            flex: 0 1 auto;
+        }
+
+        .file-input-wrap input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-wrap .fake-btn {
+            background: #e5d6c8;
+            padding: 0.65rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #2e241f;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #beaa99;
+            cursor: pointer;
+        }
+
+        .file-input-wrap .fake-btn i {
+            color: #5f4433;
+        }
+
+        .file-input-wrap:hover .fake-btn {
+            background: #d5c2b1;
+        }
+
+        .upload-btn {
+            background: #7f624b;
+            border: none;
+            color: white;
+            padding: 0.65rem 2.2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #6e513c;
+            margin-left: auto;
+        }
+
+        .upload-btn:hover {
+            background: #634b39;
+            transform: scale(0.97);
+        }
+
+        .upload-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .upload-status {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: #6e5a4b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .upload-status .progress {
+            font-weight: 600;
+            color: #7f624b;
+        }
+
+        .drag-hint {
+            font-size: 0.85rem;
+            color: #8a7667;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 10px;
+        }
+
+        .drag-hint i {
+            font-size: 1rem;
+        }
+
+        /* ----- GALLERY SECTIONS ----- */
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 300;
+            margin: 2.2rem 0 1rem 0;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px dashed #dccfc4;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #3f2e24;
+        }
+
+        .section-title i {
+            color: #a58873;
+            font-size: 1.5rem;
+        }
+
+        .section-title .count {
+            font-size: 0.9rem;
+            font-weight: 400;
+            background: #e5d6c8;
+            padding: 0.1rem 0.9rem;
+            border-radius: 40px;
+            color: #4f3b2e;
+            margin-left: 6px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .design-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+            border: 1px solid #ede3d9;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .design-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            border-color: #cfbcaa;
+        }
+
+        .design-card .img-wrap {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #f0ebe6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .design-card .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: 0.2s;
+        }
+
+        .design-card:hover .img-wrap img {
+            transform: scale(1.02);
+        }
+
+        .design-card .meta {
+            padding: 0.7rem 0.9rem 0.6rem;
+            background: #fcfaf8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #5f4a3b;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .design-card .meta .design-no {
+            font-weight: 700;
+            color: #7f624b;
+            background: #f0ebe6;
+            padding: 0.1rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+
+        .design-card .meta .cat-tag {
+            background: #e5d6c8;
+            padding: 0.1rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #3f2e24;
+        }
+
+        .design-card .meta .label-text {
+            flex: 1;
+            min-width: 60px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .empty-message {
+            grid-column: 1 / -1;
+            background: #f3ede8;
+            padding: 2.5rem 1rem;
+            border-radius: 60px;
+            text-align: center;
+            color: #7f6b5c;
+            font-style: italic;
+            border: 1px dashed #beaa99;
+            font-size: 1.05rem;
+        }
+
+        .empty-message i {
+            margin-right: 10px;
+            opacity: 0.6;
+        }
+
+        /* ----- LIGHTBOX (click to open image) ----- */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 22, 18, 0.92);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .lightbox .close-btn {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            color: #fff;
+            font-size: 2.8rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            opacity: 0.7;
+            transition: 0.2s;
+        }
+
+        .lightbox .close-btn:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        .lightbox .caption {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            padding: 0 1rem;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ----- FOOTER ----- */
+        .footer-note {
+            margin-top: 2.5rem;
+            font-size: 0.85rem;
+            color: #8a7667;
+            border-top: 1px solid #e3d6cb;
+            padding-top: 1.5rem;
+            text-align: center;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-note i {
+            margin-right: 5px;
+        }
+
+        .footer-note .sync-status {
+            font-weight: 500;
+        }
+
+        .footer-note .sync-status .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .dot.green {
+            background: #4caf50;
+        }
+        .dot.yellow {
+            background: #ffc107;
+        }
+        .dot.red {
+            background: #f44336;
+        }
+
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 750px) {
+            body {
+                padding: 1rem 0.8rem;
+            }
+            .brand h1 {
+                font-size: 1.7rem;
+            }
+            .upload-zone {
+                padding: 1.2rem 1.2rem;
+            }
+            .upload-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.8rem;
+            }
+            .upload-row .label {
+                width: 100%;
+            }
+            .category-select {
+                width: 100%;
+            }
+            .file-input-wrap .fake-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .upload-btn {
+                margin-left: 0;
+                justify-content: center;
+                width: 100%;
+            }
+            .drag-hint {
+                margin-left: 0;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            .lightbox img {
+                max-width: 95vw;
+                max-height: 80vh;
+            }
+            .lightbox .close-btn {
+                top: 15px;
+                right: 20px;
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 0.8rem;
+            }
+            .brand h1 {
+                font-size: 1.4rem;
+            }
+            .brand .badge {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app" id="app">
+
+        <!-- HEADER -->
+        <div class="brand">
+            <h1><i class="fas fa-home"></i> Sankari Home Design</h1>
+            <span class="badge"><i class="fas fa-users"></i> community gallery</span>
+        </div>
+
+        <!-- UPLOAD ZONE -->
+        <div class="upload-zone" id="uploadZone">
+            <div class="upload-row">
+                <div class="label"><i class="fas fa-cloud-upload-alt"></i> Upload design</div>
+
+                <select class="category-select" id="categorySelect">
+                    <option value="door">🚪 Door design</option>
+                    <option value="gate">⛩️ Gate design</option>
+                    <option value="tv">📺 TV set design</option>
+                    <option value="tiles">🧱 Tiles design</option>
+                    <option value="ceiling">⬇️ Fall ceiling</option>
+                </select>
+
+                <div class="file-input-wrap">
+                    <span class="fake-btn"><i class="fas fa-image"></i> Choose image</span>
+                    <input type="file" id="fileInput" accept="image/*" />
+                </div>
+
+                <button class="upload-btn" id="uploadBtn"><i class="fas fa-arrow-up"></i> Upload</button>
+            </div>
+
+            <div class="upload-status">
+                <span><i class="fas fa-info-circle"></i> Drag & drop any image here</span>
+                <span class="drag-hint"><i class="fas fa-arrows-alt"></i> or click "Choose image"</span>
+                <span class="progress" id="uploadProgress"></span>
+            </div>
+        </div>
+
+        <!-- GALLERY CONTAINER -->
+        <div id="galleryContainer"></div>
+
+        <!-- FOOTER -->
+        <div class="footer-note">
+            <span><i class="fas fa-globe"></i> public gallery · all users see the same designs</span>
+            <span class="sync-status" id="syncStatus">
+                <span class="dot green" id="statusDot"></span>
+                <span id="statusText">connected</span>
+            </span>
+            <span><i class="fas fa-hashtag"></i> each design has a unique number</span>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX (hidden by default) -->
+    <div class="lightbox" id="lightbox">
+        <button class="close-btn" id="closeLightbox">&times;</button>
+        <img id="lightboxImg" src="" alt="design preview" />
+        <div class="caption" id="lightboxCaption">Design</div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  🔑 YOUR JSONBIN CREDENTIALS (Already Added!)
+        // ============================================================
+
+        const JSONBIN_API_KEY = '$2a$10$d0B5SD734I9PyiwU80dgnuXtU.ejKlIsHiAGGUJ6de7MjUvFKRCNu';
+        const BIN_ID = '6a37d8f4f5f4af5e291835ab';
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+
+        let galleryData = [];
+        let isLoading = false;
+        let isSaving = false;
+        let nextDesignNumber = 1;
+        const STORAGE_KEY = 'sankari_gallery_cache';
+
+        // ============================================================
+        //  CATEGORIES
+        // ============================================================
+
+        const CATEGORIES = [
+            { key: 'door', icon: 'fa-door-open', label: 'Door design' },
+            { key: 'gate', icon: 'fa-archway', label: 'Gate design' },
+            { key: 'tv', icon: 'fa-tv', label: 'TV set design' },
+            { key: 'tiles', icon: 'fa-th-large', label: 'Tiles design' },
+            { key: 'ceiling', icon: 'fa-chevron-down', label: 'Fall ceiling' },
+        ];
+
+        // ============================================================
+        //  DOM REFS
+        // ============================================================
+
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const categorySelect = document.getElementById('categorySelect');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const galleryContainer = document.getElementById('galleryContainer');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const closeLightbox = document.getElementById('closeLightbox');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+
+        // ============================================================
+        //  API HELPERS (JSONBin.io)
+        // ============================================================
+
+        async function fetchGalleryFromCloud() {
+            try {
+                setStatus('loading', 'Syncing...');
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                const record = data.record;
+
+                if (record && Array.isArray(record.images)) {
+                    setStatus('ok', 'synced');
+                    return record.images;
+                } else {
+                    // Bin exists but has no images array
+                    return null;
+                }
+            } catch (err) {
+                console.warn('Cloud fetch failed:', err);
+                setStatus('error', 'offline');
+                return null;
+            }
+        }
+
+        async function saveGalleryToCloud(images) {
+            try {
+                setStatus('loading', 'saving...');
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY,
+                    },
+                    body: JSON.stringify({ images }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                setStatus('ok', 'saved');
+                return true;
+            } catch (err) {
+                console.warn('Cloud save failed:', err);
+                setStatus('error', 'save failed');
+                return false;
+            }
+        }
+
+        function setStatus(type, text) {
+            const dot = statusDot;
+            const label = statusText;
+            dot.className = 'dot';
+            if (type === 'ok') {
+                dot.classList.add('green');
+                label.textContent = text || 'connected';
+            } else if (type === 'warning') {
+                dot.classList.add('yellow');
+                label.textContent = text || 'local only';
+            } else if (type === 'error') {
+                dot.classList.add('red');
+                label.textContent = text || 'offline';
+            } else if (type === 'loading') {
+                dot.classList.add('yellow');
+                label.textContent = text || 'loading...';
+            }
+        }
+
+        // ============================================================
+        //  CORE DATA FUNCTIONS
+        // ============================================================
+
+        function getNextNumber(images) {
+            if (!images || images.length === 0) return 1;
+            const numbers = images.map(img => img.designNo || 0);
+            const max = Math.max(...numbers);
+            return max + 1;
+        }
+
+        function loadFromCache() {
+            try {
+                const cached = localStorage.getItem(STORAGE_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Array.isArray(parsed) && parsed.length) {
+                        return parsed;
+                    }
+                }
+            } catch (_) { /* ignore */ }
+            return null;
+        }
+
+        function saveToCache(images) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+            } catch (_) { /* ignore */ }
+        }
+
+        async function loadGallery() {
+            // 1. Try cloud first
+            const cloudData = await fetchGalleryFromCloud();
+
+            if (cloudData && cloudData.length > 0) {
+                galleryData = cloudData;
+                saveToCache(galleryData);
+                renderGallery();
+                return;
+            }
+
+            // 2. Fallback to cache
+            const cached = loadFromCache();
+            if (cached && cached.length > 0) {
+                galleryData = cached;
+                renderGallery();
+                // Try to push to cloud in background
+                saveGalleryToCloud(galleryData).catch(() => {});
+                return;
+            }
+
+            // 3. Seed with default demo images
+            galleryData = getDefaultImages();
+            saveToCache(galleryData);
+            // Try to push to cloud
+            saveGalleryToCloud(galleryData).catch(() => {});
+            renderGallery();
+        }
+
+        function getDefaultImages() {
+            const now = Date.now();
+            return [
+                { id: 'd1', category: 'door', url: 'https://placecats.com/300/300?random=1', label: 'Modern door',
+                    designNo: 1 },
+                { id: 'd2', category: 'gate', url: 'https://placecats.com/300/300?random=2', label: 'Wrought iron gate',
+                    designNo: 2 },
+                { id: 'd3', category: 'tv', url: 'https://placecats.com/300/300?random=3', label: 'TV unit with wood',
+                    designNo: 3 },
+                { id: 'd4', category: 'tiles', url: 'https://placecats.com/300/300?random=4', label: 'Marble tiles',
+                    designNo: 4 },
+                { id: 'd5', category: 'ceiling', url: 'https://placecats.com/300/300?random=5', label: 'Coffered ceiling',
+                    designNo: 5 },
+            ];
+        }
+
+        // ============================================================
+        //  RENDER GALLERY
+        // ============================================================
+
+        function renderGallery() {
+            if (!galleryContainer) return;
+            const images = galleryData || [];
+
+            let html = '';
+            CATEGORIES.forEach(cat => {
+                const items = images.filter(img => img.category === cat.key);
+                html += `<div class="section-title">
+                            <i class="fas ${cat.icon}"></i> ${cat.label}
+                            <span class="count">${items.length}</span>
+                        </div>`;
+                html += `<div class="gallery-grid" data-category="${cat.key}">`;
+
+                if (items.length === 0) {
+                    html += `<div class="empty-message"><i class="fas fa-upload"></i> No designs yet — be the first to upload!</div>`;
+                } else {
+                    // Sort by design number descending (newest first)
+                    const sorted = [...items].sort((a, b) => (b.designNo || 0) - (a.designNo || 0));
+                    sorted.forEach(img => {
+                        const label = img.label || 'design';
+                        const no = img.designNo || '?';
+                        html += `
+                                    <div class="design-card" data-id="${img.id}" onclick="openLightbox('${img.id}')">
+                                        <div class="img-wrap">
+                                            <img src="${img.url}" alt="${label}" loading="lazy" onerror="this.src='https://placecats.com/300/300?error=1'" />
+                                        </div>
+                                        <div class="meta">
+                                            <span class="design-no"><i class="fas fa-hashtag"></i>${no}</span>
+                                            <span class="label-text">${label}</span>
+                                            <span class="cat-tag">${cat.key}</span>
+                                        </div>
+                                    </div>
+                                `;
+                    });
+                }
+                html += `</div>`;
+            });
+
+            galleryContainer.innerHTML = html;
+        }
+
+        // ============================================================
+        //  LIGHTBOX
+        // ============================================================
+
+        window.openLightbox = function(id) {
+            const img = galleryData.find(i => i.id === id);
+            if (!img) return;
+            lightboxImg.src = img.url;
+            const no = img.designNo || '?';
+            lightboxCaption.textContent = `#${no} · ${img.label || 'design'} · ${img.category}`;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
         };
 
-        gallery.push(newImage);
-        saveGallery(gallery);
-        renderGallery(gallery);
+        function closeLightboxFn() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
 
-        // reset file input
-        fileInput.value = '';
-        // tiny feedback
-        const btn = document.getElementById('uploadBtn');
-        btn.innerHTML = '<i class="fas fa-check"></i> Uploaded!';
-        setTimeout(() => { btn.innerHTML = '<i class="fas fa-arrow-up"></i> Upload'; }, 1500);
-      };
+        closeLightbox.addEventListener('click', closeLightboxFn);
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) closeLightboxFn();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightboxFn();
+        });
 
-      reader.onerror = function() {
-        alert('Failed to read file. Please try again.');
-      };
+        // ============================================================
+        //  UPLOAD
+        // ============================================================
 
-      reader.readAsDataURL(file);
-    }
+        async function handleUpload(file, category) {
+            if (!file) return;
 
-    // ----- init -----
-    function init() {
-      const galleryData = loadGallery();
-      renderGallery(galleryData);
+            // Validate
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file.');
+                return;
+            }
 
-      // event listeners
-      document.getElementById('uploadBtn').addEventListener('click', handleUpload);
-      // allow "enter" on file input? no need
-      // also trigger upload if user presses enter while focused on file input? skip for simplicity
+            // Max size: 5MB (to keep JSONBin happy)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image is too large (max 5MB). Please compress your image.');
+                return;
+            }
 
-      // optional: drag and drop (stretch goal) – not implemented to keep it clean
-    }
+            uploadBtn.disabled = true;
+            uploadProgress.textContent = 'Reading image...';
 
-    // expose to global for error fallback in img onerror
-    window.renderGallery = renderGallery;
-    window.loadGallery = loadGallery;
+            try {
+                const dataUrl = await readFileAsDataURL(file);
 
-    // run
-    init();
-  })();
-</script>
-<!-- placeholder images from placecats, but users will upload their own -->
+                // Generate new design number
+                const nextNo = getNextNumber(galleryData);
+
+                const newImage = {
+                    id: 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                    category: category,
+                    url: dataUrl,
+                    label: file.name.replace(/\.[^/.]+$/, "").substring(0, 30) || 'design',
+                    designNo: nextNo,
+                };
+
+                // Add to local data
+                galleryData.push(newImage);
+                saveToCache(galleryData);
+
+                // Save to cloud
+                uploadProgress.textContent = 'Saving to cloud...';
+                const success = await saveGalleryToCloud(galleryData);
+                if (!success) {
+                    alert('Image uploaded locally but cloud sync failed. Other users may not see it.');
+                }
+
+                // Re-render
+                renderGallery();
+
+                // Reset
+                fileInput.value = '';
+                uploadProgress.textContent = 'Upload complete! ✅';
+                setTimeout(() => { uploadProgress.textContent = ''; }, 2500);
+
+            } catch (err) {
+                console.error('Upload error:', err);
+                alert('Upload failed: ' + err.message);
+                uploadProgress.textContent = 'Error';
+            } finally {
+                uploadBtn.disabled = false;
+            }
+        }
+
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = e => reject(new Error('Failed to read file'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ----- UPLOAD TRIGGERS -----
+
+        uploadBtn.addEventListener('click', function() {
+            const file = fileInput.files[0];
+            const category = categorySelect.value;
+            if (!file) {
+                alert('Please select an image first.');
+                return;
+            }
+            handleUpload(file, category);
+        });
+
+        // File input change
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                uploadProgress.textContent = `Selected: ${this.files[0].name}`;
+            }
+        });
+
+        // ============================================================
+        //  DRAG & DROP
+        // ============================================================
+
+        ['dragenter', 'dragover'].forEach(evt => {
+            uploadZone.addEventListener(evt, function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+        });
+
+        ['dragleave', 'dragend', 'drop'].forEach(evt => {
+            uploadZone.addEventListener(evt, function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+            });
+        });
+
+        uploadZone.addEventListener('drop', function(e) {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    const category = categorySelect.value;
+                    uploadProgress.textContent = `Dropped: ${file.name}`;
+                    handleUpload(file, category);
+                } else {
+                    alert('Please drop an image file.');
+                }
+            }
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+
+        // Set initial status
+        setStatus('loading', 'connecting...');
+
+        // Load gallery
+        loadGallery();
+
+        console.log('🏠 Sankari Home Design · Community Gallery');
+        console.log('✅ JSONBin connected!');
+        console.log('📌 Each upload gets a unique design number.');
+        console.log('🖱️  Click any image to open it in full view.');
+        console.log('📂 Drag & drop images to upload.');
+        console.log('🌍 All users see the same gallery!');
+    </script>
 </body>
 </html>
