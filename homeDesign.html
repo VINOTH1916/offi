@@ -4,15 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sankari Home Design · Community Gallery</title>
-    <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* ----- RESET & BASE ----- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
 
         body {
@@ -30,7 +28,6 @@
             width: 100%;
         }
 
-        /* ----- HEADER ----- */
         .brand {
             display: flex;
             align-items: baseline;
@@ -65,7 +62,6 @@
             margin-right: 6px;
         }
 
-        /* ----- UPLOAD ZONE (with drag & drop) ----- */
         .upload-zone {
             background: #fff;
             border-radius: 32px;
@@ -210,7 +206,6 @@
             font-size: 1rem;
         }
 
-        /* ----- GALLERY SECTIONS ----- */
         .section-title {
             font-size: 1.7rem;
             font-weight: 300;
@@ -344,7 +339,6 @@
             opacity: 0.6;
         }
 
-        /* ----- LIGHTBOX (click to open image) ----- */
         .lightbox {
             display: none;
             position: fixed;
@@ -414,7 +408,6 @@
             }
         }
 
-        /* ----- FOOTER ----- */
         .footer-note {
             margin-top: 2.5rem;
             font-size: 0.85rem;
@@ -455,7 +448,6 @@
             background: #f44336;
         }
 
-        /* ----- RESPONSIVE ----- */
         @media (max-width: 750px) {
             body {
                 padding: 1rem 0.8rem;
@@ -522,13 +514,11 @@
 <body>
     <div class="app" id="app">
 
-        <!-- HEADER -->
         <div class="brand">
             <h1><i class="fas fa-home"></i> Sankari Home Design</h1>
             <span class="badge"><i class="fas fa-users"></i> community gallery</span>
         </div>
 
-        <!-- UPLOAD ZONE -->
         <div class="upload-zone" id="uploadZone">
             <div class="upload-row">
                 <div class="label"><i class="fas fa-cloud-upload-alt"></i> Upload design</div>
@@ -556,10 +546,8 @@
             </div>
         </div>
 
-        <!-- GALLERY CONTAINER -->
         <div id="galleryContainer"></div>
 
-        <!-- FOOTER -->
         <div class="footer-note">
             <span><i class="fas fa-globe"></i> public gallery · all users see the same designs</span>
             <span class="sync-status" id="syncStatus">
@@ -570,7 +558,6 @@
         </div>
     </div>
 
-    <!-- LIGHTBOX (hidden by default) -->
     <div class="lightbox" id="lightbox">
         <button class="close-btn" id="closeLightbox">&times;</button>
         <img id="lightboxImg" src="" alt="design preview" />
@@ -579,7 +566,7 @@
 
     <script>
         // ============================================================
-        //  🔑 YOUR JSONBIN CREDENTIALS (Already Added!)
+        //  YOUR CREDENTIALS
         // ============================================================
 
         const JSONBIN_API_KEY = '$2a$10$d0B5SD734I9PyiwU80dgnuXtU.ejKlIsHiAGGUJ6de7MjUvFKRCNu';
@@ -590,14 +577,8 @@
         // ============================================================
 
         let galleryData = [];
-        let isLoading = false;
-        let isSaving = false;
-        let nextDesignNumber = 1;
         const STORAGE_KEY = 'sankari_gallery_cache';
-
-        // ============================================================
-        //  CATEGORIES
-        // ============================================================
+        let uploadInProgress = false;
 
         const CATEGORIES = [
             { key: 'door', icon: 'fa-door-open', label: 'Door design' },
@@ -625,63 +606,8 @@
         const statusText = document.getElementById('statusText');
 
         // ============================================================
-        //  API HELPERS (JSONBin.io)
+        //  STATUS
         // ============================================================
-
-        async function fetchGalleryFromCloud() {
-            try {
-                setStatus('loading', 'Syncing...');
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    headers: {
-                        'X-Master-Key': JSONBIN_API_KEY,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
-                const data = await response.json();
-                const record = data.record;
-
-                if (record && Array.isArray(record.images)) {
-                    setStatus('ok', 'synced');
-                    return record.images;
-                } else {
-                    // Bin exists but has no images array
-                    return null;
-                }
-            } catch (err) {
-                console.warn('Cloud fetch failed:', err);
-                setStatus('error', 'offline');
-                return null;
-            }
-        }
-
-        async function saveGalleryToCloud(images) {
-            try {
-                setStatus('loading', 'saving...');
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': JSONBIN_API_KEY,
-                    },
-                    body: JSON.stringify({ images }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
-                setStatus('ok', 'saved');
-                return true;
-            } catch (err) {
-                console.warn('Cloud save failed:', err);
-                setStatus('error', 'save failed');
-                return false;
-            }
-        }
 
         function setStatus(type, text) {
             const dot = statusDot;
@@ -703,7 +629,96 @@
         }
 
         // ============================================================
-        //  CORE DATA FUNCTIONS
+        //  JSONBin API (with CORS fix)
+        // ============================================================
+
+        async function fetchGalleryFromCloud() {
+            try {
+                setStatus('loading', 'Syncing...');
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Fetch error:', response.status, errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                const data = await response.json();
+                const record = data.record;
+
+                if (record && Array.isArray(record.images)) {
+                    setStatus('ok', 'synced');
+                    return record.images;
+                } else {
+                    // Try to initialize the bin with empty array
+                    await initializeBin();
+                    return [];
+                }
+            } catch (err) {
+                console.warn('Cloud fetch failed:', err);
+                setStatus('error', 'offline');
+                return null;
+            }
+        }
+
+        async function initializeBin() {
+            try {
+                console.log('Initializing bin with empty images array...');
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY,
+                    },
+                    body: JSON.stringify({ images: [] }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Init failed: ${response.status}`);
+                }
+
+                console.log('Bin initialized successfully!');
+                return true;
+            } catch (err) {
+                console.error('Failed to initialize bin:', err);
+                return false;
+            }
+        }
+
+        async function saveGalleryToCloud(images) {
+            try {
+                setStatus('loading', 'saving...');
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY,
+                    },
+                    body: JSON.stringify({ images: images }),
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Save error:', response.status, errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                setStatus('ok', 'saved');
+                return true;
+            } catch (err) {
+                console.warn('Cloud save failed:', err);
+                setStatus('error', 'save failed');
+                return false;
+            }
+        }
+
+        // ============================================================
+        //  DATA FUNCTIONS
         // ============================================================
 
         function getNextNumber(images) {
@@ -722,47 +737,17 @@
                         return parsed;
                     }
                 }
-            } catch (_) { /* ignore */ }
+            } catch (_) {}
             return null;
         }
 
         function saveToCache(images) {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
-            } catch (_) { /* ignore */ }
-        }
-
-        async function loadGallery() {
-            // 1. Try cloud first
-            const cloudData = await fetchGalleryFromCloud();
-
-            if (cloudData && cloudData.length > 0) {
-                galleryData = cloudData;
-                saveToCache(galleryData);
-                renderGallery();
-                return;
-            }
-
-            // 2. Fallback to cache
-            const cached = loadFromCache();
-            if (cached && cached.length > 0) {
-                galleryData = cached;
-                renderGallery();
-                // Try to push to cloud in background
-                saveGalleryToCloud(galleryData).catch(() => {});
-                return;
-            }
-
-            // 3. Seed with default demo images
-            galleryData = getDefaultImages();
-            saveToCache(galleryData);
-            // Try to push to cloud
-            saveGalleryToCloud(galleryData).catch(() => {});
-            renderGallery();
+            } catch (_) {}
         }
 
         function getDefaultImages() {
-            const now = Date.now();
             return [
                 { id: 'd1', category: 'door', url: 'https://placecats.com/300/300?random=1', label: 'Modern door',
                     designNo: 1 },
@@ -778,8 +763,40 @@
         }
 
         // ============================================================
-        //  RENDER GALLERY
+        //  LOAD & RENDER
         // ============================================================
+
+        async function loadGallery() {
+            // 1. Try cloud
+            const cloudData = await fetchGalleryFromCloud();
+
+            if (cloudData !== null && cloudData.length > 0) {
+                galleryData = cloudData;
+                saveToCache(galleryData);
+                renderGallery();
+                return;
+            }
+
+            // 2. Try cache
+            const cached = loadFromCache();
+            if (cached && cached.length > 0) {
+                galleryData = cached;
+                renderGallery();
+                // Try to sync to cloud in background
+                saveGalleryToCloud(galleryData).catch(() => {});
+                return;
+            }
+
+            // 3. Use defaults
+            galleryData = getDefaultImages();
+            saveToCache(galleryData);
+            // Try to sync to cloud
+            const saved = await saveGalleryToCloud(galleryData);
+            if (!saved) {
+                setStatus('warning', 'local only');
+            }
+            renderGallery();
+        }
 
         function renderGallery() {
             if (!galleryContainer) return;
@@ -797,7 +814,6 @@
                 if (items.length === 0) {
                     html += `<div class="empty-message"><i class="fas fa-upload"></i> No designs yet — be the first to upload!</div>`;
                 } else {
-                    // Sort by design number descending (newest first)
                     const sorted = [...items].sort((a, b) => (b.designNo || 0) - (a.designNo || 0));
                     sorted.forEach(img => {
                         const label = img.label || 'design';
@@ -854,27 +870,24 @@
         // ============================================================
 
         async function handleUpload(file, category) {
-            if (!file) return;
+            if (!file || uploadInProgress) return;
 
-            // Validate
             if (!file.type.startsWith('image/')) {
                 alert('Please select an image file.');
                 return;
             }
 
-            // Max size: 5MB (to keep JSONBin happy)
             if (file.size > 5 * 1024 * 1024) {
                 alert('Image is too large (max 5MB). Please compress your image.');
                 return;
             }
 
+            uploadInProgress = true;
             uploadBtn.disabled = true;
             uploadProgress.textContent = 'Reading image...';
 
             try {
                 const dataUrl = await readFileAsDataURL(file);
-
-                // Generate new design number
                 const nextNo = getNextNumber(galleryData);
 
                 const newImage = {
@@ -885,30 +898,33 @@
                     designNo: nextNo,
                 };
 
-                // Add to local data
+                // Add locally first
                 galleryData.push(newImage);
                 saveToCache(galleryData);
-
-                // Save to cloud
-                uploadProgress.textContent = 'Saving to cloud...';
-                const success = await saveGalleryToCloud(galleryData);
-                if (!success) {
-                    alert('Image uploaded locally but cloud sync failed. Other users may not see it.');
-                }
-
-                // Re-render
                 renderGallery();
 
-                // Reset
+                // Try to save to cloud
+                uploadProgress.textContent = 'Syncing to cloud...';
+                const success = await saveGalleryToCloud(galleryData);
+
+                if (success) {
+                    uploadProgress.textContent = '✅ Uploaded & synced!';
+                    setStatus('ok', 'synced');
+                } else {
+                    uploadProgress.textContent = '⚠️ Saved locally only (cloud offline)';
+                    setStatus('warning', 'local only');
+                    // Don't show alert - just notify via status
+                }
+
                 fileInput.value = '';
-                uploadProgress.textContent = 'Upload complete! ✅';
-                setTimeout(() => { uploadProgress.textContent = ''; }, 2500);
+                setTimeout(() => { uploadProgress.textContent = ''; }, 3000);
 
             } catch (err) {
                 console.error('Upload error:', err);
+                uploadProgress.textContent = '❌ Error';
                 alert('Upload failed: ' + err.message);
-                uploadProgress.textContent = 'Error';
             } finally {
+                uploadInProgress = false;
                 uploadBtn.disabled = false;
             }
         }
@@ -922,7 +938,9 @@
             });
         }
 
-        // ----- UPLOAD TRIGGERS -----
+        // ============================================================
+        //  EVENT LISTENERS
+        // ============================================================
 
         uploadBtn.addEventListener('click', function() {
             const file = fileInput.files[0];
@@ -934,17 +952,13 @@
             handleUpload(file, category);
         });
 
-        // File input change
         fileInput.addEventListener('change', function() {
             if (this.files.length > 0) {
                 uploadProgress.textContent = `Selected: ${this.files[0].name}`;
             }
         });
 
-        // ============================================================
-        //  DRAG & DROP
-        // ============================================================
-
+        // Drag & Drop
         ['dragenter', 'dragover'].forEach(evt => {
             uploadZone.addEventListener(evt, function(e) {
                 e.preventDefault();
@@ -977,18 +991,14 @@
         //  INIT
         // ============================================================
 
-        // Set initial status
         setStatus('loading', 'connecting...');
-
-        // Load gallery
         loadGallery();
 
         console.log('🏠 Sankari Home Design · Community Gallery');
-        console.log('✅ JSONBin connected!');
+        console.log('✅ JSONBin configured with Bin ID:', BIN_ID);
         console.log('📌 Each upload gets a unique design number.');
         console.log('🖱️  Click any image to open it in full view.');
         console.log('📂 Drag & drop images to upload.');
-        console.log('🌍 All users see the same gallery!');
     </script>
 </body>
 </html>
