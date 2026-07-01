@@ -1,190 +1,271 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>குன்றத்தூர் திருவிழாக்கள் மற்றும் சிறப்புகள்</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Masterclass of Emulsification</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-yellow: #fbbf24;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Noto Sans Tamil', Arial, sans-serif;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
 
-body{
-    background:#f4f6f9;
-    padding:20px;
-}
+        header {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-blue);
+        }
 
-.container{
-    max-width:1000px;
-    margin:auto;
-}
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: var(--accent-blue);
+            animation: float 3s ease-in-out infinite;
+        }
 
-.page-title{
-    text-align:center;
-    color:#8b0000;
-    margin-bottom:25px;
-    font-size:32px;
-}
+        header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 1rem auto 0;
+        }
 
-.card{
-    background:#ffffff;
-    padding:20px;
-    margin-bottom:20px;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
 
-.card h2{
-    color:#b22222;
-    margin-bottom:15px;
-    border-left:5px solid #ff6600;
-    padding-left:10px;
-}
+        section {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
 
-.content-box{
-    background:#fff8f0;
-    border-left:4px solid #ff9933;
-    padding:15px;
-    border-radius:8px;
-    margin-top:10px;
-}
+        section:hover {
+            transform: translateY(-5px);
+        }
 
-.content-box h3{
-    color:#cc5500;
-    margin-bottom:8px;
-}
+        h2 {
+            color: var(--accent-yellow);
+            border-bottom: 2px solid #334155;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
 
-.content-box p{
-    line-height:1.8;
-    color:#333;
-    text-align:justify;
-}
+        /* Animation Canvas Style Showcase */
+        .animation-box {
+            background: #020617;
+            height: 200px;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
 
-.footer{
-    text-align:center;
-    margin-top:20px;
-    color:#666;
-    font-size:14px;
-}
-</style>
+        .water-layer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50%;
+            background: rgba(56, 189, 248, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
 
+        .oil-layer {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 50%;
+            background: rgba(251, 191, 36, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: var(--accent-yellow);
+        }
+
+        .soap-molecule {
+            position: absolute;
+            width: 30px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 4px;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bindLink 4s infinite alternate;
+        }
+
+        .soap-head {
+            position: absolute;
+            right: -5px;
+            top: -4px;
+            width: 16px;
+            height: 16px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes bindLink {
+            0% { left: 20%; transform: rotate(0deg); }
+            100% { left: 80%; transform: rotate(360deg); }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        ul {
+            padding-left: 1.2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid #334155;
+            margin-top: 4rem;
+        }
+
+        .btn {
+            background-color: var(--accent-blue);
+            color: var(--bg-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #7dd3fc;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
+    <header>
+        <h1>Mastering Emulsification</h1>
+        <p>From Atomic Polarization to Global Industrial Innovations</p>
+    </header>
 
-    <h1 class="page-title">🛕 குன்றத்தூர் திருவிழாக்கள் மற்றும் சிறப்புகள்</h1>
+    <div class="container">
 
-    <div class="card">
-        <h2>1. குன்றத்தூர் முருகன் கோவில்</h2>
+        <section id="intro">
+            <h2>1. What is Emulsification?</h2>
+            <p>Emulsification is the art and science of forcing two completely immiscible (unmixable) liquids—such as water and oil—to disperse seamlessly into one another. Without an stabilizing middleman (an emulsifier), these phases rapidly separate.</p>
+        </section>
 
-        <div class="content-box">
-            <h3>அ. கந்த சஷ்டி விழா</h3>
-            <p>
-                8 நாட்கள் நடைபெறும் திருவிழா. 6-ம் நாளில் சூரசம்ஹாரமும்,
-                7-ம் மற்றும் 8-ம் நாட்களில் வள்ளி, தெய்வானை திருக்கல்யாணமும்
-                நடைபெறுகிறது.
-            </p>
-        </div>
+        <section id="atomic">
+            <h2>2. The Bond Level: Why Oil and Water Despise Each Other</h2>
+            <div class="grid">
+                <div>
+                    <h3>Water ($H_2O$)</h3>
+                    <p>Water is highly <span class="highlight">polar</span>. The oxygen pulls electrons tightly, building an electrical dipole. Water molecules love to bond tightly with other water molecules via strong hydrogen bonds.</p>
+                </div>
+                <div>
+                    <h3>Oil (Alkanes & Alkenes)</h3>
+                    <p>Oils are long hydrocarbon configurations. Because electrons are shared completely evenly, they are entirely <span class="highlight">non-polar</span>. They cannot participate in hydrogen bonding, so water actively pushes them out.</p>
+                </div>
+            </div>
+            <div class="animation-box">
+                <div class="oil-layer">Oil Phase (Non-Polar Hydrocarbons)</div>
+                <div class="soap-molecule"><div class="soap-head"></div></div>
+                <div class="water-layer">Water Phase (Polar Molecules)</div>
+            </div>
+        </section>
 
-        <div class="content-box">
-            <h3>ஆ. தைப்பூசம்</h3>
-            <p>
-                பக்தர்கள் பாதயாத்திரையாக வந்து அலகு குத்தியும்,
-                காவடி எடுத்தும் முருகனை வழிபடுவர்.
-            </p>
-        </div>
+        <section id="soap">
+            <h2>3. The Soap Paradox</h2>
+            <p>Soap is engineered directly <em>from</em> oils through saponification, yet it clears oil away effortlessly. Soap consists of <strong>amphiphilic molecules</strong> possessing a hydrophilic (water-loving) head and a lipophilic (oil-loving) hydrocarbon tail. They map around oil droplets to construct structures called <span class="highlight">micelles</span>, allowing oil to lift up and flow cleanly away in water.</p>
+        </section>
+
+        <section id="machines">
+            <h2>4. Reversing the Process: Industrial Separation</h2>
+            <p>When engineering requirements dictate that we pull oil cleanly back out of water, we rely on heavy machinery:</p>
+            <ul>
+                <li><strong>Centrifugal Separators:</strong> Spins fluid matrixes using rapid rotational G-Forces to pull dense water away from lightweight oils.</li>
+                <li><strong>Dissolved Air Flotation (DAF):</strong> Passes micro-bubbles through the tank, catching suspended oil and floating it to the surface.</li>
+                <li><strong>Coalescer Systems:</strong> Employs structured media matrices that capture tiny droplets and force them to grow larger until they naturally float up.</li>
+            </ul>
+        </section>
+
+        <section id="biological">
+            <h2>5. Biological Systems: Nature's Method</h2>
+            <div class="grid">
+                <div>
+                    <h3>In the Human Body</h3>
+                    <p>Fats cannot travel freely through our water-based digestive systems. The liver produces <span class="highlight">Bile Salts</span>, which naturally emulsify lipids inside the small intestines, dropping the particle sizing down so enzymes can absorb nutrients.</p>
+                </div>
+                <div>
+                    <h3>On the Human Skin</h3>
+                    <p>Your skin releases Sebum (oil) alongside Sweat (water). Complex structural proteins naturally combine them to form the <strong>Acid Mantle</strong>, a brilliant self-emulsified shield defending our flesh against bacterial attack.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="careers">
+            <h2>6. Pioneers & Real-World Careers</h2>
+            <p><strong>Key Scientists:</strong> <span class="highlight">Irving Langmuir</span> pioneered interfacial chemistry to unpack modern surfactant dynamics, securing a Nobel Prize in 1932.</p>
+            <h3>Career Pathing Options:</h3>
+            <ul>
+                <li><strong>Formulation Chemist:</strong> Building makeup, cosmetics, pharmaceuticals, and stable food recipes.</li>
+                <li><strong>Petrochemical Engineer:</strong> Resolving mass emulsions generated during raw crude oil extraction.</li>
+                <li><strong>Water Treatment Specialist:</strong> Eliminating chemical oils and pollutants from eco-sensitive wastewater channels.</li>
+            </ul>
+            <a href="https://en.wikipedia.org/wiki/Emulsion" target="_blank" class="btn">Deep Dive into Colloid Science</a>
+        </section>
+
     </div>
 
-    <div class="card">
-        <h2>2. சேக்கிழார் திருவிழா</h2>
-
-        <div class="content-box">
-            <p>
-                குன்றத்தூரில் ஆண்டுதோறும் வைகாசி மாதம் பூச நட்சத்திரத்தை ஒட்டி
-                சேக்கிழார் குருபூஜை விழா வெகு விமரிசையாகக் கொண்டாடப்படுகிறது.
-                இவ்விழாவின் போது சிறப்புப் பூஜைகள், பெரியபுராணச் சொற்பொழிவுகள்
-                மற்றும் சுவாமி வீதி உலா போன்ற நிகழ்வுகள் சேக்கிழார் மணி மண்டபம்
-                மற்றும் குன்றத்தூர் சேக்கிழார் கோயில் வளாகத்தில் நடைபெறுகின்றன.
-            </p>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>3. பால்குட திருவிழா</h2>
-
-        <div class="content-box">
-            <p>
-                குன்றத்தூர் நாகேஸ்வரர் கோவிலில் ஆடிப்பூரத்தன்று
-                1008 பால்குட அபிஷேகம் சிவன் கோவிலில் இருந்து
-                பொன்னியம்மன் கோவில் வரை நடைபெறுவது வழக்கம்.
-                ஏராளமான பக்தர்கள் பால்குடம் எடுத்து வந்து
-                தங்களது நேர்த்திக்கடனைச் செலுத்துகின்றனர்.
-            </p>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>4. தேர் திருவிழா</h2>
-
-        <div class="content-box">
-            <p>
-                குன்றத்தூர் திருநாகேஸ்வரர் கோவில் சித்திரை பிரம்மோற்சவத்தின்
-                முக்கிய நிகழ்வான தேரோட்டம் ஏப்ரல் மாத இறுதியில்
-                (சித்திரை மாதம்) கோலாகலமாக நடைபெற்றது.
-                பத்து நாள் திருவிழாவின் ஏழாவது நாளில் நடைபெற்ற
-                மகாரத உற்சவத்தில் அதிகாலை 6:00 மணிக்கு நிலையில் இருந்து
-                புறப்பட்ட தேர் மதியம் 1:00 மணியளவில் நிலையை வந்தடைந்தது.
-            </p>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>5. குன்றத்தூர்</h2>
-
-        <div class="content-box">
-            <p>
-                குன்றத்தூர் என்பது பெரியபுராணத்தை இயற்றிய சேக்கிழார் பெருமான்
-                அவதரித்த வரலாற்றுச் சிறப்புமிக்க ஆன்மீக நகரமாகும்.
-                இங்குள்ள குன்றின் மேல் அமைந்த சுப்பிரமணிய சுவாமி கோயில்,
-                தமிழ்நாட்டிலேயே முருகப்பெருமான் வடதிசை நோக்கி வீற்றிருக்கும்
-                ஒரே தலம் என்ற தனிச்சிறப்பைப் பெற்றது.
-            </p>
-
-            <p style="margin-top:10px;">
-                மேலும் சேக்கிழாரால் கட்டப்பட்ட புகழ்பெற்ற
-                வடதிருநாகேஸ்வரம் சிவன் கோயிலும் இங்கு அமைந்துள்ளது.
-            </p>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>6. மயான கொள்ளை திருவிழா</h2>
-
-        <div class="content-box">
-            <p>
-                குன்றத்தூர் அங்காளம்மன் கோயில் மயான கொள்ளை திருவிழா
-                ஆண்டுதோறும் மாசி மாத அமாவாசையை ஒட்டி
-                வெகு விமரிசையாகக் கொண்டாடப்படுகிறது.
-            </p>
-
-            <p style="margin-top:10px;">
-                சிவபெருமானின் பிரம்மஹத்தி தோஷம் நீங்க
-                அங்காளம்மன் மயானத்தில் உணவு படைத்து வழிபட்டதன்
-                அடிப்படையில் இந்த விழா நடத்தப்படுகிறது.
-            </p>
-        </div>
-    </div>
-
-    <div class="footer">
-        <p>குன்றத்தூர் ஆன்மீகத் திருவிழாக்கள் மற்றும் வரலாற்றுச் சிறப்புகள்</p>
-    </div>
-
-</div>
+    <footer>
+        <p>Chemistry & Chemical Engineering Presentation Deck • Built with Passion</p>
+    </footer>
 
 </body>
 </html>
