@@ -1,540 +1,996 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C Programming Quiz - 2</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emulsification · The Science of Oil & Water</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
     <style>
+        /* ─── RESET & BASE ─── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fcf6ef;
+            color: #2d1f14;
+            line-height: 1.6;
+            padding: 0 1.5rem 4rem;
         }
+
         .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 1280px;
+            margin: 0 auto;
         }
+
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0e2d4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c9a889;
+            border-radius: 12px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b38762;
+        }
+
+        /* ─── TYPOGRAPHY ─── */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
         h1 {
-            color: #2c3e50;
-            text-align: center;
+            font-size: 3.2rem;
+            line-height: 1.1;
         }
-        .spinner-container {
-            text-align: center;
-            margin: 30px 0;
-        }
-        .spinner {
-            width: 100px;
-            height: 100px;
-            background-color: #3498db;
-            border-radius: 50%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.5s;
-            user-select: none;
-        }
-        .spinner:hover {
-            background-color: #2980b9;
-        }
-        .spinner.spinning {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-        .question-set {
-            display: none;
-            margin-top: 20px;
-        }
-        .question {
-            margin-bottom: 15px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
-        .question h3 {
-            margin-top: 0;
-        }
-        .options {
-            margin-left: 20px;
-        }
-        .option {
-            margin: 8px 0;
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
+            gap: 0.75rem;
         }
-        .option input {
-            margin-right: 10px;
+        h2 i {
+            color: #b87a48;
+            font-size: 1.8rem;
+            width: 2rem;
         }
-        button {
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
+        h3 {
+            font-size: 1.4rem;
+            margin: 1.2rem 0 0.6rem;
+            color: #4d321e;
         }
-        button:hover {
-            background-color: #27ae60;
+        h4 {
+            font-size: 1.15rem;
+            margin: 1rem 0 0.4rem;
+            color: #5a3f28;
         }
-        .correct {
-            color: #27ae60;
-            font-weight: bold;
+
+        a {
+            color: #b06d3a;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
         }
-        .incorrect {
-            color: #e74c3c;
-            font-weight: bold;
+        a:hover {
+            border-bottom-color: #b06d3a;
         }
-        .feedback {
-            margin-top: 10px;
-            padding: 8px;
-            border-radius: 5px;
+
+        /* ─── BUTTON / BADGE ─── */
+        .badge {
+            display: inline-block;
+            background: #eddcc9;
+            padding: 0.2rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4d321e;
+            border: 1px solid #dbb48b;
         }
-        #score-display {
+        .badge i {
+            margin-right: 6px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #f0e2d4;
+            padding: 0.15rem 1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #4d321e;
+            border: 1px solid #dcc2ac;
+        }
+
+        /* ─── HEADER / HERO ─── */
+        .hero {
+            background: linear-gradient(145deg, #faeade 0%, #f5decb 100%);
+            border-radius: 60px 20px 60px 20px;
+            padding: 2.8rem 3rem 2.2rem;
+            margin: 1.8rem 0 2.5rem;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #edd0b8;
+            box-shadow: 0 20px 40px -12px rgba(150, 100, 60, 0.25);
+        }
+
+        .hero::before {
+            content: "🥗🧈🥛";
+            position: absolute;
+            right: 20px;
+            bottom: 10px;
+            font-size: 5rem;
+            opacity: 0.15;
+            pointer-events: none;
+            animation: floatFood 8s ease-in-out infinite;
+        }
+
+        @keyframes floatFood {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+            50% {
+                transform: translateY(-16px) rotate(3deg);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #2d1b0e;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.2rem;
+        }
+        .hero h1 i {
+            color: #b87a48;
+            font-size: 3.2rem;
+            animation: spinOil 10s infinite linear;
+        }
+
+        @keyframes spinOil {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.08);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        .hero .sub {
+            font-size: 1.3rem;
+            color: #4d321e;
+            background: rgba(255, 245, 235, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 0.4rem 2rem;
+            border-radius: 60px;
+            display: inline-block;
+            margin-top: 0.6rem;
+            border: 1px dashed #c9a889;
+            font-weight: 500;
+        }
+
+        .hero .meta {
+            margin-top: 1.4rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.2rem;
+        }
+
+        /* ─── TABLE OF CONTENTS ─── */
+        .toc {
+            background: #fffbf5;
+            border-radius: 40px 12px 40px 12px;
+            padding: 1.8rem 2.2rem;
+            border: 1px solid #edd0b8;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 6px 18px rgba(180, 130, 80, 0.08);
+        }
+        .toc h2 {
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+        }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.4rem 1.2rem;
+        }
+        .toc-grid a {
+            color: #4d321e;
+            border-bottom: 1px dotted #dcc2ac;
+            padding: 0.2rem 0;
+            display: inline-block;
+            font-weight: 500;
+        }
+        .toc-grid a:hover {
+            color: #b06d3a;
+            border-bottom-color: #b06d3a;
+        }
+
+        /* ─── CARDS ─── */
+        .card {
+            background: #fffbf5;
+            border-radius: 40px 12px 40px 12px;
+            padding: 2rem 2.2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #edd0b8;
+            box-shadow: 0 6px 20px rgba(160, 110, 60, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 32px -8px rgba(150, 100, 60, 0.15);
+        }
+
+        .card-soft {
+            background: #faf1e8;
+            border-color: #e5cfbb;
+        }
+
+        .card-accent {
+            background: #f7ede1;
+            border-left: 6px solid #b87a48;
+        }
+
+        /* ─── GRID LAYOUTS ─── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+        }
+
+        @media (max-width: 900px) {
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2.6rem;
+            }
+            .hero {
+                padding: 2rem 1.5rem;
+            }
+            h1 {
+                font-size: 2.4rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* ─── ATOM BLOCK ─── */
+        .atom-block {
+            background: linear-gradient(135deg, #f7ede1, #efdccb);
+            border-radius: 30px 8px 30px 8px;
+            padding: 1.4rem 1.8rem;
+            border-left: 6px solid #b87a48;
+            margin: 1rem 0;
+        }
+        .atom-block strong {
+            color: #7a4d26;
+        }
+
+        .molecule-icon {
+            font-size: 2.8rem;
+            display: inline-block;
+            margin-right: 0.6rem;
+        }
+
+        /* ─── IMAGE PLACEHOLDERS (unsplash) ─── */
+        .img-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin: 1.2rem 0;
+            justify-content: center;
+        }
+        .img-row img {
+            width: 100%;
+            max-width: 280px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 28px 8px 28px 8px;
+            border: 2px solid #edd0b8;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+            transition: transform 0.25s ease;
+        }
+        .img-row img:hover {
+            transform: scale(1.02);
+        }
+
+        .img-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            background: #f7ede1;
+            border-radius: 40px 8px 40px 8px;
+            padding: 0.8rem 1.8rem;
+            border: 1px dashed #dbb48b;
+        }
+        .img-inline i {
+            font-size: 2.6rem;
+            color: #a06f48;
+        }
+
+        /* ─── LIST STYLES ─── */
+        .list-icon li {
+            list-style: none;
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 0.6rem;
+        }
+        .list-icon li::before {
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+        }
+
+        .list-dot li::before {
+            content: "•";
+            color: #b87a48;
+            font-weight: 700;
+            font-size: 1.6rem;
+            line-height: 1;
+        }
+        .list-food li::before {
+            content: "🍳";
+        }
+        .list-flask li::before {
+            content: "🧪";
+        }
+        .list-badge li::before {
+            content: "✦";
+            color: #b87a48;
+            font-weight: 700;
+        }
+
+        /* ─── SOAP SPECIAL ─── */
+        .soap-box {
+            background: #f5decb;
+            border-radius: 50px 10px 50px 10px;
+            padding: 1.4rem 2rem;
+            border: 2px solid #e3be9f;
+            margin: 1rem 0;
+        }
+
+        /* ─── MACHINE / JOB TAGS ─── */
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 0.9rem;
+            margin: 0.6rem 0;
+        }
+        .tag-group .tag {
+            font-size: 0.9rem;
+            padding: 0.25rem 1.2rem;
+            background: #f0e2d4;
+            border-radius: 60px;
+            border: 1px solid #dcc2ac;
+        }
+        .tag-group .tag i {
+            margin-right: 6px;
+            color: #b06d3a;
+        }
+
+        /* ─── SCIENTIST CARD ─── */
+        .scientist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin: 1rem 0;
+        }
+        .scientist-item {
+            background: #f7ede1;
+            border-radius: 30px 6px 30px 6px;
+            padding: 1rem 1.4rem;
+            border: 1px solid #e5cfbb;
             text-align: center;
-            font-size: 1.2em;
-            margin: 15px 0;
-            font-weight: bold;
         }
-        pre {
-            background-color: #eee;
-            padding: 10px;
-            border-radius: 5px;
+        .scientist-item i {
+            font-size: 2.4rem;
+            color: #b06d3a;
+            margin-bottom: 0.2rem;
+            display: block;
+        }
+        .scientist-item .name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #3f2c19;
+        }
+        .scientist-item .desc {
+            font-size: 0.9rem;
+            color: #5a3f28;
+        }
+
+        /* ─── FOOTER ─── */
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            background: #f7ede1;
+            padding: 1.6rem 2rem;
+            border-radius: 60px 12px 60px 12px;
+            border: 1px solid #edd0b8;
+            font-size: 0.95rem;
+            color: #4d321e;
+        }
+        .footer a {
+            color: #b06d3a;
+            font-weight: 600;
+        }
+        .footer .icons {
+            font-size: 2rem;
+            letter-spacing: 0.6rem;
+            margin: 0.4rem 0;
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes floatBubble {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-14px) rotate(6deg);
+            }
+        }
+        .float-anim {
+            animation: floatBubble 5s ease-in-out infinite;
+        }
+        .float-anim-2 {
+            animation: floatBubble 6s ease-in-out infinite 0.8s;
+        }
+
+        /* ─── RESPONSIVE IMAGES ─── */
+        .img-responsive {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 32px 8px 32px 8px;
+            border: 2px solid #edd0b8;
+        }
+
+        /* ─── DIVIDER ─── */
+        .divider {
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #edd0b8, #dbb48b, #edd0b8);
+            border-radius: 12px;
+            margin: 2rem 0;
+            opacity: 0.5;
+        }
+
+        /* ─── UTILITY ─── */
+        .mt-1 {
+            margin-top: 1rem;
+        }
+        .mt-2 {
+            margin-top: 2rem;
+        }
+        .mb-1 {
+            margin-bottom: 1rem;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .gap-1 {
+            gap: 1rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>C Programming Quiz</h1>
-        
-        <div class="spinner-container">
-            <div class="spinner" id="spinner">SPIN</div>
-        </div>
-        
-        <div id="score-display"></div>
-        <div id="question-set-container"></div>
-        
-        <button id="submit-btn" style="display: none;">Submit Answers</button>
-        <button id="next-btn" style="display: none;">Next Question Set</button>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  HERO  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <header class="hero">
+            <h1>
+                <i class="fas fa-circle"></i>
+                Emulsification
+                <span style="font-size:2rem; background:#dbb48b60; padding:0.1rem 1.2rem; border-radius:80px;">⚡</span>
+            </h1>
+            <div class="sub">
+                <i class="fas fa-water" style="margin-right:8px;"></i>
+                The Science of Mixing Oil &amp; Water
+                <i class="fas fa-oil-can" style="margin-left:12px;"></i>
+            </div>
+            <div class="meta">
+                <span class="badge"><i class="fas fa-atom"></i> H₂O · alkane · alkene</span>
+                <span class="badge"><i class="fas fa-flask"></i> homogenizer · centrifuge</span>
+                <span class="badge"><i class="fas fa-soap"></i> micelle · surfactant</span>
+                <span class="badge"><i class="fas fa-heartbeat"></i> bile · sebum</span>
+            </div>
+            <div style="margin-top:1.2rem; font-size:2.4rem; opacity:0.35; display:flex; gap:1.2rem; flex-wrap:wrap;">
+                <span class="float-anim">💧</span>
+                <span class="float-anim-2">🫒</span>
+                <span style="animation:spinOil 8s infinite linear;">⚗️</span>
+                <span class="float-anim" style="animation-delay:0.4s;">🧴</span>
+                <span class="float-anim-2" style="animation-delay:0.2s;">🥛</span>
+            </div>
+        </header>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  TABLE OF CONTENTS  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <nav class="toc">
+            <h2><i class="fas fa-list-ul"></i> Table of Contents</h2>
+            <div class="toc-grid">
+                <a href="#intro">1. Introduction</a>
+                <a href="#what">2. What is Emulsification?</a>
+                <a href="#atom">3. Why Oil &amp; Water Don't Mix</a>
+                <a href="#types">4. Types of Emulsions</a>
+                <a href="#emulsifier">5. Emulsifiers &amp; How They Work</a>
+                <a href="#soap">6. How Soap Removes Oil</a>
+                <a href="#biology">7. Biological Emulsification</a>
+                <a href="#skin">8. Skin &amp; Oil/Water</a>
+                <a href="#separate">9. Machines: Separate</a>
+                <a href="#create">10. Machines: Create</a>
+                <a href="#applications">11. Real-Life Applications</a>
+                <a href="#chemicals">12. Chemicals Used</a>
+                <a href="#scientists">13. Famous Scientists</a>
+                <a href="#careers">14. Careers</a>
+                <a href="#summary">15. Summary</a>
+            </div>
+        </nav>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  1. INTRODUCTION  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="intro">
+            <div class="card">
+                <h2><i class="fas fa-book-open"></i> 1. Introduction</h2>
+                <p style="font-size:1.15rem;">
+                    Have you ever wondered why cooking oil floats on water? Why milk doesn't separate into fat and water?
+                    Why soap can wash oily hands?
+                </p>
+                <p style="font-size:1.15rem; margin-top:0.6rem;">
+                    <strong>The answer is <em>Emulsification</em>.</strong>
+                </p>
+                <p>
+                    Emulsification is one of the most important concepts in chemistry because it is used in
+                    <strong>food, medicine, cosmetics, petroleum industries, wastewater treatment, pharmaceuticals, and biology</strong>.
+                </p>
+                <div class="img-row">
+                    <img src="https://images.unsplash.com/photo-1587654780291-39c9404d9d5b?w=400&h=240&fit=crop&crop=center" alt="Oil and water" loading="lazy" />
+                    <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=240&fit=crop&crop=center" alt="Mayonnaise emulsion" loading="lazy" />
+                    <img src="https://images.unsplash.com/photo-1622484211902-f43f8d2f7a2d?w=400&h=240&fit=crop&crop=center" alt="Milk" loading="lazy" />
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  2. WHAT IS EMULSIFICATION?  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="what">
+            <div class="card card-soft">
+                <h2><i class="fas fa-question-circle"></i> 2. What is Emulsification?</h2>
+                <p><strong>Definition:</strong> Emulsification is the process of mixing two liquids that normally do not mix, such as oil and water, by using an <strong>emulsifying agent</strong> (emulsifier).</p>
+                <p>The resulting mixture is called an <strong>emulsion</strong>.</p>
+                <div style="display:flex; flex-wrap:wrap; gap:0.8rem 2rem; margin-top:0.8rem;">
+                    <span class="badge"><i class="fas fa-glass-whiskey"></i> Milk</span>
+                    <span class="badge"><i class="fas fa-egg"></i> Mayonnaise</span>
+                    <span class="badge"><i class="fas fa-cheese"></i> Butter</span>
+                    <span class="badge"><i class="fas fa-hand-sparkles"></i> Lotion</span>
+                    <span class="badge"><i class="fas fa-snowflake"></i> Ice cream</span>
+                </div>
+                <div class="img-inline" style="margin-top:1rem;">
+                    <i class="fas fa-tint"></i>
+                    <span><strong>Oil in Water (O/W)</strong> – milk, lotion</span>
+                    <i class="fas fa-tint" style="color:#b87a48;"></i>
+                    <span><strong>Water in Oil (W/O)</strong> – butter, cold cream</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  3. WHY OIL & WATER DON'T MIX  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="atom">
+            <div class="card">
+                <h2><i class="fas fa-atom"></i> 3. Why Oil &amp; Water Don't Mix <span style="font-size:1rem; font-weight:400; margin-left:0.6rem;">(Atomic &amp; Molecular Level)</span></h2>
+
+                <div class="grid-2" style="gap:1.5rem;">
+                    <div>
+                        <h3><i class="fas fa-tint" style="color:#2e6b9e;"></i> Water (Polar)</h3>
+                        <p>Water is H₂O. Oxygen pulls electrons more strongly → <strong>polar molecule</strong>.</p>
+                        <div class="atom-block" style="border-left-color:#2e6b9e;">
+                            <span style="font-size:1.2rem;">δ⁺ H – O – H δ⁺</span><br />
+                            <small>Oxygen is δ⁻, Hydrogens are δ⁺ → hydrogen bonds</small>
+                        </div>
+                        <p>Water molecules attract each other via <strong>hydrogen bonds</strong>, forming a strong network.</p>
+                    </div>
+                    <div>
+                        <h3><i class="fas fa-oil-can" style="color:#8b6b3a;"></i> Oil (Nonpolar)</h3>
+                        <p>Oils are <strong>hydrocarbons</strong> – long chains of C and H.</p>
+                        <div class="atom-block" style="border-left-color:#8b6b3a;">
+                            <span style="font-size:1.2rem;">CH₃–CH₂–CH₂–CH₂–CH₃</span><br />
+                            <small>Alkanes (single bonds) · Alkenes (double bonds)</small>
+                        </div>
+                        <p>Carbon and hydrogen share electrons equally → <strong>no charge separation</strong> → nonpolar.</p>
+                    </div>
+                </div>
+
+                <div style="background:#f7ede1; border-radius:30px; padding:1.2rem 1.8rem; margin-top:1rem; border:2px dashed #dbb48b;">
+                    <p style="font-size:1.2rem; font-weight:600; text-align:center;">
+                        <i class="fas fa-ruler-combined"></i> “Like dissolves like.”
+                    </p>
+                    <p style="text-align:center;">
+                        Polar dissolves in polar · Nonpolar dissolves in nonpolar.<br />
+                        <strong>Water (polar) + Oil (nonpolar) → they repel.</strong>
+                    </p>
+                </div>
+
+                <div class="img-row">
+                    <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=400&h=200&fit=crop&crop=center" alt="Water molecules" loading="lazy" />
+                    <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=400&h=200&fit=crop&crop=center" alt="Oil molecules" loading="lazy" style="filter:sepia(0.2);" />
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  4. TYPES OF EMULSIONS  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="types">
+            <div class="card card-soft">
+                <h2><i class="fas fa-layer-group"></i> 4. Types of Emulsions</h2>
+                <div class="grid-2">
+                    <div style="background:#f0e2d4; border-radius:30px; padding:1.2rem 1.6rem;">
+                        <h3><i class="fas fa-water"></i> Oil in Water (O/W)</h3>
+                        <p>Tiny oil droplets spread in water.</p>
+                        <div class="tag-group">
+                            <span class="tag">🥛 Milk</span>
+                            <span class="tag">🧴 Lotion</span>
+                            <span class="tag">🎨 Paint</span>
+                        </div>
+                    </div>
+                    <div style="background:#f0e2d4; border-radius:30px; padding:1.2rem 1.6rem;">
+                        <h3><i class="fas fa-oil-can"></i> Water in Oil (W/O)</h3>
+                        <p>Tiny water droplets spread in oil.</p>
+                        <div class="tag-group">
+                            <span class="tag">🧈 Butter</span>
+                            <span class="tag">🧴 Cold cream</span>
+                            <span class="tag">🧈 Margarine</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  5. EMULSIFIERS & HOW THEY WORK  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="emulsifier">
+            <div class="card">
+                <h2><i class="fas fa-hand-holding-heart"></i> 5. Emulsifiers &amp; How They Work</h2>
+                <p>An emulsifier is a molecule with <strong>two different ends</strong>:</p>
+                <div style="display:flex; flex-wrap:wrap; gap:1.2rem 2.5rem; justify-content:center; margin:1rem 0;">
+                    <span class="badge" style="background:#2e6b9e20; border-color:#2e6b9e;"><i class="fas fa-water" style="color:#2e6b9e;"></i> Hydrophilic Head – loves water (polar)</span>
+                    <span class="badge" style="background:#8b6b3a20; border-color:#8b6b3a;"><i class="fas fa-oil-can" style="color:#8b6b3a;"></i> Hydrophobic Tail – loves oil (nonpolar)</span>
+                </div>
+                <div class="img-inline" style="justify-content:center; background:#f7ede1;">
+                    <i class="fas fa-arrow-right"></i>
+                    <span style="font-weight:600;">The emulsifier connects oil and water together.</span>
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+                <div style="background:#e5cfbb; border-radius:30px; padding:1rem; text-align:center; margin-top:0.6rem;">
+                    <span style="font-size:1.6rem;">💧 — 🧪 — 🫒</span>
+                    <p style="font-size:0.9rem;">Water · Emulsifier · Oil</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  6. HOW SOAP REMOVES OIL  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="soap">
+            <div class="card soap-box">
+                <h2><i class="fas fa-soap"></i> 6. How Soap Removes Oil</h2>
+                <p>Soap molecules have a <strong>hydrophilic head</strong> and a <strong>hydrophobic tail</strong>.</p>
+                <div style="display:flex; flex-wrap:wrap; gap:1rem; justify-content:center; margin:0.8rem 0;">
+                    <span class="badge" style="background:#2e6b9e20;">1. Tail enters grease</span>
+                    <span class="badge" style="background:#2e6b9e20;">2. Head stays in water</span>
+                    <span class="badge" style="background:#2e6b9e20;">3. Forms a <strong>Micelle</strong></span>
+                </div>
+                <div style="background:#fcf3e9; border-radius:40px; padding:1rem 1.6rem; text-align:center; border:1px solid #dbb48b;">
+                    <span style="font-size:2.2rem;">🧼 + 🫒 → ⚪ (micelle) → 💧 carries away</span>
+                    <p style="font-size:0.9rem; margin-top:0.2rem;">Oil trapped inside micelle, washed away with water.</p>
+                </div>
+                <div style="margin-top:1rem; background:#f7ede1; border-radius:30px; padding:1rem 1.6rem; border-left:4px solid #b06d3a;">
+                    <p><strong>❓ If soap is made from oil, how can it remove oil?</strong></p>
+                    <p><strong>Saponification:</strong> Oil + NaOH → Soap + Glycerol. The reaction changes oil into soap molecules with a water-loving head and oil-loving tail.</p>
+                </div>
+                <div class="img-row">
+                    <img src="https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&h=180&fit=crop&crop=center" alt="Soap bubbles" loading="lazy" />
+                    <img src="https://images.unsplash.com/photo-1584483766114-2cea6facdf57?w=400&h=180&fit=crop&crop=center" alt="Micelle" loading="lazy" />
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  7. BIOLOGICAL EMULSIFICATION  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="biology">
+            <div class="card">
+                <h2><i class="fas fa-heartbeat"></i> 7. Biological Emulsification (Human Body)</h2>
+                <p>Humans eat fats every day. Oil cannot dissolve in the watery digestive system.</p>
+                <p><strong>Solution:</strong> <strong>Bile</strong> – produced by the liver, stored in the gallbladder.</p>
+                <div class="atom-block" style="border-left-color:#6b8c5c;">
+                    <p><strong>Bile salts</strong> work like soap. They break large fat droplets into tiny droplets → increased surface area → <strong>lipase</strong> digests fats.</p>
+                </div>
+                <div style="background:#e5f0dc; border-radius:30px; padding:1rem 1.6rem; text-align:center; margin:0.8rem 0;">
+                    <p style="font-weight:600;">Fat Digestion Pathway:</p>
+                    <span style="font-size:1.2rem;">🫒 → 🧪 (bile) → ⚪ (tiny droplets) → 🔬 (lipase) → 🧬 (fatty acids + glycerol) → 🩸 absorbed</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  8. SKIN & OIL/WATER  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="skin">
+            <div class="card card-soft">
+                <h2><i class="fas fa-hand-sparkles"></i> 8. How Our Skin Handles Oil &amp; Water</h2>
+                <p>Our skin produces <strong>sebum</strong>, an oily substance that:</p>
+                <ul class="list-icon list-dot" style="padding-left:1.2rem;">
+                    <li>Prevents water loss</li>
+                    <li>Protects against bacteria</li>
+                    <li>Keeps skin soft</li>
+                </ul>
+                <p>The outer skin layer has both oils and proteins, creating a barrier that controls water movement.</p>
+                <div class="img-inline" style="justify-content:center;">
+                    <i class="fas fa-droplet" style="color:#b87a48;"></i>
+                    <span>Sebum (oil) + sweat (water) = natural emulsion</span>
+                    <i class="fas fa-droplet" style="color:#2e6b9e;"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  9. MACHINES: SEPARATE  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="separate">
+            <div class="card">
+                <h2><i class="fas fa-cogs"></i> 9. Machines Used to <em>Separate</em> Oil from Water</h2>
+                <div class="grid-3">
+                    <div style="background:#f7ede1; border-radius:30px; padding:1rem 1.2rem;">
+                        <h4><i class="fas fa-funnel-dollar"></i> Oil-Water Separator</h4>
+                        <p>Gravity-based – oil floats.</p>
+                        <span class="tag">Workshops · refineries</span>
+                    </div>
+                    <div style="background:#f7ede1; border-radius:30px; padding:1rem 1.2rem;">
+                        <h4><i class="fas fa-sync-alt"></i> Centrifuge</h4>
+                        <p>Spins fast – heavier liquid moves outward.</p>
+                        <span class="tag">Dairy · petroleum</span>
+                    </div>
+                    <div style="background:#f7ede1; border-radius:30px; padding:1rem 1.2rem;">
+                        <h4><i class="fas fa-water"></i> Hydrocyclone</h4>
+                        <p>Centrifugal force without moving parts.</p>
+                        <span class="tag">Offshore oil platforms</span>
+                    </div>
+                </div>
+                <div style="margin-top:0.6rem;">
+                    <span class="badge"><i class="fas fa-filter"></i> Membrane Filtration – water passes, oil stays</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  10. MACHINES: CREATE  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="create">
+            <div class="card card-soft">
+                <h2><i class="fas fa-mixer"></i> 10. Machines Used to <em>Create</em> Emulsions</h2>
+                <div class="grid-3">
+                    <div style="background:#f7ede1; border-radius:30px; padding:1rem 1.2rem;">
+                        <h4><i class="fas fa-gavel"></i> Homogenizer</h4>
+                        <p>Breaks oil into microscopic droplets.</p>
+                        <span class="tag">Milk · cosmetics</span>
+                    </div>
+                    <div style="background:#f7ede1; border-radius:30px; padding:1rem 1.2rem;">
+                        <h4><i class="fas fa-bolt"></i> High-Speed Mixer</h4>
+                        <p>Mixes liquids rapidly.</p>
+                        <span class="tag">Paint · food · chemicals</span>
+                    </div>
+                    <div style="background:#f7ede1; border-radius:30px; padding:1rem 1.2rem;">
+                        <h4><i class="fas fa-wave-square"></i> Ultrasonic Emulsifier</h4>
+                        <p>Ultrasound waves → nano-droplets.</p>
+                        <span class="tag">Nanotechnology · medicine</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  11. REAL-LIFE APPLICATIONS  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="applications">
+            <div class="card">
+                <h2><i class="fas fa-globe-americas"></i> 11. Real-Life Applications</h2>
+                <div class="grid-3" style="gap:1rem;">
+                    <div><span class="badge" style="background:#f0e2d4;"><i class="fas fa-utensils"></i> Food</span> Milk, ice cream, butter, mayo</div>
+                    <div><span class="badge" style="background:#f0e2d4;"><i class="fas fa-paint-brush"></i> Cosmetics</span> Lotion, shampoo, sunscreen</div>
+                    <div><span class="badge" style="background:#f0e2d4;"><i class="fas fa-pills"></i> Medicine</span> Vaccines, drug delivery</div>
+                    <div><span class="badge" style="background:#f0e2d4;"><i class="fas fa-industry"></i> Petroleum</span> Crude processing, spill cleanup</div>
+                    <div><span class="badge" style="background:#f0e2d4;"><i class="fas fa-seedling"></i> Agriculture</span> Pesticides, fertilizers</div>
+                    <div><span class="badge" style="background:#f0e2d4;"><i class="fas fa-palette"></i> Paint</span> Keeps pigments mixed</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  12. CHEMICALS USED  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="chemicals">
+            <div class="card card-soft">
+                <h2><i class="fas fa-flask"></i> 12. Chemicals Used as Emulsifiers</h2>
+                <div class="grid-2">
+                    <div>
+                        <h4><i class="fas fa-leaf"></i> Natural</h4>
+                        <ul class="list-icon list-dot">
+                            <li>Lecithin (egg yolk)</li>
+                            <li>Bile salts</li>
+                            <li>Gelatin</li>
+                            <li>Casein (milk protein)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-vial"></i> Synthetic</h4>
+                        <ul class="list-icon list-dot">
+                            <li>Polysorbates</li>
+                            <li>Sorbitan esters</li>
+                            <li>Sodium stearate (soap)</li>
+                            <li>Sodium lauryl sulfate (SLS)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  13. FAMOUS SCIENTISTS  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="scientists">
+            <div class="card">
+                <h2><i class="fas fa-user-graduate"></i> 13. Famous Scientists &amp; Their Contributions</h2>
+                <div class="scientist-grid">
+                    <div class="scientist-item">
+                        <i class="fas fa-atom"></i>
+                        <div class="name">Thomas Graham</div>
+                        <div class="desc">Introduced colloid science, including emulsions.</div>
+                    </div>
+                    <div class="scientist-item">
+                        <i class="fas fa-microscope"></i>
+                        <div class="name">Irving Langmuir</div>
+                        <div class="desc">Surface chemistry; explained molecular arrangement at interfaces.</div>
+                    </div>
+                    <div class="scientist-item">
+                        <i class="fas fa-flask"></i>
+                        <div class="name">Jean Perrin</div>
+                        <div class="desc">Studied colloidal particles and their behavior in liquids.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  14. CAREERS  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="careers">
+            <div class="card card-soft">
+                <h2><i class="fas fa-briefcase"></i> 14. Careers Related to Emulsification</h2>
+                <p><strong>Students in Chemistry or Chemical Engineering can work as:</strong></p>
+                <div class="tag-group" style="justify-content:center;">
+                    <span class="tag">🧪 Chemical Engineer</span>
+                    <span class="tag">⚙️ Process Engineer</span>
+                    <span class="tag">🍔 Food Technologist</span>
+                    <span class="tag">🧴 Cosmetic Formulation Scientist</span>
+                    <span class="tag">💊 Pharmaceutical Scientist</span>
+                    <span class="tag">🧬 Materials Scientist</span>
+                    <span class="tag">🛢️ Petrochemical Engineer</span>
+                    <span class="tag">💧 Water Treatment Engineer</span>
+                    <span class="tag">🔬 Research Scientist</span>
+                    <span class="tag">🎨 Paint &amp; Coating Engineer</span>
+                </div>
+                <p style="margin-top:0.8rem;"><strong>Industries:</strong> Food, cosmetics, pharma, oil &amp; gas, paints, biotechnology, environmental engineering.</p>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  15. SUMMARY  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="summary">
+            <div class="card" style="background:#f7ede1; border-color:#dbb48b;">
+                <h2><i class="fas fa-check-circle"></i> 15. Summary</h2>
+                <ul class="list-icon list-dot" style="padding-left:1.2rem;">
+                    <li>Emulsification mixes two immiscible liquids (oil &amp; water) using an emulsifier.</li>
+                    <li>Water is <strong>polar</strong>; oil is <strong>nonpolar</strong> – “like dissolves like”.</li>
+                    <li>Emulsifiers have a hydrophilic head and hydrophobic tail.</li>
+                    <li>Soap cleans by forming <strong>micelles</strong> that trap oil.</li>
+                    <li>In the body, <strong>bile salts</strong> emulsify fats for digestion.</li>
+                    <li>Skin uses <strong>sebum</strong> to control water loss.</li>
+                    <li>Industrial machines: separators, centrifuges, homogenizers, ultrasonic emulsifiers.</li>
+                    <li>Applications: food, cosmetics, medicine, petroleum, agriculture, paint.</li>
+                    <li>Many career opportunities in chemistry and chemical engineering.</li>
+                </ul>
+                <div style="margin-top:1.2rem; text-align:center; font-size:1.2rem; background:#fffbf5; border-radius:60px; padding:0.6rem 1.2rem; border:1px solid #dbb48b;">
+                    <i class="fas fa-quote-left"></i> 
+                    Emulsification – where chemistry meets everyday life.
+                    <i class="fas fa-quote-right"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  FOOTER  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <footer class="footer">
+            <div class="icons">
+                💧 🫒 🧪 🧴 🥛 🧼
+            </div>
+            <p>
+                <i class="fas fa-graduation-cap"></i> Chemistry · Chemical Engineering 
+                <span style="margin:0 0.6rem;">|</span>
+                <i class="fas fa-atom"></i> “Like dissolves like” – alkane, alkene, water polarity
+            </p>
+            <p style="margin-top:0.4rem; font-size:0.85rem;">
+                <i class="fas fa-link"></i> 
+                <a href="#" onclick="return false;">Emulsification in food</a> · 
+                <a href="#" onclick="return false;">Surface chemistry</a> · 
+                <a href="#" onclick="return false;">Colloid science</a> · 
+                <a href="#" onclick="return false;">Soap making</a>
+                <br />
+                <span style="font-size:0.8rem; opacity:0.7;">Built with <i class="fas fa-heart" style="color:#b06d3a;"></i> for GitHub Pages</span>
+            </p>
+        </footer>
+
     </div>
-
-    <script>
-        // Question sets data (10 sets with 4 basic questions each)
-        const questionSets = [
-            {
-                title: "SET 1: Basic Output",
-                questions: [
-                    {
-                        question: "What is missing in this code to print a number?\nint x = 5;\nprintf(\"___\", x);",
-                        options: ["%d", "%c", "%f", "%s"],
-                        answer: "%d"
-                    },
-                    {
-                        question: "What will be the output?\nprintf(\"%d\", 3 + 2);",
-                        options: ["5", "32", "3+2", "Error"],
-                        answer: "5"
-                    },
-                    {
-                        question: "Which header file is needed for printf()?",
-                        options: ["<stdio.h>", "<math.h>", "<conio.h>", "None"],
-                        answer: "<stdio.h>"
-                    },
-                    {
-                        question: "What is the correct way to print a float variable y?",
-                        options: ["printf(\"%d\", y);", "printf(\"%f\", y);", "printf(\"%c\", y);", "printf(y);"],
-                        answer: "printf(\"%f\", y);"
-                    }
-                ]
-            },
-            {
-                title: "SET 2: Data Types",
-                questions: [
-                    {
-                        question: "What is the size of 'int' data type typically?",
-                        options: ["1 byte", "2 bytes", "4 bytes", "8 bytes"],
-                        answer: "4 bytes"
-                    },
-                    {
-                        question: "Which data type would you use for a single character?",
-                        options: ["int", "float", "char", "string"],
-                        answer: "char"
-                    },
-                    {
-                        question: "What is the ASCII value of 'A'?",
-                        options: ["48", "65", "97", "32"],
-                        answer: "65"
-                    },
-                    {
-                        question: "Which is NOT a valid C data type?",
-                        options: ["int", "float", "double", "real"],
-                        answer: "real"
-                    }
-                ]
-            },
-            {
-                title: "SET 3: Basic Operations",
-                questions: [
-                    {
-                        question: "What is 7 % 3?",
-                        options: ["2", "1", "3", "0"],
-                        answer: "1"
-                    },
-                    {
-                        question: "What is the result of 5 / 2 in C?",
-                        options: ["2.5", "2", "3", "2.0"],
-                        answer: "2"
-                    },
-                    {
-                        question: "What does ++x do?",
-                        options: ["Adds 2 to x", "Increments x by 1", "Doubles x", "Does nothing"],
-                        answer: "Increments x by 1"
-                    },
-                    {
-                        question: "What is the value of x after: int x = 3; x += 2;",
-                        options: ["3", "5", "6", "Error"],
-                        answer: "5"
-                    }
-                ]
-            },
-            {
-                title: "SET 4: Simple Programs",
-                questions: [
-                    {
-                        question: "What is missing in this program?\nint main() {\n    printf(\"Hello\");\n    return 0;\n}",
-                        options: ["#include<stdio.h>", "void before main()", "getch()", "Nothing"],
-                        answer: "#include<stdio.h>"
-                    },
-                    {
-                        question: "What will this print?\nprintf(\"%c\", 65);",
-                        options: ["65", "A", "a", "Error"],
-                        answer: "A"
-                    },
-                    {
-                        question: "What is the output?\nint x = 5;\nprintf(\"%d\", x++);",
-                        options: ["5", "6", "0", "Error"],
-                        answer: "5"
-                    },
-                    {
-                        question: "How to print a new line?",
-                        options: ["\\n", "\\t", "\\r", "\\a"],
-                        answer: "\\n"
-                    }
-                ]
-            },
-            {
-                title: "SET 5: Basic Math",
-                questions: [
-                    {
-                        question: "What is the formula for area of circle?",
-                        options: ["πd", "2πr", "πr²", "4πr²"],
-                        answer: "πr²"
-                    },
-                    {
-                        question: "What is 3 * 4 + 5?",
-                        options: ["17", "27", "12", "Error"],
-                        answer: "17"
-                    },
-                    {
-                        question: "What is the value of 5 * (2 + 3)?",
-                        options: ["10", "15", "25", "13"],
-                        answer: "25"
-                    },
-                    {
-                        question: "What is 10 / 3 in C?",
-                        options: ["3.333", "3", "4", "3.0"],
-                        answer: "3"
-                    }
-                ]
-            },
-            {
-                title: "SET 6: Variables",
-                questions: [
-                    {
-                        question: "Which is a valid variable name?",
-                        options: ["1var", "var-name", "var_name", "int"],
-                        answer: "var_name"
-                    },
-                    {
-                        question: "What is the value of x?\nint x = 5 / 2;",
-                        options: ["2.5", "2", "3", "2.0"],
-                        answer: "2"
-                    },
-                    {
-                        question: "How to declare a constant PI with value 3.14?",
-                        options: ["const PI = 3.14;", "#define PI 3.14", "float PI = 3.14;", "Both 1 and 2"],
-                        answer: "#define PI 3.14"
-                    },
-                    {
-                        question: "What is the default value of an uninitialized variable?",
-                        options: ["0", "1", "Garbage value", "NULL"],
-                        answer: "Garbage value"
-                    }
-                ]
-            },
-            {
-                title: "SET 7: Basic Syntax",
-                questions: [
-                    {
-                        question: "What is missing?\nint main()\n    printf(\"Hello\");\n    return 0;\n}",
-                        options: ["{ after main()", ")", ";", "#include"],
-                        answer: "{ after main()"
-                    },
-                    {
-                        question: "What ends every statement in C?",
-                        options: [".", ";", ":", "New line"],
-                        answer: ";"
-                    },
-                    {
-                        question: "Which is correct for main function?",
-                        options: ["int main()", "void main()", "main()", "All of these"],
-                        answer: "All of these"
-                    },
-                    {
-                        question: "What is wrong?\nint x = 5\nprintf(\"%d\", x);",
-                        options: ["Missing ;", "Missing ,", "Missing ()", "Nothing"],
-                        answer: "Missing ;"
-                    }
-                ]
-            },
-            {
-                title: "SET 8: Character Operations",
-                questions: [
-                    {
-                        question: "What is 'a' - 32?",
-                        options: ["A", "97", "65", "Space"],
-                        answer: "A"
-                    },
-                    {
-                        question: "What is the ASCII value of '0'?",
-                        options: ["0", "32", "48", "65"],
-                        answer: "48"
-                    },
-                    {
-                        question: "How to print a tab space?",
-                        options: ["\\n", "\\t", "\\a", "\\s"],
-                        answer: "\\t"
-                    },
-                    {
-                        question: "What will this print?\nprintf(\"%d\", 'B' - 'A');",
-                        options: ["0", "1", "65", "66"],
-                        answer: "1"
-                    }
-                ]
-            },
-            {
-                title: "SET 9: Basic Programs",
-                questions: [
-                    {
-                        question: "What is missing?\n___\nint main() {\n    printf(\"Hello\");\n    return 0;\n}",
-                        options: ["#include<stdio.h>", "void", "getch();", "Nothing"],
-                        answer: "#include<stdio.h>"
-                    },
-                    {
-                        question: "What will this print?\nprintf(\"%d\", sizeof(char));",
-                        options: ["1", "2", "4", "8"],
-                        answer: "1"
-                    },
-                    {
-                        question: "What is the output?\nprintf(\"%.1f\", 5.0 / 2);",
-                        options: ["2", "2.5", "2.0", "2.50"],
-                        answer: "2.5"
-                    },
-                    {
-                        question: "How to print % symbol?",
-                        options: ["\\%", "%%", "%", "%%%"],
-                        answer: "%%"
-                    }
-                ]
-            },
-            {
-                title: "SET 10: Mixed Basics",
-                questions: [
-                    {
-                        question: "What is the output?\nprintf(\"%c\", 97);",
-                        options: ["97", "a", "A", "Error"],
-                        answer: "a"
-                    },
-                    {
-                        question: "What is missing?\nint x = 5;\ny = 10;",
-                        options: ["; after 5", ", between x and y", "int before y", "All of these"],
-                        answer: "int before y"
-                    },
-                    {
-                        question: "What is the value of 3 * 4 / 2?",
-                        options: ["6", "12", "1.5", "Error"],
-                        answer: "6"
-                    },
-                    {
-                        question: "What is the size of float typically?",
-                        options: ["2 bytes", "4 bytes", "8 bytes", "16 bytes"],
-                        answer: "4 bytes"
-                    }
-                ]
-            }
-        ];
-
-        // DOM elements
-        const spinner = document.getElementById('spinner');
-        const questionSetContainer = document.getElementById('question-set-container');
-        const submitBtn = document.getElementById('submit-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const scoreDisplay = document.getElementById('score-display');
-
-        let currentSetIndex = -1;
-        let userAnswers = [];
-        let score = 0;
-
-        // Spinner click event
-        spinner.addEventListener('click', function() {
-            // Start spinning animation
-            this.classList.add('spinning');
-            scoreDisplay.textContent = "";
-            
-            // Randomly select a question set after a delay
-            setTimeout(() => {
-                this.classList.remove('spinning');
-                
-                // Get a random set that's not the current one
-                let newIndex;
-                do {
-                    newIndex = Math.floor(Math.random() * questionSets.length);
-                } while (newIndex === currentSetIndex && questionSets.length > 1);
-                
-                currentSetIndex = newIndex;
-                displayQuestionSet(currentSetIndex);
-                
-                // Show submit button
-                submitBtn.style.display = 'inline-block';
-                nextBtn.style.display = 'none';
-            }, 2000);
-        });
-
-        // Display question set
-        function displayQuestionSet(index) {
-            const set = questionSets[index];
-            questionSetContainer.innerHTML = '';
-            userAnswers = Array(set.questions.length).fill(null);
-            
-            // Create set title
-            const title = document.createElement('h2');
-            title.textContent = set.title;
-            questionSetContainer.appendChild(title);
-            
-            // Create questions
-            set.questions.forEach((q, i) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'question';
-                
-                const questionTitle = document.createElement('h3');
-                questionTitle.textContent = `Q${i+1}:`;
-                questionDiv.appendChild(questionTitle);
-                
-                // Format code-like questions with <pre>
-                if (q.question.includes('\n')) {
-                    const codePre = document.createElement('pre');
-                    codePre.textContent = q.question;
-                    questionDiv.appendChild(codePre);
-                } else {
-                    const questionText = document.createElement('p');
-                    questionText.textContent = q.question;
-                    questionDiv.appendChild(questionText);
-                }
-                
-                const optionsDiv = document.createElement('div');
-                optionsDiv.className = 'options';
-                
-                // Create radio buttons for each option
-                q.options.forEach((option, j) => {
-                    const optionDiv = document.createElement('div');
-                    optionDiv.className = 'option';
-                    
-                    const radio = document.createElement('input');
-                    radio.type = 'radio';
-                    radio.name = `question-${i}`;
-                    radio.value = option;
-                    radio.id = `q${i}-opt${j}`;
-                    
-                    radio.addEventListener('change', function() {
-                        if (this.checked) {
-                            userAnswers[i] = this.value;
-                        }
-                    });
-                    
-                    const label = document.createElement('label');
-                    label.htmlFor = `q${i}-opt${j}`;
-                    label.textContent = option;
-                    
-                    optionDiv.appendChild(radio);
-                    optionDiv.appendChild(label);
-                    optionsDiv.appendChild(optionDiv);
-                });
-                
-                questionDiv.appendChild(optionsDiv);
-                
-                const feedbackDiv = document.createElement('div');
-                feedbackDiv.className = 'feedback';
-                feedbackDiv.dataset.index = i;
-                questionDiv.appendChild(feedbackDiv);
-                
-                questionSetContainer.appendChild(questionDiv);
-            });
-        }
-
-        // Submit button click event
-        submitBtn.addEventListener('click', function() {
-            const set = questionSets[currentSetIndex];
-            let allAnswered = true;
-            let currentScore = 0;
-            
-            // Check answers and provide feedback
-            for (let i = 0; i < set.questions.length; i++) {
-                const feedbackDiv = document.querySelector(`.feedback[data-index="${i}"]`);
-                feedbackDiv.textContent = '';
-                feedbackDiv.className = 'feedback';
-                
-                if (userAnswers[i] === null) {
-                    feedbackDiv.textContent = 'Please select an answer';
-                    feedbackDiv.classList.add('incorrect');
-                    allAnswered = false;
-                } else {
-                    if (userAnswers[i] === set.questions[i].answer) {
-                        feedbackDiv.textContent = 'Correct!';
-                        feedbackDiv.classList.add('correct');
-                        currentScore++;
-                    } else {
-                        feedbackDiv.textContent = `Incorrect. The correct answer is: ${set.questions[i].answer}`;
-                        feedbackDiv.classList.add('incorrect');
-                    }
-                }
-            }
-            
-            if (!allAnswered) return;
-            
-            // Update score
-            score = currentScore;
-            scoreDisplay.textContent = `Score: ${score}/${set.questions.length}`;
-            
-            // Hide submit button and show next button
-            submitBtn.style.display = 'none';
-            nextBtn.style.display = 'inline-block';
-        });
-
-        // Next button click event
-        nextBtn.addEventListener('click', function() {
-            currentSetIndex = -1;
-            questionSetContainer.innerHTML = '';
-            submitBtn.style.display = 'none';
-            this.style.display = 'none';
-            scoreDisplay.textContent = "";
-        });
-    </script>
+    <!-- end container -->
 </body>
 </html>
